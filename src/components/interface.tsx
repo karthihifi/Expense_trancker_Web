@@ -9,6 +9,7 @@ interface ModalFile {
     necessity: string,
     dateno:number,
     month:number,
+    monthstr:string,
     year:number
 }
 
