@@ -12,6 +12,7 @@ import SideBar from './SideBar'
 import NavBar from './NavBar'
 import TodaysExpenseSect from './TodaysExpenseSection'
 import ModalFile from './interface';
+import PieChart from './PieChart'
 
 interface ModalDataProps {
     ModalData: ModalFile[];
@@ -32,7 +33,7 @@ const Calenderinfo = [
     {
         key: 3,
         value: 'March',
-    }, 
+    },
     {
         key: 4,
         value: 'April',
@@ -84,15 +85,15 @@ function createData(
     necessity: string,
     dateno: number,
     month: number,
-    monthstr:string,
+    monthstr: string,
     year: number
 ) {
-    return { date, currency, amount, time, category, subcategory, availmode, necessity, dateno, month,monthstr, year };
+    return { date, currency, amount, time, category, subcategory, availmode, necessity, dateno, month, monthstr, year };
 }
 
 const rows = [
-    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7,'July', 2022),
-    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7,'July', 2022)
+    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022)
 ];
 
 
@@ -162,7 +163,12 @@ const Main: React.FC = (props) => {
         return total
     }
     // const uniqify = (array:ModalFile[], key:any) => array.reduce((prev, curr) => prev.find(a => a[key] === curr[key]) ? prev : prev.push(curr) && prev, []);
-    
+
+    var compareYear = function (a: ModalFile, b: ModalFile) {
+        if (a.year > b.year) { return -1; }
+        if (a.year < b.year) { return 1; }
+        return 0;
+    }
     const handleAddExpense = (Modal: ModalFile) => {
         console.log(Modal)
         let dummydata: ModalFile[] = [...AllData];
@@ -200,13 +206,13 @@ const Main: React.FC = (props) => {
                 }, []);
                 filteredArr.forEach((item) => {
                     item.amount = calculateMonthtot(item.month, item.year)
-                    let index = Calenderinfo.findIndex(row => {return row.key == item.month} )
+                    let index = Calenderinfo.findIndex(row => { return row.key == item.month })
                     // item.date = Calenderinfo[index].value
                 })
-                console.log(AllData, filteredArr,ModalData,"testmonth")
-//                 filteredArr.sort((a,b) => {
-// return a.month > b.month
-//                 })
+                console.log(AllData, filteredArr, ModalData, "testmonth")
+                //                 filteredArr.sort((a,b) => {
+                // return a.month > b.month
+                //                 })
                 setdailyTotal(calculateDailytot(filteredArr))
                 setMontlyData(filteredArr)
                 setModalData(filteredArr)
@@ -225,24 +231,29 @@ const Main: React.FC = (props) => {
                 //     }
                 // }, []);
 
-                const uniqueIds:number[] = [];
+                const uniqueIds: number[] = [];
 
-                let filteredArr1 = dummydata.filter( (element:ModalFile) => {
-  const isDuplicate = uniqueIds.includes(element.year);
-  if (!isDuplicate) {
-    uniqueIds.push(element.year);
-    return true;
-  }
-  return false;
-})
-console.log(filteredArr1,"yearId's")
-
+                let filteredArr1 = dummydata.filter((element: ModalFile) => {
+                    const isDuplicate = uniqueIds.includes(element.year);
+                    if (!isDuplicate) {
+                        uniqueIds.push(element.year);
+                        return true;
+                    }
+                    return false;
+                })
+                filteredArr1.sort(compareYear)
+                console.log(filteredArr1, "yearId's")
+                // filteredArr1.sort(
+                //     function (a, b) {
+                //         a.year - b.year ? 1 : ((a.year - b.year) ? -1 : 0)
+                //     }
+                // )
                 filteredArr1.forEach((item) => {
                     item.amount = calculateYeartot(item.year)
                     // let index = Calenderinfo.findIndex(row => {return row.key == item.month} )
                     // item.date = Calenderinfo[index].value
                 })
-                console.log(AllData, filteredArr1,"testmonth")
+                console.log(AllData, filteredArr1, "testmonth")
                 setdailyTotal(calculateDailytot(filteredArr1))
                 setYearlyData(filteredArr1)
                 setModalData(filteredArr1)
@@ -337,9 +348,10 @@ console.log(filteredArr1,"yearId's")
                                     {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
                                 </BarChart>
                             </ResponsiveContainer>
-
                         </div>
-                        : ''}
+                        : 
+                        <div className="chart"><PieChart></PieChart></div>
+                        }
                 </div>
             </div>
         </div>
