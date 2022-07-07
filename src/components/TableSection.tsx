@@ -44,12 +44,12 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>Date</TableCell>
-                <TableCell align="right">Currency</TableCell>
+                {/* <TableCell align="right">Currency</TableCell> */}
                 <TableCell align="right">Amount</TableCell>
-                <TableCell align="right">Time of Day</TableCell>
+                <TableCell align="right">Time</TableCell>
                 <TableCell align="right">Category</TableCell>
-                <TableCell align="right">SubCategory</TableCell>
-                <TableCell align="right">Mode of Purchase</TableCell>
+                <TableCell align="right">SubCat</TableCell>
+                <TableCell align="right">Purch. Mode</TableCell>
                 <TableCell align="right">Necessity</TableCell>
               </TableRow>
             </TableHead>
@@ -62,8 +62,8 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
                   <TableCell component="th" scope="row">
                     {row.date}
                   </TableCell>
-                  <TableCell align="right">{row.currency}</TableCell>
-                  <TableCell align="right">{row.amount}</TableCell>
+                  {/* <TableCell align="right">{row.currency}</TableCell> */}
+                  <TableCell align="right">{row.amount} {row.currency}</TableCell>
                   <TableCell align="right">{row.time}</TableCell>
                   <TableCell align="right">{row.category}</TableCell>
                   <TableCell align="right">{row.subcategory}</TableCell>
