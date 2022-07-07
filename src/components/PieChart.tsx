@@ -1,64 +1,55 @@
 import React from 'react';
-import { Pie } from 'react-chartjs-2';
-import { Chart, ArcElement } from 'chart.js'
-Chart.register(ArcElement);
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { TooltipProps } from 'recharts';
+import {
+    ValueType,
+    NameType,
+} from 'recharts/src/component/DefaultTooltipContent';
 
-const state = {
-    labels: ['January', 'February', 'March',
-        'April', 'May'],
-    datasets: [
-        {
-            label: 'Rainfall',
-            backgroundColor: [
-                '#B21F00',
-                '#C9DE00',
-                '#2FDE00',
-                '#00A6B4',
-                '#6800B4'
-            ],
-            hoverBackgroundColor: [
-                '#501800',
-                '#4B5000',
-                '#175000',
-                '#003350',
-                '#35014F'
-            ],
-            data: [65, 59, 80, 81, 56]
-        }
-    ]
+interface PieChartsProps {
+    pieData: { name: string, value: number }[]
 }
-const PieChart = () => {
+
+let COLORS: string[] = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
+
+const CustomTooltip = ({
+    active,
+    payload,
+    label,
+}: TooltipProps<ValueType, NameType>) => {
+    if (active) {
+        return (
+            <div className="custom-tooltip">
+                <p className="label">{`${payload?.[0].name} : ${payload?.[0].value} %`}</p>
+                {/* <p className="desc">Anything you want can be displayed here.</p> */}
+            </div>
+        );
+    }
+
+    return null;
+};
+
+const PieCharts: React.FC<PieChartsProps> = (props) => {
+
     return (
         <div>
-            <Pie
-                data={state}
-                options={{
-                    layout: {
-                        padding: {
-                            left: 250, right: 250,
-                            bottom: 250
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            align: 'start',
-                            // display: true,
-                            text: 'Custom Chart Title'
-                        },
-                        legend: {
-                            // display: true,
-                            position: "right",
-                            labels: {
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        }
+            <PieChart width={500}
+                height={300} margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                }}>
+                <Pie data={props.pieData} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
+                    {
+                        props.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
                     }
-                }}
-            />
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+            </PieChart>
         </div>
     );
 };
 
-export default PieChart;
+export default PieCharts;

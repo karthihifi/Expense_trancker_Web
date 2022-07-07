@@ -12,7 +12,8 @@ import SideBar from './SideBar'
 import NavBar from './NavBar'
 import TodaysExpenseSect from './TodaysExpenseSection'
 import ModalFile from './interface';
-import PieChart from './PieChart'
+import PieCharts from './PieChart'
+import BarCharts from './BarChart'
 
 interface ModalDataProps {
     ModalData: ModalFile[];
@@ -21,6 +22,9 @@ interface CalenderProps {
     key: number,
     value: string
 }
+
+interface PieChartIntf { name: string, value: number }
+
 const Calenderinfo = [
     {
         key: 1,
@@ -93,10 +97,33 @@ function createData(
 
 const rows = [
     createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
     createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022)
 ];
 
 
+const timeofDay = [
+    'Morning',
+    'Afternoon',
+    'Evening',
+    'Night'
+]
+
+const Categories = [
+    'Food',
+    'Clothes',
+    'Electronics',
+    'Entertainment',
+    'Fitness'
+]
+
+
+const Necessity = [
+    'Needed',
+    'Not Needed',
+    'Future',
+    'Maybe'
+]
 
 
 const Main: React.FC = (props) => {
@@ -114,6 +141,9 @@ const Main: React.FC = (props) => {
     const [MontlyData, setMontlyData] = React.useState<ModalFile[]>([]);
     const [YearlyData, setYearlyData] = React.useState<ModalFile[]>([]);
 
+
+    const [PieChartData, setPieChartData] = React.useState<PieChartIntf[]>([]);
+
     React.useEffect(() => {
         console.log('recalled')
         setModalData(rows)
@@ -121,15 +151,19 @@ const Main: React.FC = (props) => {
         setdailyTotal(dailyTotal)
         setDailyData(rows)
         setAllData(rows)
+        groupData(rows, 'Category', dailyTotal)
         console.log(dailyTotal)
     }, [])
 
-    const calculateDailytot = (TableData: ModalFile[]): Number => {
-        // let date = parseInt(new Date().toISOString().split('T')[0].split('-')[2])
-        // let month = parseInt(new Date().toISOString().split('T')[0].split('-')[1])
-        // let year = parseInt(new Date().toISOString().split('T')[0].split('-')[0])
-        // const dailyItems = TableData.filter((item) => { return (item.dateno == date && item.month == month && item.year == year) })
-        // console.log(dailyItems, TableData, date, month, year)
+    const calculateDailytot = (TableData: ModalFile[]): number => {
+        let total = TableData.reduce((tot, val) => {
+            const { amount } = val
+            return tot + amount
+        }, 0)
+        return total
+    }
+
+    const calculatetot = (TableData: ModalFile[]): number => {
         let total = TableData.reduce((tot, val) => {
             const { amount } = val
             return tot + amount
@@ -180,6 +214,27 @@ const Main: React.FC = (props) => {
         setdailyTotal(calculateDailytot(dummydata))
     }
 
+    const groupData = (ModalData: ModalFile[], groupBy: string, total: number) => {
+        switch (groupBy) {
+            case 'Category':
+                let PieData: PieChartIntf[] = []
+                Categories.forEach((cat) => {
+                    let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.category === cat) })
+                    if (filetreditems.length >= 1) {
+                        console.log(calculatetot(filetreditems), total)
+                        let percent = Math.round((100 * calculatetot(filetreditems)) / total)
+                        PieData.push({ name: cat, value: percent })
+                    }
+                })
+                console.log(PieData, "Piedata")
+                setPieChartData(PieData)
+                break;
+
+            default:
+                break;
+        }
+    }
+
     const handleCliclPageChange = (pageSelect: string) => {
         console.log(pageSelect, 'pagesel')
         let date = parseInt(new Date().toISOString().split('T')[0].split('-')[2])
@@ -188,9 +243,12 @@ const Main: React.FC = (props) => {
         switch (pageSelect) {
             case 'Home':
                 setPageSelect('Home');
-                const dailyItems = AllData.filter((item) => { return (item.dateno == date && item.month == month && item.year == year) })
+                // const dailyItems = AllData.filter((item) => { return (item.dateno == date && item.month == month && item.year == year) })
+                const dailyItems = AllData.filter((item) => { return (item.month == month && item.year == year) })
                 setdailyTotal(calculateDailytot(dailyItems))
                 setModalData(dailyItems)
+                console.log(dailyItems, "Home")
+                groupData(dailyItems, 'Category', calculateDailytot(dailyItems))
                 break;
             case 'Mon':
                 setPageSelect('Mon');
@@ -210,27 +268,16 @@ const Main: React.FC = (props) => {
                     // item.date = Calenderinfo[index].value
                 })
                 console.log(AllData, filteredArr, ModalData, "testmonth")
-                //                 filteredArr.sort((a,b) => {
-                // return a.month > b.month
-                //                 })
                 setdailyTotal(calculateDailytot(filteredArr))
                 setMontlyData(filteredArr)
                 setModalData(filteredArr)
+                groupData(filteredArr, 'Category', calculateDailytot(filteredArr))
                 break;
             case 'Year':
                 setPageSelect('Year');
                 setdailyTotal(calculateYeartot(year))
 
                 const dummydata: ModalFile[] = JSON.parse(JSON.stringify(AllData));
-                // let filteredArr1: ModalFile[] = dummydata.reduce((acc: ModalFile[], current) => {
-                //     const x = acc.find(item =>  item.year == item.year);
-                //     if (!x) {
-                //         return acc.concat([current]);
-                //     } else {
-                //         return acc;
-                //     }
-                // }, []);
-
                 const uniqueIds: number[] = [];
 
                 let filteredArr1 = dummydata.filter((element: ModalFile) => {
@@ -243,20 +290,14 @@ const Main: React.FC = (props) => {
                 })
                 filteredArr1.sort(compareYear)
                 console.log(filteredArr1, "yearId's")
-                // filteredArr1.sort(
-                //     function (a, b) {
-                //         a.year - b.year ? 1 : ((a.year - b.year) ? -1 : 0)
-                //     }
-                // )
                 filteredArr1.forEach((item) => {
                     item.amount = calculateYeartot(item.year)
-                    // let index = Calenderinfo.findIndex(row => {return row.key == item.month} )
-                    // item.date = Calenderinfo[index].value
                 })
                 console.log(AllData, filteredArr1, "testmonth")
                 setdailyTotal(calculateDailytot(filteredArr1))
                 setYearlyData(filteredArr1)
                 setModalData(filteredArr1)
+                groupData(filteredArr1, 'Category', calculateDailytot(filteredArr1))
                 break;
             case 'BarCh':
                 setPageSelect('BarCh');
@@ -266,52 +307,6 @@ const Main: React.FC = (props) => {
                 break;
         }
     }
-
-    // Sample data
-    const data = [
-        {
-            name: 'Page A',
-            uv: 4000,
-            pv: 2400,
-            amt: 2400,
-        },
-        {
-            name: 'Page B',
-            uv: 3000,
-            pv: 1398,
-            amt: 2210,
-        },
-        {
-            name: 'Page C',
-            uv: 2000,
-            pv: 9800,
-            amt: 2290,
-        },
-        {
-            name: 'Page D',
-            uv: 2780,
-            pv: 3908,
-            amt: 2000,
-        },
-        {
-            name: 'Page E',
-            uv: 1890,
-            pv: 4800,
-            amt: 2181,
-        },
-        {
-            name: 'Page F',
-            uv: 2390,
-            pv: 3800,
-            amt: 2500,
-        },
-        {
-            name: 'Page G',
-            uv: 3490,
-            pv: 4300,
-            amt: 2100,
-        },
-    ];
 
 
     return (
@@ -325,33 +320,13 @@ const Main: React.FC = (props) => {
                     <DateSection handleAddExpense={handleAddExpense}></DateSection>
                     <TodaysExpenseSect dailyTotal={dailyTotal}></TodaysExpenseSect>
                     {PageSelect == 'Home' || PageSelect == 'Mon' || PageSelect == 'Year' ? <TableSection ModalData={ModalData}></TableSection> : ''}
-                    {PageSelect == 'BarCh' ?
-                        <div className="chart">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    width={500}
-                                    height={300}
-                                    data={ModalData}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="date" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Bar dataKey="amount" fill="#8884d8" />
-                                    {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                        : 
-                        <div className="chart"><PieChart></PieChart></div>
-                        }
+                    <div className="chart">
+                        <h3>Data Analysis</h3>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <div className="chart"> {PageSelect == 'BarCh' ? <BarCharts barData={ModalData}></BarCharts>
+                                : <PieCharts pieData={PieChartData}></PieCharts>}</div>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
             </div>
         </div>
@@ -359,38 +334,5 @@ const Main: React.FC = (props) => {
 }
 
 export default Main;
-
-// function App() {
-//   const Main : React.FC = () =>{
-//     // static demoUrl = 'https://codesandbox.io/s/simple-bar-chart-tpz8r';
-//   return (
-//     <div >
-//         <div>test</div>
-//          <ResponsiveContainer width="100%" height="100%">
-//         <BarChart
-//           width={500}
-//           height={300}
-//           data={data}
-//           margin={{
-//             top: 5,
-//             right: 30,
-//             left: 20,
-//             bottom: 5,
-//           }}
-//         >
-//           <CartesianGrid strokeDasharray="3 3" />
-//           <XAxis dataKey="name" />
-//           <YAxis />
-//           <Tooltip />
-//           <Legend />
-//           <Bar dataKey="pv" fill="#8884d8" />
-//           <Bar dataKey="uv" fill="#82ca9d" />
-//         </BarChart>
-//       </ResponsiveContainer>
-//     </div>
-//   );
-// }
-
-// export default Main;
 
 
