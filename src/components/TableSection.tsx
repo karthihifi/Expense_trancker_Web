@@ -37,7 +37,9 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
 
   return (
     <div className="table">
-      <h3>Expennse Details</h3>
+      <div className="header">
+        <h3>Expense Details</h3>
+      </div>
       <div className='table-cont'>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
@@ -56,7 +58,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
             <TableBody>
               {props.ModalData.map((row) => (
                 <TableRow
-                //   key={row.date}
+                  //   key={row.date}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">

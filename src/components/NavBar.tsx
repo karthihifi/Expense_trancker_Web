@@ -12,9 +12,18 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
+const darkTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#866ec7',
+    },
+  },
+});
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -36,6 +45,7 @@ const NavBar = () => {
   };
 
   return (
+    <ThemeProvider theme={darkTheme}>
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -157,6 +167,7 @@ const NavBar = () => {
         </Toolbar>
       </Container>
     </AppBar>
+    </ThemeProvider>
   );
 };
 export default NavBar;

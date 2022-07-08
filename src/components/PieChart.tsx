@@ -33,7 +33,7 @@ const PieCharts: React.FC<PieChartsProps> = (props) => {
 
     return (
         <div>
-            <PieChart width={500}
+            <PieChart width={460}
                 height={300} margin={{
                     top: 5,
                     right: 30,

@@ -98,7 +98,16 @@ function createData(
 const rows = [
     createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
     createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022)
+    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
+    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
 ];
 
 
@@ -311,21 +320,25 @@ const Main: React.FC = (props) => {
 
     return (
         <div>
-            <NavBar></NavBar>
+            {/* <NavBar></NavBar> */}
             <div className="main">
                 <div className="Sidebar">
                     <SideBar handleCliclPageChange={handleCliclPageChange}></SideBar>
                 </div>
                 <div className="Detail">
                     <DateSection handleAddExpense={handleAddExpense}></DateSection>
-                    <TodaysExpenseSect dailyTotal={dailyTotal}></TodaysExpenseSect>
-                    {PageSelect == 'Home' || PageSelect == 'Mon' || PageSelect == 'Year' ? <TableSection ModalData={ModalData}></TableSection> : ''}
-                    <div className="chart">
-                        <h3>Data Analysis</h3>
-                        <ResponsiveContainer width="100%" height="100%">
-                            <div className="chart"> {PageSelect == 'BarCh' ? <BarCharts barData={ModalData}></BarCharts>
-                                : <PieCharts pieData={PieChartData}></PieCharts>}</div>
-                        </ResponsiveContainer>
+                    <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect>
+                    <div className="Detail_maincontent">
+                        <TableSection ModalData={ModalData}></TableSection>
+                        <div className="chart">
+                            <div className="header">
+                                <h3>Data Analysis</h3>
+                            </div>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <div> {PageSelect == 'BarCh' ? <BarCharts barData={ModalData}></BarCharts>
+                                    : <PieCharts pieData={PieChartData}></PieCharts>}</div>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ import axios from 'axios';
 import ModalFile from './interface';
 import './main.css'
 import exp from 'constants';
+import Box from '@mui/material/Box';
 
 interface MainProps {
     handleAddExpense: (ModalData: ModalFile) => void;
@@ -117,7 +118,7 @@ const Calenderinfo = [
     },
 ];
 
-const findmonth = (month : number): string => {
+const findmonth = (month: number): string => {
     let index = Calenderinfo.findIndex(row => { return row.key == month })
     return Calenderinfo[index].value
 }
@@ -134,7 +135,7 @@ const defaultExpData: ModalFile = {
     dateno: parseInt(new Date().toISOString().split('T')[0].split('-')[2]),
     month: parseInt(new Date().toISOString().split('T')[0].split('-')[1]),
     monthstr: findmonth(parseInt(new Date().toISOString().split('T')[0].split('-')[1])),
-  year: parseInt(new Date().toISOString().split('T')[0].split('-')[0])
+    year: parseInt(new Date().toISOString().split('T')[0].split('-')[0])
 }
 
 const defaultFieldState: ErrorFields = {
@@ -152,6 +153,8 @@ const DateSection: React.FC<MainProps> = (props) => {
     const [expData, setexpData] = React.useState<ModalFile>(defaultExpData);
 
     const [errorFileds, setErrorfields] = React.useState<ErrorFields>(defaultFieldState)
+
+    const [CurrSymbols, setCurrSymbols] = React.useState<{ label: string, value: string }[]>([]);
 
     const validationerror = (): boolean => {
 
@@ -276,128 +279,168 @@ const DateSection: React.FC<MainProps> = (props) => {
         //https://v6.exchangerate-api.com/v6/fa161db3ad1c0d2e50ce799e/latest/USD
         axios.get('https://restcountries.com/v3.1/all')
             .then(res => {
-                console.log(res)
+                // console.log(res.data[0].currencies)
+                let currencydata: any[] = []
+                let restdata: any[] = res.data
+                let symbols: any = {}
+                restdata.forEach(element => {
+                    // console.log(Object.keys(element.currencies)[0], Object.values(element.currencies)[0])
+                    const symbols = (symbol: any): string => {
+                        console.log(symbol)
+                        let dummy: any = Object.values(symbol)[0];
+                        return dummy.symbol
+                    }
+                    if (element.currencies != null) {
+                        // console.log(Object.keys(element.currencies))
+                        currencydata.push({
+                            value: Object.keys(element.currencies)[0],
+                            label: symbols(element.currencies)
+                        })
+                    }
+
+                });
+                const filteredArr = currencydata.reduce((acc, current) => {
+                    const x = acc.find((item: { value: any; }) => item.value === current.value);
+                    if (!x) {
+                        return acc.concat([current]);
+                    } else {
+                        return acc;
+                    }
+                }, []);
+                console.log(filteredArr)
+                setCurrSymbols(filteredArr)
             })
     }, [])
     return (
-        <div>
-            <h2>Todays Expense Details</h2>
-            <form noValidate className='ExpenseSect-form'>
-                <TextField
-                    id="outlined-select-currency"
-                    error={errorFileds.currency}
-                    select
-                    label="Select"
-                    size="small"
-                    helperText="Please select your currency"
-                    value={expData.currency}
-                    onChange={handleChange('currency')}
-                >
-                    {currencies.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                        </MenuItem>
-                    ))}
-                </TextField>
+        <div className='Detail_header'>
+            <div className='header'>
+                <h3>Todays Expense Details</h3>
+            </div>
+            <Box
+                component="form"
+                sx={{
+                    '& .MuiTextField-root': { m: 1, width: '15ch' },
+                }}
+                noValidate
+                autoComplete="off"
+            >
+                <form noValidate className='ExpenseSect-form'>
+                    <TextField
+                        id="outlined-select-currency"
+                        error={errorFileds.currency}
+                        select
+                        label="Select"
+                        size="small"
+                        helperText="Please select your currency"
+                        value={expData.currency}
+                        onChange={handleChange('currency')}
+                    >
+                        {CurrSymbols.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
 
-                <TextField
-                    required
-                    error={errorFileds.amount}
-                    id="outlined-number"
-                    label="Amount"
-                    helperText="Enter Expense"
-                    type="number"
-                    size="small"
-                    value={expData.amount}
-                    onChange={handleChange('amount')}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-                <TextField
-                    required
-                    error={errorFileds.time}
-                    id="outlined-basic"
-                    select
-                    label="Select"
-                    size="small"
-                    // value={currency}
-                    //   onChange={handleChange}
-                    helperText="Time of Day"
-                    value={expData.time}
-                    onChange={handleChange('time')}
-                >
-                    {timeofDay.map((option) => (
-                        <MenuItem key={option} value={option}>
-                            {option}
-                        </MenuItem>
-                    ))}
-                </TextField>
+                    <TextField
+                        required
+                        error={errorFileds.amount}
+                        id="outlined-number"
+                        label="Amount"
+                        helperText="Enter Expense"
+                        type="number"
+                        size="small"
+                        value={expData.amount}
+                        onChange={handleChange('amount')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        required
+                        error={errorFileds.time}
+                        id="outlined-basic"
+                        select
+                        label="Select"
+                        size="small"
+                        // value={currency}
+                        //   onChange={handleChange}
+                        helperText="Time of Day"
+                        value={expData.time}
+                        onChange={handleChange('time')}
+                    >
+                        {timeofDay.map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </TextField>
 
-                <TextField
-                    required
-                    error={errorFileds.category}
-                    id="outlined-basic"
-                    select
-                    label="Select"
-                    size="small"
-                    helperText="Select Category"
-                    value={expData.category}
-                    onChange={handleChange('category')}
-                >
-                    {Categories.map((option) => (
-                        <MenuItem key={option} value={option}>
-                            {option}
-                        </MenuItem>
-                    ))}
-                </TextField>
+                    <TextField
+                        required
+                        error={errorFileds.category}
+                        id="outlined-basic"
+                        select
+                        label="Select"
+                        size="small"
+                        helperText="Select Category"
+                        value={expData.category}
+                        onChange={handleChange('category')}
+                    >
+                        {Categories.map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </TextField>
 
-                <TextField
-                    required
-                    error={errorFileds.necessity}
-                    id="outlined-basic"
-                    select
-                    label="Select"
-                    size="small"
-                    value={expData.necessity}
-                    //   onChange={handleChange}
-                    helperText="Select Necessity"
-                    onChange={handleChange('necessity')}
-                >
-                    {Necessity.map((option) => (
-                        <MenuItem key={option} value={option}>
-                            {option}
-                        </MenuItem>
-                    ))}
-                </TextField>
+                    <TextField
+                        required
+                        error={errorFileds.necessity}
+                        id="outlined-basic"
+                        select
+                        label="Select"
+                        size="small"
+                        value={expData.necessity}
+                        //   onChange={handleChange}
+                        helperText="Select Necessity"
+                        onChange={handleChange('necessity')}
+                    >
+                        {Necessity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </TextField>
 
-                <TextField
-                    required
-                    error={errorFileds.date}
-                    id="date"
-                    label="Enter Date"
-                    type="date"
-                    // defaultValue= {defDate}
-                    value={expData.date}
-                    size="small"
-                    //   className={classes.textField}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    onChange={handleChange('date')}
-                />
-                <Button variant="text" color="success" size="small" onClick={() => {
-                    let error: boolean = validationerror()
-                    if (error == false) {
-                        props.handleAddExpense(expData)
-                        setErrorfields(defaultFieldState)
-                    }
-                    setexpData(defaultExpData)
+                    <TextField
+                        required
+                        error={errorFileds.date}
+                        id="date"
+                        label="Enter Date"
+                        type="date"
+                        // defaultValue= {defDate}
+                        value={expData.date}
+                        size="small"
+                        //   className={classes.textField}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        onChange={handleChange('date')}
+                    />
+                    <Button variant="contained" color="primary" size="small" onClick={() => {
+                        let error: boolean = validationerror()
+                        if (error == false) {
+                            props.handleAddExpense(expData)
+                            setErrorfields(defaultFieldState)
+                        }
+                        setexpData(defaultExpData)
 
-                }}>
-                    Add Expense
-        </Button>
-            </form>
+                    }}>
+                        Add Expense
+                    </Button>
+                </form>
+            </Box>
         </div>
     );
 }

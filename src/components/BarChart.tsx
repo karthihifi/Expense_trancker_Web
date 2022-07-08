@@ -16,7 +16,7 @@ const BarCharts: React.FC<BarChartsProps> = (props) => {
     return (
         <div>
             <BarChart
-                width={500}
+                width={460}
                 height={300}
                 data={props.barData}
                 margin={{

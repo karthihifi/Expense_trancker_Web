@@ -45,9 +45,11 @@ interface expensesect{
 }
 
 const TodaysExpenseSect:React.FC<expensesect> = (props) => {
-    return (<div>
+    return (<div className='TodaysExp-det'>
+        <div className='header'>
         <h3>Cumulative Spending</h3>
-        <div className='TodaysExp-det'>
+        </div>
+        <div>
             {/* <div>{String(props.dailyTotal)}</div> */}
             <div>Total Amount spent Today : {String(props.dailyTotal)} INR  </div>
             <div>Total Amount spent on August Month : 1500 INR</div>

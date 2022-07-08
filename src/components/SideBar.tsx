@@ -5,12 +5,18 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import CurrencyYenIcon from '@mui/icons-material/CurrencyYen';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import PieChartIcon from '@mui/icons-material/PieChart';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
+import  './main.css'
 
 
 interface SideBarProps {
@@ -26,38 +32,39 @@ const SideBar: React.FC<SideBarProps> = (props) => {
 
     return (
         <List
-            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+            sx={{ width: '100%', maxWidth: 360, bgcolor: '#866ec7' }}
             component="nav"
             aria-labelledby="nested-list-subheader"
             subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                    Nested List Items
-                </ListSubheader>
+                // <ListSubheader component="div" id="nested-list-subheader" className='Sidebar_header' >
+                //    Expense Report
+                // </ListSubheader>
+                <h3>Expense Report</h3>
             }
         >
             <ListItemButton
               onClick={() => props.handleCliclPageChange('Home')}
             >
                 <ListItemIcon>
-                    <SendIcon />
+                    <AssessmentIcon style={{ color: "#fff" }}/>
                 </ListItemIcon>
                 <ListItemText primary="Daily Report" />
             </ListItemButton>
             <ListItemButton onClick={() => props.handleCliclPageChange('Mon')}>
                 <ListItemIcon>
-                    <DraftsIcon />
+                    <SummarizeIcon style={{ color: "#fff" }}/>
                 </ListItemIcon>
                 <ListItemText primary="Monthly Report" />
             </ListItemButton >
             <ListItemButton onClick={() => props.handleCliclPageChange('Year')}>
                 <ListItemIcon>
-                    <DraftsIcon />
+                    <CurrencyYenIcon style={{ color: "#fff" }}/>
                 </ListItemIcon>
                 <ListItemText primary="Yearly Report" />
             </ListItemButton>
             <ListItemButton onClick={handleClick}>
                 <ListItemIcon>
-                    <InboxIcon />
+                    <InboxIcon style={{ color: "#fff" }}/>
                 </ListItemIcon>
                 <ListItemText primary="Analysis" />
                 {open ? <ExpandLess /> : <ExpandMore />}
@@ -66,15 +73,15 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                 <List component="div" disablePadding>
                     <ListItemButton sx={{ pl: 4 }} onClick={() => props.handleCliclPageChange('BarCh')}>
                         <ListItemIcon>
-                            <StarBorder />
+                            <BarChartIcon style={{ color: "#fff" }}/>
                         </ListItemIcon>
-                        <ListItemText primary="Bar Chart Analysis" />
+                        <ListItemText primary="Bar Chart" />
                     </ListItemButton>
                     <ListItemButton sx={{ pl: 4 }} onClick={() => props.handleCliclPageChange('PieCh')}>
                         <ListItemIcon>
-                            <StarBorder />
+                            <PieChartIcon  style={{ color: "#fff" }}/>
                         </ListItemIcon>
-                        <ListItemText primary="Pie Chart Analysis" />
+                        <ListItemText primary="Pie Chart"/>
                     </ListItemButton>
                 </List>
             </Collapse>
