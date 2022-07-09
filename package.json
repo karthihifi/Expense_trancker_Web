@@ -19,6 +19,7 @@
     "axios": "^0.27.2",
     "canvasjs-react-charts": "^1.0.5",
     "chart.js": "^3.8.0",
+    "firebase": "^9.9.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.2.0",
     "react-dom": "^18.2.0",

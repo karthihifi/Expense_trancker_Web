@@ -14,6 +14,13 @@ import TodaysExpenseSect from './TodaysExpenseSection'
 import ModalFile from './interface';
 import PieCharts from './PieChart'
 import BarCharts from './BarChart'
+import firebase_Expeseapp from "./firebase";
+import { getDatabase, ref, set, push, get, child, query, limitToLast } from "firebase/database";
+import exp from "constants";
+// import {collection, addDoc, Timestamp} from 'firebase/firestore'
+
+// Initialize Realtime Database and get a reference to the service
+const database = getDatabase(firebase_Expeseapp);
 
 interface ModalDataProps {
     ModalData: ModalFile[];
@@ -99,15 +106,6 @@ const rows = [
     createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
     createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
     createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
 ];
 
 
@@ -134,6 +132,11 @@ const Necessity = [
     'Maybe'
 ]
 
+function writeUserData(expdata: ModalFile) {
+    const postListRef = ref(database, 'ExpenseData');
+    const newPostRef = push(postListRef);
+    set(newPostRef, expdata);
+}
 
 const Main: React.FC = (props) => {
 
@@ -151,18 +154,44 @@ const Main: React.FC = (props) => {
     const [YearlyData, setYearlyData] = React.useState<ModalFile[]>([]);
 
 
+    const[maxcount,setmaxcount] = React.useState<number>(15);
     const [PieChartData, setPieChartData] = React.useState<PieChartIntf[]>([]);
 
     React.useEffect(() => {
         console.log('recalled')
-        setModalData(rows)
-        let dailyTotal = calculateDailytot(rows)
-        setdailyTotal(dailyTotal)
-        setDailyData(rows)
-        setAllData(rows)
-        groupData(rows, 'Category', dailyTotal)
-        console.log(dailyTotal)
+        // setModalData(rows)
+        // let dailyTotal = calculateDailytot(rows)
+        // setdailyTotal(dailyTotal)
+        // setDailyData(rows)
+        // setAllData(rows)
+        // groupData(rows, 'Category', dailyTotal)
+        // // console.log(dailyTotal)
+        // // writeUserData(rows[0])
+        readExpenseData()
     }, [])
+
+    const readExpenseData = async () => {
+        const Expref = ref(database, 'ExpenseData');
+        get(Expref).then((snapshot) => {
+            if (snapshot.exists()) {
+                let dummy: ModalFile[] = Object.values(snapshot.val())
+                let ExpenseData: ModalFile[] =  Object.values(snapshot.val())
+                if (ExpenseData.length > maxcount) {
+                    ExpenseData = dummy.slice((dummy.length - maxcount), dummy.length)
+                } 
+                setModalData(ExpenseData)
+                let dailyTotal = calculateDailytot(ExpenseData)
+                setdailyTotal(dailyTotal)
+                setDailyData(ExpenseData)
+                setAllData(ExpenseData)
+                groupData(ExpenseData, 'Category', dailyTotal)
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
 
     const calculateDailytot = (TableData: ModalFile[]): number => {
         let total = TableData.reduce((tot, val) => {
@@ -214,13 +243,18 @@ const Main: React.FC = (props) => {
     }
     const handleAddExpense = (Modal: ModalFile) => {
         console.log(Modal)
+        writeUserData(Modal)
         let dummydata: ModalFile[] = [...AllData];
         dummydata.push(Modal)
         setAllData(dummydata)
         setModalData(dummydata)
         // setModalData(prevData => [...prevData, Modal])
-        console.log(dummydata, 'After')
+        // console.log(dummydata, 'After')
         setdailyTotal(calculateDailytot(dummydata))
+        let month = parseInt(new Date().toISOString().split('T')[0].split('-')[1])
+        let year = parseInt(new Date().toISOString().split('T')[0].split('-')[0])
+        const dailyItems = dummydata.filter((item) => { return (item.month == month && item.year == year) })
+        groupData(dailyItems, 'Category', calculateDailytot(dailyItems))
     }
 
     const groupData = (ModalData: ModalFile[], groupBy: string, total: number) => {
@@ -274,9 +308,8 @@ const Main: React.FC = (props) => {
                 filteredArr.forEach((item) => {
                     item.amount = calculateMonthtot(item.month, item.year)
                     let index = Calenderinfo.findIndex(row => { return row.key == item.month })
-                    // item.date = Calenderinfo[index].value
+                    item.date = Calenderinfo[index].value
                 })
-                console.log(AllData, filteredArr, ModalData, "testmonth")
                 setdailyTotal(calculateDailytot(filteredArr))
                 setMontlyData(filteredArr)
                 setModalData(filteredArr)
@@ -301,8 +334,9 @@ const Main: React.FC = (props) => {
                 console.log(filteredArr1, "yearId's")
                 filteredArr1.forEach((item) => {
                     item.amount = calculateYeartot(item.year)
+                    item.date = String(item.year)
                 })
-                console.log(AllData, filteredArr1, "testmonth")
+                // console.log(AllData, filteredArr1, "testmonth")
                 setdailyTotal(calculateDailytot(filteredArr1))
                 setYearlyData(filteredArr1)
                 setModalData(filteredArr1)

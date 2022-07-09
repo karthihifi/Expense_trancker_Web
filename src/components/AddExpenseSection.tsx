@@ -276,7 +276,6 @@ const DateSection: React.FC<MainProps> = (props) => {
         };
 
     React.useEffect(() => {
-        //https://v6.exchangerate-api.com/v6/fa161db3ad1c0d2e50ce799e/latest/USD
         axios.get('https://restcountries.com/v3.1/all')
             .then(res => {
                 // console.log(res.data[0].currencies)
@@ -286,7 +285,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                 restdata.forEach(element => {
                     // console.log(Object.keys(element.currencies)[0], Object.values(element.currencies)[0])
                     const symbols = (symbol: any): string => {
-                        console.log(symbol)
+                        // console.log(symbol)
                         let dummy: any = Object.values(symbol)[0];
                         return dummy.symbol
                     }
@@ -307,10 +306,11 @@ const DateSection: React.FC<MainProps> = (props) => {
                         return acc;
                     }
                 }, []);
-                console.log(filteredArr)
+                // console.log(filteredArr)
                 setCurrSymbols(filteredArr)
             })
-    }, [])
+    }, []
+    )
     return (
         <div className='Detail_header'>
             <div className='header'>
@@ -322,89 +322,134 @@ const DateSection: React.FC<MainProps> = (props) => {
                     '& .MuiTextField-root': { m: 1, width: '15ch' },
                 }}
                 noValidate
-                autoComplete="off"
+                autoComplete="on"
             >
-                <form noValidate className='ExpenseSect-form'>
-                    <TextField
-                        id="outlined-select-currency"
-                        error={errorFileds.currency}
-                        select
-                        label="Select"
-                        size="small"
-                        helperText="Please select your currency"
-                        value={expData.currency}
-                        onChange={handleChange('currency')}
-                    >
-                        {CurrSymbols.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </TextField>
+                <div>
+                    <form noValidate className='ExpenseSect-form'>
+                        <TextField
+                            id="outlined-select-currency"
+                            error={errorFileds.currency}
+                            select
+                            label="Select"
+                            size="small"
+                            helperText="Please select your currency"
+                            value={expData.currency}
+                            onChange={handleChange('currency')}
+                        >
+                            {CurrSymbols.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
 
+                        <TextField
+                            required
+                            error={errorFileds.amount}
+                            id="outlined-number"
+                            label="Amount"
+                            helperText="Enter Expense"
+                            type="number"
+                            size="small"
+                            value={expData.amount}
+                            onChange={handleChange('amount')}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <TextField
+                            required
+                            error={errorFileds.time}
+                            id="outlined-basic"
+                            select
+                            label="Select"
+                            size="small"
+                            // value={currency}
+                            //   onChange={handleChange}
+                            helperText="Time of Day"
+                            value={expData.time}
+                            onChange={handleChange('time')}
+                        >
+                            {timeofDay.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+
+                        <TextField
+                            required
+                            error={errorFileds.category}
+                            id="outlined-basic"
+                            select
+                            label="Select"
+                            size="small"
+                            helperText="Select Category"
+                            value={expData.category}
+                            onChange={handleChange('category')}
+                        >
+                            {Categories.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+
+                        <TextField
+                            required
+                            error={errorFileds.necessity}
+                            id="outlined-basic"
+                            select
+                            label="Select"
+                            size="small"
+                            value={expData.necessity}
+                            helperText="Select Necessity"
+                            onChange={handleChange('necessity')}
+                        >
+                            {Necessity.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+
+                        <TextField
+                            required
+                            error={errorFileds.date}
+                            id="date"
+                            label="Enter Date"
+                            type="date"
+                            // defaultValue= {defDate}
+                            value={expData.date}
+                            size="small"
+                            //   className={classes.textField}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            onChange={handleChange('date')}
+                        />
+                        <Button variant="contained" color="primary" size="small" onClick={() => {
+                            let error: boolean = validationerror()
+                            if (error == false) {
+                                props.handleAddExpense(expData)
+                                setErrorfields(defaultFieldState)
+                            }
+                            setexpData(defaultExpData)
+
+                        }}>
+                            Add Expense
+                        </Button>
+                    </form>
+                </div>
+                <div>
                     <TextField
-                        required
-                        error={errorFileds.amount}
-                        id="outlined-number"
-                        label="Amount"
-                        helperText="Enter Expense"
-                        type="number"
-                        size="small"
-                        value={expData.amount}
-                        onChange={handleChange('amount')}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                    <TextField
-                        required
-                        error={errorFileds.time}
                         id="outlined-basic"
                         select
-                        label="Select"
+                        label="SubCategory"
                         size="small"
-                        // value={currency}
-                        //   onChange={handleChange}
-                        helperText="Time of Day"
-                        value={expData.time}
-                        onChange={handleChange('time')}
-                    >
-                        {timeofDay.map((option) => (
-                            <MenuItem key={option} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-
-                    <TextField
-                        required
-                        error={errorFileds.category}
-                        id="outlined-basic"
-                        select
-                        label="Select"
-                        size="small"
-                        helperText="Select Category"
-                        value={expData.category}
-                        onChange={handleChange('category')}
-                    >
-                        {Categories.map((option) => (
-                            <MenuItem key={option} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-
-                    <TextField
-                        required
-                        error={errorFileds.necessity}
-                        id="outlined-basic"
-                        select
-                        label="Select"
-                        size="small"
-                        value={expData.necessity}
-                        //   onChange={handleChange}
-                        helperText="Select Necessity"
-                        onChange={handleChange('necessity')}
+                        // value={expData.necessity}
+                        helperText="Select SubCategory"
+                        // onChange={handleChange('necessity')}
                     >
                         {Necessity.map((option) => (
                             <MenuItem key={option} value={option}>
@@ -414,32 +459,39 @@ const DateSection: React.FC<MainProps> = (props) => {
                     </TextField>
 
                     <TextField
-                        required
-                        error={errorFileds.date}
-                        id="date"
-                        label="Enter Date"
-                        type="date"
-                        // defaultValue= {defDate}
-                        value={expData.date}
+                        id="outlined-basic"
+                        select
+                        label="Purchase Mode"
                         size="small"
-                        //   className={classes.textField}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        onChange={handleChange('date')}
-                    />
-                    <Button variant="contained" color="primary" size="small" onClick={() => {
-                        let error: boolean = validationerror()
-                        if (error == false) {
-                            props.handleAddExpense(expData)
-                            setErrorfields(defaultFieldState)
-                        }
-                        setexpData(defaultExpData)
+                        // value={expData.necessity}
+                        helperText="Enter PurchaseMode"
+                        // onChange={handleChange('necessity')}
+                    >
+                        {Necessity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </TextField>
 
-                    }}>
-                        Add Expense
-                    </Button>
-                </form>
+                    <TextField
+                        id="outlined-basic"
+                        multiline
+                        rows={1}
+                        // select
+                        // label="Enter Comments"
+                        size="small"
+                        // value={expData.necessity}
+                        helperText="Enter Comments"
+                        // onChange={handleChange('necessity')}
+                    >
+                        {Necessity.map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </div>
             </Box>
         </div>
     );
