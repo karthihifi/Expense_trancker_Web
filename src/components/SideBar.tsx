@@ -16,7 +16,12 @@ import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
-import  './main.css'
+import './main.css'
+import ProfileMenu from './ProfileSettings'
+import SettingsIcon from '@mui/icons-material/Settings';
+import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
+import Divider from '@mui/material/Divider';
+
 
 
 interface SideBarProps {
@@ -36,35 +41,54 @@ const SideBar: React.FC<SideBarProps> = (props) => {
             component="nav"
             aria-labelledby="nested-list-subheader"
             subheader={
-                // <ListSubheader component="div" id="nested-list-subheader" className='Sidebar_header' >
-                //    Expense Report
-                // </ListSubheader>
-                <h3>Expense Report</h3>
+                <ListSubheader component="div" sx={{ bgcolor: '#866ec7', margin: '15px 0' }} id="nested-list-subheader" className='Sidebar_header' >
+                    <ProfileMenu></ProfileMenu>
+                </ListSubheader>
             }
         >
             <ListItemButton
-              onClick={() => props.handleCliclPageChange('Home')}
+             onClick={() => props.handleCliclPageChange('Profile')}
             >
                 <ListItemIcon>
-                    <AssessmentIcon style={{ color: "#fff" }}/>
+                    <SettingsIcon style={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Profile Settings" />
+            </ListItemButton>
+
+            <ListItemButton
+            onClick={() => props.handleCliclPageChange('Currency')}
+            >
+                <ListItemIcon>
+                    <CurrencyPoundIcon style={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Set Currency" />
+            </ListItemButton>
+            <Divider sx={{
+                bgcolor: '#fff'
+            }} />
+            <ListItemButton
+                onClick={() => props.handleCliclPageChange('Home')}
+            >
+                <ListItemIcon>
+                    <AssessmentIcon style={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Daily Report" />
             </ListItemButton>
             <ListItemButton onClick={() => props.handleCliclPageChange('Mon')}>
                 <ListItemIcon>
-                    <SummarizeIcon style={{ color: "#fff" }}/>
+                    <SummarizeIcon style={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Monthly Report" />
             </ListItemButton >
             <ListItemButton onClick={() => props.handleCliclPageChange('Year')}>
                 <ListItemIcon>
-                    <CurrencyYenIcon style={{ color: "#fff" }}/>
+                    <CurrencyYenIcon style={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Yearly Report" />
             </ListItemButton>
             <ListItemButton onClick={handleClick}>
                 <ListItemIcon>
-                    <InboxIcon style={{ color: "#fff" }}/>
+                    <InboxIcon style={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Analysis" />
                 {open ? <ExpandLess /> : <ExpandMore />}
@@ -73,15 +97,15 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                 <List component="div" disablePadding>
                     <ListItemButton sx={{ pl: 4 }} onClick={() => props.handleCliclPageChange('BarCh')}>
                         <ListItemIcon>
-                            <BarChartIcon style={{ color: "#fff" }}/>
+                            <BarChartIcon style={{ color: "#fff" }} />
                         </ListItemIcon>
                         <ListItemText primary="Bar Chart" />
                     </ListItemButton>
                     <ListItemButton sx={{ pl: 4 }} onClick={() => props.handleCliclPageChange('PieCh')}>
                         <ListItemIcon>
-                            <PieChartIcon  style={{ color: "#fff" }}/>
+                            <PieChartIcon style={{ color: "#fff" }} />
                         </ListItemIcon>
-                        <ListItemText primary="Pie Chart"/>
+                        <ListItemText primary="Pie Chart" />
                     </ListItemButton>
                 </List>
             </Collapse>

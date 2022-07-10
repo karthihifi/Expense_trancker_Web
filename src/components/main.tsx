@@ -17,6 +17,9 @@ import BarCharts from './BarChart'
 import firebase_Expeseapp from "./firebase";
 import { getDatabase, ref, set, push, get, child, query, limitToLast } from "firebase/database";
 import exp from "constants";
+import ProfileMenu from './ProfileSettings'
+import AddCategory from './AddCategory'
+import axios from 'axios';
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 
 // Initialize Realtime Database and get a reference to the service
@@ -153,10 +156,45 @@ const Main: React.FC = (props) => {
     const [MontlyData, setMontlyData] = React.useState<ModalFile[]>([]);
     const [YearlyData, setYearlyData] = React.useState<ModalFile[]>([]);
 
-
-    const[maxcount,setmaxcount] = React.useState<number>(15);
+    const [catModalOpen, setcatModalOpen] = React.useState<boolean>(false);
+    const [maxcount, setmaxcount] = React.useState<number>(15);
     const [PieChartData, setPieChartData] = React.useState<PieChartIntf[]>([]);
 
+    const [CurrSymbols, setCurrSymbols] = React.useState<{
+        currlabel: string, currsymbol: string, countryname: string,
+        flag: string
+    }[]>([]);
+
+
+    const getCountryDetails = () =>{
+        axios.get('https://restcountries.com/v3.1/all')
+        .then(res => {
+            // console.log(res.data[0].currencies)
+            let currencydata: any[] = []
+            let restdata: any[] = res.data
+            let symbols: any = {}
+            restdata.forEach(element => {
+                // console.log(Object.keys(element.currencies)[0], Object.values(element.currencies)[0])
+                const symbols = (symbol: any): string => {
+                    // console.log(symbol)
+                    let dummy: any = Object.values(symbol)[0];
+                    return dummy.symbol
+                }
+                if (element.currencies != null) {
+                    // console.log(Object.keys(element.currencies))
+                    currencydata.push({
+                        currlabel: Object.keys(element.currencies)[0],
+                        currsymbol: symbols(element.currencies),
+                        countryname: element.name.common,
+                        flag: element.flags.svg
+                    })
+                }
+
+            });
+            console.log(currencydata)
+            setCurrSymbols(currencydata)
+        })
+    }
     React.useEffect(() => {
         console.log('recalled')
         // setModalData(rows)
@@ -168,6 +206,7 @@ const Main: React.FC = (props) => {
         // // console.log(dailyTotal)
         // // writeUserData(rows[0])
         readExpenseData()
+        getCountryDetails()
     }, [])
 
     const readExpenseData = async () => {
@@ -175,10 +214,10 @@ const Main: React.FC = (props) => {
         get(Expref).then((snapshot) => {
             if (snapshot.exists()) {
                 let dummy: ModalFile[] = Object.values(snapshot.val())
-                let ExpenseData: ModalFile[] =  Object.values(snapshot.val())
+                let ExpenseData: ModalFile[] = Object.values(snapshot.val())
                 if (ExpenseData.length > maxcount) {
                     ExpenseData = dummy.slice((dummy.length - maxcount), dummy.length)
-                } 
+                }
                 setModalData(ExpenseData)
                 let dailyTotal = calculateDailytot(ExpenseData)
                 setdailyTotal(dailyTotal)
@@ -278,6 +317,10 @@ const Main: React.FC = (props) => {
         }
     }
 
+    const handleCatModalclose = () => {
+        setcatModalOpen(false)
+    }
+
     const handleCliclPageChange = (pageSelect: string) => {
         console.log(pageSelect, 'pagesel')
         let date = parseInt(new Date().toISOString().split('T')[0].split('-')[2])
@@ -348,6 +391,13 @@ const Main: React.FC = (props) => {
             case 'PieCh':
                 setPageSelect('PieCh');
                 break;
+            case 'Profile':
+                // setPageSelect('PieCh');
+                break;
+            case 'Currency':
+                // setPageSelect('PieCh');
+                setcatModalOpen(true)
+                break;
         }
     }
 
@@ -360,6 +410,7 @@ const Main: React.FC = (props) => {
                     <SideBar handleCliclPageChange={handleCliclPageChange}></SideBar>
                 </div>
                 <div className="Detail">
+                    {/* <ProfileMenu></ProfileMenu> */}
                     <DateSection handleAddExpense={handleAddExpense}></DateSection>
                     <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect>
                     <div className="Detail_maincontent">
@@ -375,6 +426,7 @@ const Main: React.FC = (props) => {
                         </div>
                     </div>
                 </div>
+                <AddCategory openCatmodal={catModalOpen} handleCatModalclose={handleCatModalclose}></AddCategory>
             </div>
         </div>
     );

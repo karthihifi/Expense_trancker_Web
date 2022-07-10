@@ -293,21 +293,23 @@ const DateSection: React.FC<MainProps> = (props) => {
                         // console.log(Object.keys(element.currencies))
                         currencydata.push({
                             value: Object.keys(element.currencies)[0],
-                            label: symbols(element.currencies)
+                            label: symbols(element.currencies),
+                            name: element.name.common,
+                            flag: element.flags.svg
                         })
                     }
 
                 });
-                const filteredArr = currencydata.reduce((acc, current) => {
-                    const x = acc.find((item: { value: any; }) => item.value === current.value);
-                    if (!x) {
-                        return acc.concat([current]);
-                    } else {
-                        return acc;
-                    }
-                }, []);
-                // console.log(filteredArr)
-                setCurrSymbols(filteredArr)
+                // const filteredArr = currencydata.reduce((acc, current) => {
+                //     const x = acc.find((item: { value: any; }) => item.value === current.value);
+                //     if (!x) {
+                //         return acc.concat([current]);
+                //     } else {
+                //         return acc;
+                //     }
+                // }, []);
+                console.log(currencydata)
+                setCurrSymbols(currencydata)
             })
     }, []
     )
@@ -449,7 +451,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                         size="small"
                         // value={expData.necessity}
                         helperText="Select SubCategory"
-                        // onChange={handleChange('necessity')}
+                    // onChange={handleChange('necessity')}
                     >
                         {Necessity.map((option) => (
                             <MenuItem key={option} value={option}>
@@ -465,7 +467,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                         size="small"
                         // value={expData.necessity}
                         helperText="Enter PurchaseMode"
-                        // onChange={handleChange('necessity')}
+                    // onChange={handleChange('necessity')}
                     >
                         {Necessity.map((option) => (
                             <MenuItem key={option} value={option}>
@@ -483,7 +485,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                         size="small"
                         // value={expData.necessity}
                         helperText="Enter Comments"
-                        // onChange={handleChange('necessity')}
+                    // onChange={handleChange('necessity')}
                     >
                         {Necessity.map((option) => (
                             <MenuItem key={option} value={option}>
