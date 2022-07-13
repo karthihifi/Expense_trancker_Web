@@ -22,11 +22,13 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import Divider from '@mui/material/Divider';
 
-
-
 interface SideBarProps {
     // handleCliclPageChange(pageSelect: string): any
     handleCliclPageChange: (pageSelect: any) => void;
+    profiledata: {
+        currlabel: string, currsymbol: string, countryname: string,
+        flag: string
+    }
 }
 const SideBar: React.FC<SideBarProps> = (props) => {
     const [open, setOpen] = React.useState(true);
@@ -42,7 +44,7 @@ const SideBar: React.FC<SideBarProps> = (props) => {
             aria-labelledby="nested-list-subheader"
             subheader={
                 <ListSubheader component="div" sx={{ bgcolor: '#866ec7', margin: '15px 0' }} id="nested-list-subheader" className='Sidebar_header' >
-                    <ProfileMenu></ProfileMenu>
+                    <ProfileMenu profiledata={props.profiledata}></ProfileMenu>
                 </ListSubheader>
             }
         >

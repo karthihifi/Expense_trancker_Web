@@ -20,6 +20,7 @@ import exp from "constants";
 import ProfileMenu from './ProfileSettings'
 import AddCategory from './AddCategory'
 import axios from 'axios';
+import AddCurrency from './AddCurrency'
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 
 // Initialize Realtime Database and get a reference to the service
@@ -33,6 +34,12 @@ interface CalenderProps {
     value: string
 }
 
+interface Glabaldata {
+    username: string,
+    currlabel: string, currsymbol: string, countryname: string,
+    flag: string
+
+}
 interface PieChartIntf { name: string, value: number }
 
 const Calenderinfo = [
@@ -135,10 +142,25 @@ const Necessity = [
     'Maybe'
 ]
 
-function writeUserData(expdata: ModalFile) {
-    const postListRef = ref(database, 'ExpenseData');
-    const newPostRef = push(postListRef);
-    set(newPostRef, expdata);
+// function writeUserData(expdata: ModalFile) {
+//     const postListRef = ref(database, `ExpenseUser/${.username}/ProfileData`);
+//     const newPostRef = push(postListRef);
+//     set(newPostRef, expdata);
+// }
+
+function writeGlobalUserData(expdata: Glabaldata) {
+    const Expref = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
+    get(Expref).then((snapshot) => {
+        let id = Object.keys(snapshot.val())[0]
+        const Expref1 = ref(database, `ExpenseUser/${expdata.username}/ProfileData/${id}`);
+        get(Expref1).then((snapshot) => {
+            console.log('Profiledata', snapshot.val())
+            set(Expref1,expdata)
+        })
+    })
+    // const postListRef = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
+    // const newPostRef = push(postListRef);
+    // set(newPostRef, expdata);
 }
 
 const Main: React.FC = (props) => {
@@ -157,8 +179,14 @@ const Main: React.FC = (props) => {
     const [YearlyData, setYearlyData] = React.useState<ModalFile[]>([]);
 
     const [catModalOpen, setcatModalOpen] = React.useState<boolean>(false);
+    const [currModalOpen, setcurrModalOpen] = React.useState<boolean>(false);
     const [maxcount, setmaxcount] = React.useState<number>(15);
     const [PieChartData, setPieChartData] = React.useState<PieChartIntf[]>([]);
+
+    const [GlobalUserData, setGlobalUserData] = React.useState<Glabaldata>({
+        username: 'testuser',
+        countryname: '', currlabel: '', currsymbol: '', flag: ''
+    });
 
     const [CurrSymbols, setCurrSymbols] = React.useState<{
         currlabel: string, currsymbol: string, countryname: string,
@@ -166,34 +194,34 @@ const Main: React.FC = (props) => {
     }[]>([]);
 
 
-    const getCountryDetails = () =>{
+    const getCountryDetails = () => {
         axios.get('https://restcountries.com/v3.1/all')
-        .then(res => {
-            // console.log(res.data[0].currencies)
-            let currencydata: any[] = []
-            let restdata: any[] = res.data
-            let symbols: any = {}
-            restdata.forEach(element => {
-                // console.log(Object.keys(element.currencies)[0], Object.values(element.currencies)[0])
-                const symbols = (symbol: any): string => {
-                    // console.log(symbol)
-                    let dummy: any = Object.values(symbol)[0];
-                    return dummy.symbol
-                }
-                if (element.currencies != null) {
-                    // console.log(Object.keys(element.currencies))
-                    currencydata.push({
-                        currlabel: Object.keys(element.currencies)[0],
-                        currsymbol: symbols(element.currencies),
-                        countryname: element.name.common,
-                        flag: element.flags.svg
-                    })
-                }
+            .then(res => {
+                // console.log(res.data[0].currencies)
+                let currencydata: any[] = []
+                let restdata: any[] = res.data
+                let symbols: any = {}
+                restdata.forEach(element => {
+                    // console.log(Object.keys(element.currencies)[0], Object.values(element.currencies)[0])
+                    const symbols = (symbol: any): string => {
+                        // console.log(symbol)
+                        let dummy: any = Object.values(symbol)[0];
+                        return dummy.symbol
+                    }
+                    if (element.currencies != null) {
+                        // console.log(Object.keys(element.currencies))
+                        currencydata.push({
+                            currlabel: Object.keys(element.currencies)[0],
+                            currsymbol: symbols(element.currencies),
+                            countryname: element.name.common,
+                            flag: element.flags.svg
+                        })
+                    }
 
-            });
-            console.log(currencydata)
-            setCurrSymbols(currencydata)
-        })
+                });
+                console.log(currencydata)
+                setCurrSymbols(currencydata)
+            })
     }
     React.useEffect(() => {
         console.log('recalled')
@@ -208,6 +236,13 @@ const Main: React.FC = (props) => {
         readExpenseData()
         getCountryDetails()
     }, [])
+
+    function writeUserData(expdata: ModalFile) {
+        const postListRef = ref(database, `ExpenseUser/${GlobalUserData.username}/ExpenseData`);
+        const newPostRef = push(postListRef);
+        set(newPostRef, expdata);
+    }
+
 
     const readExpenseData = async () => {
         const Expref = ref(database, 'ExpenseData');
@@ -321,6 +356,29 @@ const Main: React.FC = (props) => {
         setcatModalOpen(false)
     }
 
+    const handleCurrModalclose = () => {
+        setcurrModalOpen(false)
+    }
+
+    const handlecurrencysave = () => {
+        writeGlobalUserData(GlobalUserData)
+        handleCurrModalclose()
+    }
+    const handlecountryselect = (country: string) => {
+        let dummydata = { ...GlobalUserData }
+        dummydata.countryname = country
+        let currdata = CurrSymbols.find((item) => { return item.countryname == country })
+        if (currdata != undefined) {
+            // dummydata.
+            dummydata.currsymbol = currdata.currsymbol
+            dummydata.flag = currdata?.flag
+            dummydata.currlabel = currdata?.currlabel
+        }
+        console.log('currency', dummydata)
+        setGlobalUserData(dummydata)
+        // handleCurrModalclose()
+    }
+
     const handleCliclPageChange = (pageSelect: string) => {
         console.log(pageSelect, 'pagesel')
         let date = parseInt(new Date().toISOString().split('T')[0].split('-')[2])
@@ -396,7 +454,8 @@ const Main: React.FC = (props) => {
                 break;
             case 'Currency':
                 // setPageSelect('PieCh');
-                setcatModalOpen(true)
+                // setcatModalOpen(true)
+                setcurrModalOpen(true)
                 break;
         }
     }
@@ -407,7 +466,7 @@ const Main: React.FC = (props) => {
             {/* <NavBar></NavBar> */}
             <div className="main">
                 <div className="Sidebar">
-                    <SideBar handleCliclPageChange={handleCliclPageChange}></SideBar>
+                    <SideBar profiledata={GlobalUserData} handleCliclPageChange={handleCliclPageChange}></SideBar>
                 </div>
                 <div className="Detail">
                     {/* <ProfileMenu></ProfileMenu> */}
@@ -427,6 +486,9 @@ const Main: React.FC = (props) => {
                     </div>
                 </div>
                 <AddCategory openCatmodal={catModalOpen} handleCatModalclose={handleCatModalclose}></AddCategory>
+                <AddCurrency openCurrmodal={currModalOpen} handleCurrModalclose={handleCurrModalclose}
+                    CountryDetails={CurrSymbols} globalCurrencydata={GlobalUserData}
+                    handlecountryselect={handlecountryselect} handlecurrencysave={handlecurrencysave}></AddCurrency>
             </div>
         </div>
     );

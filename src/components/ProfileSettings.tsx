@@ -12,7 +12,14 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 
-const ProfileMenu = () => {
+interface Glabaldata {
+    profiledata: {
+        currlabel: string, currsymbol: string, countryname: string,
+        flag: string
+    }
+}
+
+const ProfileMenu: React.FC<Glabaldata> = (props) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -23,7 +30,7 @@ const ProfileMenu = () => {
     };
     return (
         <React.Fragment>
-            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', width: '100%', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', width: '100%', justifyContent: 'center', color:'#fff' }}>
                 {/* <Typography sx={{ minWidth: 100 }}>Contact</Typography>
                 <Typography sx={{ minWidth: 100 }}>Profile</Typography> */}
                 <Tooltip title="Account settings">
@@ -38,6 +45,15 @@ const ProfileMenu = () => {
                         <Avatar sx={{ width: 150, height: 150 }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT10iBOJaWt-Fak8Jfp0pljYmPROsev4QzGUg&usqp=CAU"></Avatar>
                     </IconButton>
                 </Tooltip>
+            </Box>
+            <Box sx={{color:'#fff'}}>
+                <Typography variant="h6" gutterBottom component="div">
+                    Test User
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px', textAlign: 'center', width: '100%', justifyContent: 'center' }}>
+                    <Avatar sx={{ width: 30, height: 30 }} alt="Remy Sharp" src={props.profiledata.flag} />
+                    <div>{props.profiledata.currlabel}</div>
+                </Box>
             </Box>
             <Menu
                 anchorEl={anchorEl}
@@ -74,6 +90,7 @@ const ProfileMenu = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
+
                 <MenuItem>
                     <Avatar /> Profile Settings
                 </MenuItem>
