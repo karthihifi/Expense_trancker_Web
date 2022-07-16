@@ -245,11 +245,14 @@ const Main: React.FC = (props) => {
 
 
     const readExpenseData = async () => {
-        const Expref = ref(database, 'ExpenseData');
+        const Expref = ref(database, `ExpenseUser/${GlobalUserData.username}`);
         get(Expref).then((snapshot) => {
             if (snapshot.exists()) {
-                let dummy: ModalFile[] = Object.values(snapshot.val())
-                let ExpenseData: ModalFile[] = Object.values(snapshot.val())
+                let profiledata: any= Object.values(snapshot.val().ProfileData)[0]
+                setGlobalUserData(profiledata)
+                // console.log(profiledata,'profile')
+                let dummy: ModalFile[] = Object.values(snapshot.val().ExpenseData)
+                let ExpenseData: ModalFile[] = Object.values(snapshot.val().ExpenseData)
                 if (ExpenseData.length > maxcount) {
                     ExpenseData = dummy.slice((dummy.length - maxcount), dummy.length)
                 }
@@ -470,7 +473,7 @@ const Main: React.FC = (props) => {
                 </div>
                 <div className="Detail">
                     {/* <ProfileMenu></ProfileMenu> */}
-                    <DateSection handleAddExpense={handleAddExpense}></DateSection>
+                    <DateSection GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
                     <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect>
                     <div className="Detail_maincontent">
                         <TableSection ModalData={ModalData}></TableSection>

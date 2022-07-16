@@ -12,8 +12,16 @@ import './main.css'
 import exp from 'constants';
 import Box from '@mui/material/Box';
 
+interface Glabaldata {
+    username: string,
+    currlabel: string, currsymbol: string, countryname: string,
+    flag: string
+
+}
+
 interface MainProps {
     handleAddExpense: (ModalData: ModalFile) => void;
+    GlobalData: Glabaldata
 }
 
 interface ErrorFields {
@@ -132,6 +140,7 @@ const defaultExpData: ModalFile = {
     subcategory: '',
     availmode: '',
     necessity: '',
+    comments: '',
     dateno: parseInt(new Date().toISOString().split('T')[0].split('-')[2]),
     month: parseInt(new Date().toISOString().split('T')[0].split('-')[1]),
     monthstr: findmonth(parseInt(new Date().toISOString().split('T')[0].split('-')[1])),
@@ -266,12 +275,14 @@ const DateSection: React.FC<MainProps> = (props) => {
 
             if (prop == 'currency') {
                 let currency = event.target.value
+                console.log('value',currency)
                 if (currency != '') {
                     fieldState.currency = false
                     setErrorfields(fieldState)
                 }
             }
 
+            dummydata.currency = props.GlobalData.currsymbol
             setexpData(dummydata);
         };
 
@@ -329,13 +340,14 @@ const DateSection: React.FC<MainProps> = (props) => {
                 <div>
                     <form noValidate className='ExpenseSect-form'>
                         <TextField
+                            disabled
                             id="outlined-select-currency"
                             error={errorFileds.currency}
                             select
                             label="Select"
                             size="small"
                             helperText="Please select your currency"
-                            value={expData.currency}
+                            value={props.GlobalData.currlabel}     //{expData.currency}
                             onChange={handleChange('currency')}
                         >
                             {CurrSymbols.map((option) => (
@@ -447,11 +459,11 @@ const DateSection: React.FC<MainProps> = (props) => {
                     <TextField
                         id="outlined-basic"
                         select
-                        label="SubCategory"
+                        label="Select"
                         size="small"
-                        // value={expData.necessity}
+                        value={expData.subcategory}
                         helperText="Select SubCategory"
-                    // onChange={handleChange('necessity')}
+                        onChange={handleChange('subcategory')}
                     >
                         {Necessity.map((option) => (
                             <MenuItem key={option} value={option}>
@@ -463,17 +475,18 @@ const DateSection: React.FC<MainProps> = (props) => {
                     <TextField
                         id="outlined-basic"
                         select
-                        label="Purchase Mode"
+                        label="Select"
                         size="small"
-                        // value={expData.necessity}
+                        value={expData.availmode}
                         helperText="Enter PurchaseMode"
-                    // onChange={handleChange('necessity')}
+                        onChange={handleChange('availmode')}
                     >
-                        {Necessity.map((option) => (
-                            <MenuItem key={option} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
+                        <MenuItem key='Online' value='Online'>
+                            Online
+                        </MenuItem>
+                        <MenuItem key='Offline' value='Offline'>
+                            Offline
+                        </MenuItem>
                     </TextField>
 
                     <TextField
@@ -487,11 +500,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                         helperText="Enter Comments"
                     // onChange={handleChange('necessity')}
                     >
-                        {Necessity.map((option) => (
-                            <MenuItem key={option} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
+
                     </TextField>
                 </div>
             </Box>

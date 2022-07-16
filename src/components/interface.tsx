@@ -7,6 +7,7 @@ interface ModalFile {
     subcategory: string,
     availmode: string,
     necessity: string,
+    comments:string,
     dateno:number,
     month:number,
     monthstr:string,
