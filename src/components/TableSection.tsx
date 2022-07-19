@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import ModalFile from './interface';
 import { pink } from '@mui/material/colors';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import './main.css'
 
 interface ModalDataProps {
@@ -48,10 +50,10 @@ const Homeheader = (): any => {
 const Monthly_Yearlyheader = (): any => {
   return (
     <TableRow>
-      <TableCell>Date</TableCell>
-      <TableCell align="right">Amount</TableCell>
-      <TableCell align="right">Percentage</TableCell>
-      <TableCell align="right">Trend</TableCell>
+      <TableCell>Month</TableCell>
+      <TableCell align="right">Amount Spent</TableCell>
+      <TableCell align="right">Variance</TableCell>
+      <TableCell align="right">Spending Trend</TableCell>
     </TableRow>)
 }
 
@@ -59,7 +61,7 @@ const Monthly_Yearlyheader = (): any => {
 
 const TableSection: React.FC<ModalDataProps> = (props) => {
 
-  const [PageSelect, setPageSelect] = React.useState('Home');
+  const [PageSelect, setPageSelect] = React.useState(true);
 
   const Homeheaderdata = (row: ModalFile): any => {
     return (
@@ -77,7 +79,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         <TableCell align="right">{row.subcategory}</TableCell>
         <TableCell align="right">{row.availmode}</TableCell>
         <TableCell align="right">{row.necessity}</TableCell>
-        <TableCell align="right">{row.trendrate}<TrendingUpIcon sx={{ color: pink[500] }}></TrendingUpIcon></TableCell>
+        {/* <TableCell align="right">{row.trendrate}<TrendingUpIcon sx={{ color: pink[500] }}></TrendingUpIcon></TableCell> */}
         {/* <TableCell align="right">{row.dateno}</TableCell>
                   <TableCell align="right">{row.month}</TableCell>
                   <TableCell align="right">{row.year}</TableCell> */}
@@ -95,8 +97,13 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
           {row.date}
         </TableCell>
         <TableCell align="right">{row.amount} {row.currency}</TableCell>
-        <TableCell align="right">{row.trendrate} %</TableCell>
-        <TableCell align="right">{row.trendrate}<TrendingUpIcon sx={{ color: pink[500] }}></TrendingUpIcon></TableCell>
+        <TableCell align="right">{row.trendrate}%</TableCell>
+        <TableCell align="right">
+          {row.trendicon == 'up' ? <TrendingUpIcon sx={{ color: pink[500] }}></TrendingUpIcon> :
+            row.trendicon == 'down' ? <TrendingDownIcon color="success"></TrendingDownIcon> :
+              <TrendingFlatIcon color="disabled"></TrendingFlatIcon>}
+
+        </TableCell>
       </TableRow>
     )
   }
@@ -112,7 +119,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
   // setModalData(rows)
   // })
   console.log(props)
-  let pageselected: boolean
+  let pageselected: string = props.page
 
   return (
     <div className="table">
@@ -127,13 +134,13 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
             </TableHead>
             <TableBody>
               {props.ModalData.map((row: ModalFile) => (
-                { pageselected?<Homeheaderdata{...row } ></Homeheaderdata> : <Monthly_Yearlyheaderdata {...row}></Monthly_Yearlyheaderdata>}
-            ))
+                props.page == 'Home' ? <Homeheaderdata {...row}></Homeheaderdata> : <Monthly_Yearlyheaderdata {...row}></Monthly_Yearlyheaderdata>
+              ))
               }
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </div >
   );
 }

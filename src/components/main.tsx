@@ -418,7 +418,7 @@ const Main: React.FC = (props) => {
                     if (iter == 0) {
                         prev = item.amount
                     }
-                    console.log(item.amount, prev, iter)
+                    // console.log(item.amount, prev, iter)
                     let percent = ((item.amount - prev) / prev) * 100
                     prev = item.amount
                     item.trendrate = String(percent)
@@ -429,7 +429,7 @@ const Main: React.FC = (props) => {
                     } else {
                         item.trendicon = 'down'
                     }
-                    console.log(percent)
+                    console.log(percent,item.trendicon)
                 })
                 setdailyTotal(calculateDailytot(filteredArr))
                 setMontlyData(filteredArr)
