@@ -50,11 +50,11 @@
 
 .Detail_maincontent {
   display: grid;
-  grid-auto-rows: 60% 40%;
+  grid-auto-columns: 60% 40%;
   grid-auto-flow: column;
   /* display: flex; */
   flex-direction: row;
-  gap: 10px;
+  gap: 5px;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;

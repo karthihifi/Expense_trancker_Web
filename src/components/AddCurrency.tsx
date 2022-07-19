@@ -21,7 +21,7 @@ const style = {
 };
 
 interface Glabaldata {
-    username:string,
+    username: string,
     currlabel: string, currsymbol: string, countryname: string,
     flag: string
 
@@ -36,7 +36,7 @@ interface AddCurrencyprops {
     handleCurrModalclose: () => void,
     globalCurrencydata: Glabaldata,
     handlecountryselect: (country: string) => void,
-    handlecurrencysave:() => void
+    handlecurrencysave: () => void
 }
 
 // Initialize Realtime Database and get a reference to the service
@@ -63,7 +63,7 @@ const AddCurrency: React.FC<AddCurrencyprops> = (props) => {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Add Category
+                        Set Currency
                     </Typography>
                     <Box
                         component="form"

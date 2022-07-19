@@ -155,7 +155,7 @@ function writeGlobalUserData(expdata: Glabaldata) {
         const Expref1 = ref(database, `ExpenseUser/${expdata.username}/ProfileData/${id}`);
         get(Expref1).then((snapshot) => {
             console.log('Profiledata', snapshot.val())
-            set(Expref1,expdata)
+            set(Expref1, expdata)
         })
     })
     // const postListRef = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
@@ -248,7 +248,7 @@ const Main: React.FC = (props) => {
         const Expref = ref(database, `ExpenseUser/${GlobalUserData.username}`);
         get(Expref).then((snapshot) => {
             if (snapshot.exists()) {
-                let profiledata: any= Object.values(snapshot.val().ProfileData)[0]
+                let profiledata: any = Object.values(snapshot.val().ProfileData)[0]
                 setGlobalUserData(profiledata)
                 // console.log(profiledata,'profile')
                 let dummy: ModalFile[] = Object.values(snapshot.val().ExpenseData)
@@ -409,10 +409,27 @@ const Main: React.FC = (props) => {
                         return acc;
                     }
                 }, []);
-                filteredArr.forEach((item) => {
+                let prev: number = 0
+                filteredArr.forEach((item, iter) => {
+
                     item.amount = calculateMonthtot(item.month, item.year)
                     let index = Calenderinfo.findIndex(row => { return row.key == item.month })
                     item.date = Calenderinfo[index].value
+                    if (iter == 0) {
+                        prev = item.amount
+                    }
+                    console.log(item.amount, prev, iter)
+                    let percent = ((item.amount - prev) / prev) * 100
+                    prev = item.amount
+                    item.trendrate = String(percent)
+                    if (percent == 0) {
+                        item.trendicon = 'neutral'
+                    } else if (percent > 0) {
+                        item.trendicon = 'up'
+                    } else {
+                        item.trendicon = 'down'
+                    }
+                    console.log(percent)
                 })
                 setdailyTotal(calculateDailytot(filteredArr))
                 setMontlyData(filteredArr)
@@ -460,6 +477,10 @@ const Main: React.FC = (props) => {
                 // setcatModalOpen(true)
                 setcurrModalOpen(true)
                 break;
+
+            case 'Category':
+                setcatModalOpen(true)
+                break;
         }
     }
 
@@ -476,7 +497,7 @@ const Main: React.FC = (props) => {
                     <DateSection GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
                     <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect>
                     <div className="Detail_maincontent">
-                        <TableSection ModalData={ModalData}></TableSection>
+                        <TableSection page={PageSelect} ModalData={ModalData}></TableSection>
                         <div className="chart">
                             <div className="header">
                                 <h3>Data Analysis</h3>

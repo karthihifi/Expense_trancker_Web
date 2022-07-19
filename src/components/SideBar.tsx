@@ -49,7 +49,7 @@ const SideBar: React.FC<SideBarProps> = (props) => {
             }
         >
             <ListItemButton
-             onClick={() => props.handleCliclPageChange('Profile')}
+                onClick={() => props.handleCliclPageChange('Profile')}
             >
                 <ListItemIcon>
                     <SettingsIcon style={{ color: "#fff" }} />
@@ -58,16 +58,29 @@ const SideBar: React.FC<SideBarProps> = (props) => {
             </ListItemButton>
 
             <ListItemButton
-            onClick={() => props.handleCliclPageChange('Currency')}
+                onClick={() => props.handleCliclPageChange('Currency')}
             >
                 <ListItemIcon>
                     <CurrencyPoundIcon style={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText primary="Set Currency" />
             </ListItemButton>
+
+            <ListItemButton
+                onClick={() => props.handleCliclPageChange('Category')}
+            >
+                <ListItemIcon>
+                    <CurrencyPoundIcon style={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Add Categories" />
+            </ListItemButton>
+
             <Divider sx={{
                 bgcolor: '#fff'
             }} />
+
+
+
             <ListItemButton
                 onClick={() => props.handleCliclPageChange('Home')}
             >

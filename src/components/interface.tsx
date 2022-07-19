@@ -8,6 +8,8 @@ interface ModalFile {
     availmode: string,
     necessity: string,
     comments:string,
+    trendrate:string,
+    trendicon:string,
     dateno:number,
     month:number,
     monthstr:string,
