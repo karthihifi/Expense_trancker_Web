@@ -89,6 +89,14 @@ const SideBar: React.FC<SideBarProps> = (props) => {
                 </ListItemIcon>
                 <ListItemText primary="Daily Report" />
             </ListItemButton>
+            <ListItemButton
+                onClick={() => props.handleCliclPageChange('Daily')}
+            >
+                <ListItemIcon>
+                    <AssessmentIcon style={{ color: "#fff" }} />
+                </ListItemIcon>
+                <ListItemText primary="Daily Cumulative Report" />
+            </ListItemButton>
             <ListItemButton onClick={() => props.handleCliclPageChange('Mon')}>
                 <ListItemIcon>
                     <SummarizeIcon style={{ color: "#fff" }} />

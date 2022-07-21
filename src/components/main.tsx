@@ -21,11 +21,14 @@ import ProfileMenu from './ProfileSettings'
 import AddCategory from './AddCategory'
 import axios from 'axios';
 import AddCurrency from './AddCurrency'
+import PieCat from './PieCategories'
+import PieCatSelect from './PieCatSect'
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(firebase_Expeseapp);
-
+const PieCategories = new PieCat()
+console.log(PieCategories.Categories)
 interface ModalDataProps {
     ModalData: ModalFile[];
 }
@@ -167,7 +170,7 @@ const Main: React.FC = (props) => {
 
     const [PageSelect, setPageSelect] = React.useState('Home');
 
-    const [dailyTotal, setdailyTotal] = React.useState<Number>(0);
+    const [dailyTotal, setdailyTotal] = React.useState<number>(0);
     const [MonthTotal, setMonthTotal] = React.useState<Number>(0);
     const [YearTotal, setYearTotal] = React.useState<Number>(0);
 
@@ -346,10 +349,39 @@ const Main: React.FC = (props) => {
                         PieData.push({ name: cat, value: percent })
                     }
                 })
-                console.log(PieData, "Piedata")
+                // console.log(PieData, "Piedata")
                 setPieChartData(PieData)
                 break;
-
+            case 'Date':
+                let PieData3: PieChartIntf[] = []
+                ModalData.forEach((item) => {
+                    PieData3.push({ name: item.date, value: item.amount })
+                })
+                console.log(PieData3, "Piedata")
+                setPieChartData(PieData3)
+                break;
+            case 'Month':
+                let PieData1: PieChartIntf[] = []
+                let year = parseInt(new Date().toISOString().split('T')[0].split('-')[0])
+                Calenderinfo.forEach((cat) => {
+                    let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.month === cat.key && item.year == year) })
+                    if (filetreditems.length >= 1) {
+                        console.log(calculatetot(filetreditems), total)
+                        let percent = Math.round((100 * calculatetot(filetreditems)) / total)
+                        PieData1.push({ name: cat.value, value: percent })
+                    }
+                })
+                console.log(PieData1, "Piedata")
+                setPieChartData(PieData1)
+                break;
+            case 'Year':
+                let PieData2: PieChartIntf[] = []
+                ModalData.forEach((item) => {
+                    PieData2.push({ name: item.date, value: item.amount })
+                })
+                console.log(PieData2, "Piedata")
+                setPieChartData(PieData2)
+                break;
             default:
                 break;
         }
@@ -397,6 +429,52 @@ const Main: React.FC = (props) => {
                 console.log(dailyItems, "Home")
                 groupData(dailyItems, 'Category', calculateDailytot(dailyItems))
                 break;
+            case 'Daily':
+                setPageSelect('Daily');
+                let dailyitemsarr: ModalFile[] = []
+                const dymmydata1: ModalFile[] = JSON.parse(JSON.stringify(AllData));
+                const getDays = (year: number, month: number) => new Date(year, month, 0).getDate()
+
+                const days = getDays(2021, 8)
+                console.log(days)
+                let noofdays = [...Array(days).keys()].slice(1);
+                noofdays.forEach((item: number) => {
+                    let day: number = item
+                    let dailyCumItems = dymmydata1.filter((item) => { return (item.dateno == day && item.month == month && item.year == year) })
+                    let array1: ModalFile[] = dailyCumItems.filter((item) => {
+                        return item.dateno == day && item.month == month && item.year == year
+                    })
+                    // console.log(array1, "ada")
+                    if (array1.length >= 1) {
+                        console.log(calculateDailytot(array1))
+                        let arritem: ModalFile = array1[0]
+                        arritem.amount = calculateDailytot(array1)
+                        dailyitemsarr.push(arritem)
+                    }
+                })
+                console.log(dailyitemsarr)
+                let prev1: number = 0
+                dailyitemsarr.forEach((item, iter) => {
+                    if (iter == 0) {
+                        prev1 = item.amount
+                    }
+                    let percent = Math.round(((item.amount - prev1) / prev1) * 100)
+                    prev1 = item.amount
+                    item.trendrate = String(percent)
+                    if (percent == 0) {
+                        item.trendicon = 'neutral'
+                    } else if (percent > 0) {
+                        item.trendicon = 'up'
+                    } else {
+                        item.trendicon = 'down'
+                    }
+                })
+
+                setdailyTotal(calculateDailytot(dailyitemsarr))
+                setModalData(dailyitemsarr)
+                console.log(dailyitemsarr, "Home")
+                groupData(dailyitemsarr, 'Date', calculateDailytot(dailyitemsarr))
+                break;
             case 'Mon':
                 setPageSelect('Mon');
                 setdailyTotal(calculateMonthtot(month, year))
@@ -419,7 +497,7 @@ const Main: React.FC = (props) => {
                         prev = item.amount
                     }
                     // console.log(item.amount, prev, iter)
-                    let percent = ((item.amount - prev) / prev) * 100
+                    let percent = Math.round(((item.amount - prev) / prev) * 100)
                     prev = item.amount
                     item.trendrate = String(percent)
                     if (percent == 0) {
@@ -429,12 +507,12 @@ const Main: React.FC = (props) => {
                     } else {
                         item.trendicon = 'down'
                     }
-                    console.log(percent,item.trendicon)
+                    console.log(percent, item.trendicon)
                 })
                 setdailyTotal(calculateDailytot(filteredArr))
                 setMontlyData(filteredArr)
                 setModalData(filteredArr)
-                groupData(filteredArr, 'Category', calculateDailytot(filteredArr))
+                groupData(filteredArr, 'Month', calculateDailytot(filteredArr))
                 break;
             case 'Year':
                 setPageSelect('Year');
@@ -461,7 +539,7 @@ const Main: React.FC = (props) => {
                 setdailyTotal(calculateDailytot(filteredArr1))
                 setYearlyData(filteredArr1)
                 setModalData(filteredArr1)
-                groupData(filteredArr1, 'Category', calculateDailytot(filteredArr1))
+                groupData(filteredArr1, 'Year', calculateDailytot(filteredArr1))
                 break;
             case 'BarCh':
                 setPageSelect('BarCh');
@@ -502,6 +580,7 @@ const Main: React.FC = (props) => {
                             <div className="header">
                                 <h3>Data Analysis</h3>
                             </div>
+                            <PieCatSelect PieCategories = {PieCategories} ModalData={ModalData} total={dailyTotal} setPieData={setPieChartData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {PageSelect == 'BarCh' ? <BarCharts barData={ModalData}></BarCharts>
                                     : <PieCharts pieData={PieChartData}></PieCharts>}</div>
