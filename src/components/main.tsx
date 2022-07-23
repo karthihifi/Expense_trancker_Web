@@ -23,6 +23,7 @@ import axios from 'axios';
 import AddCurrency from './AddCurrency'
 import PieCat from './PieCategories'
 import PieCatSelect from './PieCatSect'
+import TextField from '@mui/material/TextField';
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 
 // Initialize Realtime Database and get a reference to the service
@@ -435,20 +436,23 @@ const Main: React.FC = (props) => {
                 const dymmydata1: ModalFile[] = JSON.parse(JSON.stringify(AllData));
                 const getDays = (year: number, month: number) => new Date(year, month, 0).getDate()
 
-                const days = getDays(2021, 8)
+                const days = getDays(year, month)
                 console.log(days)
                 let noofdays = [...Array(days).keys()].slice(1);
                 noofdays.forEach((item: number) => {
                     let day: number = item
                     let dailyCumItems = dymmydata1.filter((item) => { return (item.dateno == day && item.month == month && item.year == year) })
-                    let array1: ModalFile[] = dailyCumItems.filter((item) => {
+                    let array1: ModalFile[] = dymmydata1.filter((item) => {
                         return item.dateno == day && item.month == month && item.year == year
                     })
-                    // console.log(array1, "ada")
                     if (array1.length >= 1) {
+                        console.log(array1, "ada")
                         console.log(calculateDailytot(array1))
                         let arritem: ModalFile = array1[0]
+                        arritem.mostusedcat = PieCategories.GetHighestspentData('category', dailyCumItems, calculateDailytot(dailyCumItems))
                         arritem.amount = calculateDailytot(array1)
+                        //arritem.mostusedcat = PieCategories.GetHighestspentData('category', dailyCumItems, calculateDailytot(dailyCumItems))
+                        // let DailyItems = AllData.filter((item) => { return (item.month == month && item.year == year) })
                         dailyitemsarr.push(arritem)
                     }
                 })
@@ -488,6 +492,7 @@ const Main: React.FC = (props) => {
                     }
                 }, []);
                 let prev: number = 0
+                console.log(filteredArr, "fil")
                 filteredArr.forEach((item, iter) => {
 
                     item.amount = calculateMonthtot(item.month, item.year)
@@ -500,6 +505,9 @@ const Main: React.FC = (props) => {
                     let percent = Math.round(((item.amount - prev) / prev) * 100)
                     prev = item.amount
                     item.trendrate = String(percent)
+                    let MonItems = AllData.filter((All) => { return (All.month == item.month && All.year == item.year) })
+                    console.log(MonItems, "Mon")
+                    item.mostusedcat = PieCategories.GetHighestspentData('category', MonItems, calculateDailytot(MonItems))
                     if (percent == 0) {
                         item.trendicon = 'neutral'
                     } else if (percent > 0) {
@@ -509,10 +517,13 @@ const Main: React.FC = (props) => {
                     }
                     console.log(percent, item.trendicon)
                 })
-                setdailyTotal(calculateDailytot(filteredArr))
+                let montot = calculateDailytot(filteredArr)
+                setdailyTotal(montot)
                 setMontlyData(filteredArr)
                 setModalData(filteredArr)
                 groupData(filteredArr, 'Month', calculateDailytot(filteredArr))
+
+
                 break;
             case 'Year':
                 setPageSelect('Year');
@@ -575,12 +586,14 @@ const Main: React.FC = (props) => {
                     <DateSection GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
                     <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect>
                     <div className="Detail_maincontent">
-                        <TableSection page={PageSelect} ModalData={ModalData}></TableSection>
+                        <div>
+                            <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData} PieCategories={PieCategories} AllData={AllData} setModalData={setModalData} page={PageSelect} ModalData={ModalData}></TableSection>
+                        </div>
                         <div className="chart">
                             <div className="header">
                                 <h3>Data Analysis</h3>
                             </div>
-                            <PieCatSelect PieCategories = {PieCategories} ModalData={ModalData} total={dailyTotal} setPieData={setPieChartData}></PieCatSelect>
+                            <PieCatSelect PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal} setPieData={setPieChartData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {PageSelect == 'BarCh' ? <BarCharts barData={ModalData}></BarCharts>
                                     : <PieCharts pieData={PieChartData}></PieCharts>}</div>

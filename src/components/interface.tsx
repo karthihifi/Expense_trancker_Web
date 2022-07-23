@@ -10,6 +10,8 @@ interface ModalFile {
     comments:string,
     trendrate:string,
     trendicon:string,
+    mostusedcat:string,
+    mostusedpurchmode:string,
     dateno:number,
     month:number,
     monthstr:string,

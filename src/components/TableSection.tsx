@@ -12,10 +12,17 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import './main.css'
+import TextField from '@mui/material/TextField';
+import PieCat from './PieCategories'
 
 interface ModalDataProps {
+  setdailyTotal:(tot:number)=>void
+  AllData: ModalFile[]
   ModalData: ModalFile[];
   page: string;
+  setModalData: (ModalData: ModalFile[]) => void
+  PieCategories: PieCat
+  setPieData: (ModalData: { name: string, value: number }[]) => void;
 }
 
 // import Main from './components/main'
@@ -53,6 +60,7 @@ const Monthly_Yearlyheader = (): any => {
       <TableCell>Month</TableCell>
       <TableCell align="right">Amount Spent</TableCell>
       <TableCell align="right">Variance</TableCell>
+      <TableCell align="right">Most Used Category</TableCell>
       <TableCell align="right">Spending Trend</TableCell>
     </TableRow>)
 }
@@ -98,6 +106,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         </TableCell>
         <TableCell align="right">{row.amount} {row.currency}</TableCell>
         <TableCell align="right">{row.trendrate}%</TableCell>
+        <TableCell align="right">{row.mostusedcat}</TableCell>
         <TableCell align="right">
           {row.trendicon == 'up' ? <TrendingUpIcon sx={{ color: pink[500] }}></TrendingUpIcon> :
             row.trendicon == 'down' ? <TrendingDownIcon color="success"></TrendingDownIcon> :
@@ -125,6 +134,34 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
     <div className="table">
       <div className="header">
         <h3>Expense Details</h3>
+      </div>
+      <div className='table-date'>
+        {props.page == 'Home' ? <TextField
+          // required
+          // error={errorFileds.date}
+          id="date"
+          label="Enter Date"
+          type="date"
+          // defaultValue= {defDate}
+          // value={expData.date}
+          size="small"
+          //   className={classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={(event) => {
+            console.log(event.target.value)
+            let filtered = props.AllData.filter((item) => {
+              return item.date == event.target.value
+            })
+            props.setModalData(filtered);
+            let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
+            props.setPieData(PieData)
+            props.setdailyTotal(props.PieCategories.calculatetot(filtered))
+            console.log(filtered, "da")
+          }}
+        /> : ''}
+
       </div>
       <div className='table-cont'>
         <TableContainer component={Paper}>

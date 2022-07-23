@@ -132,3 +132,9 @@
   margin-right: 20px;
 
 }
+
+.table-date{
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 20px;
+}

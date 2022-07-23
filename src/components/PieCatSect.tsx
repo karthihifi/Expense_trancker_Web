@@ -15,7 +15,7 @@ interface PieProps {
     setPieData: (ModalData: { name: string, value: number }[]) => void;
     ModalData: ModalFile[]
     total: number
-    PieCategories:PieCat
+    PieCategories: PieCat
 }
 const PieCatSelect: React.FC<PieProps> = (props) => {
 
@@ -25,8 +25,11 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
             case 'By Necessity':
                 selected = 'Necessity'
                 break;
-
+            case 'By Category':
+                selected = 'Category'
+                break;
             default:
+                selected = 'Category'
                 break;
         }
         props.setPieData(props.PieCategories.GroupData(selected, props.ModalData, props.total))

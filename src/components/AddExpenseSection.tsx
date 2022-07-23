@@ -143,6 +143,8 @@ const defaultExpData: ModalFile = {
     comments: '',
     trendrate: '',
     trendicon:'',
+    mostusedcat:'',
+    mostusedpurchmode:'',
     dateno: parseInt(new Date().toISOString().split('T')[0].split('-')[2]),
     month: parseInt(new Date().toISOString().split('T')[0].split('-')[1]),
     monthstr: findmonth(parseInt(new Date().toISOString().split('T')[0].split('-')[1])),
