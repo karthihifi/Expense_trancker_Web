@@ -14,9 +14,11 @@ import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import './main.css'
 import TextField from '@mui/material/TextField';
 import PieCat from './PieCategories'
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 interface ModalDataProps {
-  setdailyTotal:(tot:number)=>void
+  setdailyTotal: (tot: number) => void
   AllData: ModalFile[]
   ModalData: ModalFile[];
   page: string;
@@ -160,7 +162,37 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
             props.setdailyTotal(props.PieCategories.calculatetot(filtered))
             console.log(filtered, "da")
           }}
-        /> : ''}
+        /> : props.page == 'Daily' ?
+          <TextField
+            sx={{ m: 1, minWidth: 120 }}
+            select
+            // multiple
+            id="month"
+            label="Enter Month"
+            size="small"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(event) => {
+              console.log(event.target.value)
+              let filtered = props.AllData.filter((item) => {
+                let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
+                return item.month == calval[0].key
+              })
+              props.setModalData(filtered);
+              let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
+              props.setPieData(PieData)
+              props.setdailyTotal(props.PieCategories.calculatetot(filtered))
+              console.log(filtered, "da")
+            }}
+          >
+            {props.PieCategories.Calenderinfo.map((option) => (
+              <MenuItem key={option.key} value={option.value}>
+                {option.value}
+              </MenuItem>
+            ))}
+          </TextField>
+          : ''}
 
       </div>
       <div className='table-cont'>

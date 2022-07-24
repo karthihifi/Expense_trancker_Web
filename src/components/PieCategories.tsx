@@ -14,8 +14,59 @@ class PieCat {
     Necessity: string[]
     Usercat: string[]
     PurchMode: string[]
+    Calenderinfo = [
+        {
+            key: 1,
+            value: 'January',
+        },
+        {
+            key: 2,
+            value: 'February',
+        },
+        {
+            key: 3,
+            value: 'March',
+        },
+        {
+            key: 4,
+            value: 'April',
+        },
+        {
+            key: 5,
+            value: 'May',
+        },
+        {
+            key: 6,
+            value: 'June',
+        },
+        {
+            key: 7,
+            value: 'July',
+        },
+        {
+            key: 8,
+            value: 'August',
+        },
+        {
+            key: 9,
+            value: 'September',
+        },
+        {
+            key: 10,
+            value: 'October',
+        },
+        {
+            key: 11,
+            value: 'November',
+        },
+        {
+            key: 12,
+            value: 'December',
+        },
+    ];
     constructor() {
-        this.Categories = [{ page: 'Home', Categories: ['By Category', 'By Purchmode', 'By Necessity'] }
+        this.Categories = [{ page: 'Home', Categories: ['By Category', 'By Purchmode', 'By Necessity'] },
+        { page: 'DailyCum', Categories: ['By Date', 'By Category', 'By Purchmode', 'By Necessity'] }
         ]
         this.Necessity = [
             'Needed',
@@ -96,6 +147,15 @@ class PieCat {
                         let percent = Math.round((100 * this.calculatetot(filetreditems)) / total)
                         PieData.push({ name: mode, value: percent })
                     }
+                })
+                break;
+            case 'Date':
+                ModalData.forEach((item) => {
+                    // let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.availmode === mode) })
+                    // if (filetreditems.length >= 1) {
+                    let percent = Math.round(100 * (item.amount) / total)
+                    PieData.push({ name: item.date, value: percent })
+                    // }
                 })
                 break;
         }

@@ -356,7 +356,8 @@ const Main: React.FC = (props) => {
             case 'Date':
                 let PieData3: PieChartIntf[] = []
                 ModalData.forEach((item) => {
-                    PieData3.push({ name: item.date, value: item.amount })
+                    let percent = Math.round(100 * (item.amount / total))
+                    PieData3.push({ name: item.date, value: percent })
                 })
                 console.log(PieData3, "Piedata")
                 setPieChartData(PieData3)
@@ -593,7 +594,7 @@ const Main: React.FC = (props) => {
                             <div className="header">
                                 <h3>Data Analysis</h3>
                             </div>
-                            <PieCatSelect PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal} setPieData={setPieChartData}></PieCatSelect>
+                            <PieCatSelect page={PageSelect} PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal} setPieData={setPieChartData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {PageSelect == 'BarCh' ? <BarCharts barData={ModalData}></BarCharts>
                                     : <PieCharts pieData={PieChartData}></PieCharts>}</div>

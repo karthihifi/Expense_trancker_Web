@@ -16,6 +16,7 @@ interface PieProps {
     ModalData: ModalFile[]
     total: number
     PieCategories: PieCat
+    page: string
 }
 const PieCatSelect: React.FC<PieProps> = (props) => {
 
@@ -27,6 +28,9 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                 break;
             case 'By Category':
                 selected = 'Category'
+                break;
+            case 'By Date':
+                selected = 'Date'
                 break;
             default:
                 selected = 'Category'
@@ -48,11 +52,12 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                         //   label="Sel. Category"
                         onChange={handleChange}
                     >
-                        {props.PieCategories.Categories[0].Categories.map((option: string) => (
-                            <MenuItem key={option} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
+                        {props.PieCategories.Categories[props.page == 'Home' ? 0 :
+                            props.page == 'Daily' ? 1 : 0].Categories.map((option: string) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
 
                     </Select>
                 </FormControl>
