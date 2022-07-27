@@ -4,18 +4,48 @@ import {
     ValueType,
     NameType,
 } from 'recharts/src/component/DefaultTooltipContent';
-import ModalFile from './interface';
+import { ModalFile, ChartSchema } from './interface';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Chart } from "react-google-charts";
 
 interface BarChartsProps {
-    barData: ModalFile[]
+    barData: any[][],
 }
 
-const BarCharts: React.FC<BarChartsProps> = (props) => {
+export const data = [
+    ["City", "2010 Population", "2000 Population"],
+    ["New York City, NY", 8175000, 8008000],
+    ["Los Angeles, CA", 3792000, 3694000],
+    ["Chicago, IL", 2695000, 2896000],
+    ["Houston, TX", 2099000, 1953000],
+    ["Philadelphia, PA", 1526000, 1517000],
+];
 
+export const options = {
+    title: "Population of Largest U.S. Cities",
+    chartArea: { width: "50%" },
+    // hAxis: {
+    //     title: "Total Population",
+    //     minValue: 0,
+    // },
+    // vAxis: {
+    //     title: "City",
+    // },
+};
+
+const BarCharts: React.FC<BarChartsProps> = (props) => {
+    console.log(props.barData, "sasss")
     return (
         <div>
-            <BarChart
+            <Chart
+            
+                chartType="Bar"
+                width="100%"
+                height="400px"
+                data={props.barData}
+                options={options}
+            />
+            {/* <BarChart
                 width={460}
                 height={300}
                 data={props.barData}
@@ -32,7 +62,7 @@ const BarCharts: React.FC<BarChartsProps> = (props) => {
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="amount" fill="#8884d8" />
-            </BarChart>
+            </BarChart> */}
         </div>
     );
 };

@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import PieCat from './PieCategories'
 import './main.css'
-import ModalFile from './interface';
+import {ModalFile} from './interface';
 
 // const PieCategories = new PieCat()
 // console.log(PieCategories.Categories)

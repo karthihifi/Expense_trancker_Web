@@ -1,6 +1,7 @@
 
+import { type } from 'os';
 import { stringify } from 'querystring';
-import ModalFile from './interface';
+import { ModalFile, ChartSchema } from './interface';
 
 interface Cattype {
     page: string,
@@ -9,6 +10,7 @@ interface Cattype {
 
 interface PieChartIntf { name: string, value: number }
 
+type charttype = string | number
 class PieCat {
     Categories: Cattype[];
     Necessity: string[]
@@ -91,6 +93,27 @@ class PieCat {
             return tot + amount
         }, 0)
         return total
+    }
+
+    SetbarchartData(ModalData: ModalFile[]): [[]]{
+        let Bardata:any  =[["date","amount"]]
+        let baritem: any[] =[]//["City", "2010 Population"]
+  
+            // Bardata.push({title:'Date',value:'Amount'})
+            // baritem.push(['ada','adaas'])
+            // Bardata.push(baritem)
+        ModalData.forEach((item) => {
+            // baritem.push(item.date,item.amount)
+            // baritem.push(item.amount)
+            baritem = []
+        baritem.push(String(item.date),item.amount)
+        Bardata.push(baritem)
+        })
+        // Bardata = [baritem]
+        // let newarr = Bardata.slice(1,13)
+        console.log(Bardata,'sads',typeof(Bardata))
+        // const data = google.visualization.arrayToDataTable(arrayData);
+        return Bardata;
     }
     GetHighestspentData(bymode: string, ModalData: ModalFile[], total: number): string {
         let ret = 'NA'

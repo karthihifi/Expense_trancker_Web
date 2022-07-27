@@ -1,4 +1,4 @@
-interface ModalFile {
+export interface ModalFile {
     date: string,
     currency: string,
     amount: number,
@@ -18,4 +18,9 @@ interface ModalFile {
     year:number
 }
 
-export default ModalFile;
+export interface ChartSchema{
+    title:string,
+    value:number
+}
+
+// export default { ModalFile , ChartSchema };

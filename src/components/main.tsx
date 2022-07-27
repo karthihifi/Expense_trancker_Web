@@ -11,7 +11,7 @@ import TableSection from './TableSection'
 import SideBar from './SideBar'
 import NavBar from './NavBar'
 import TodaysExpenseSect from './TodaysExpenseSection'
-import ModalFile from './interface';
+import {ModalFile,ChartSchema} from './interface';
 import PieCharts from './PieChart'
 import BarCharts from './BarChart'
 import firebase_Expeseapp from "./firebase";
@@ -176,6 +176,7 @@ const Main: React.FC = (props) => {
     const [YearTotal, setYearTotal] = React.useState<Number>(0);
 
     const [ModalData, setModalData] = React.useState<ModalFile[]>([]);
+    const [BarModalData, setBarModalData] = React.useState<string[][]>([]);
     const [AllData, setAllData] = React.useState<ModalFile[]>([]);
 
     const [DailyData, setDailyData] = React.useState<ModalFile[]>([]);
@@ -428,6 +429,7 @@ const Main: React.FC = (props) => {
                 const dailyItems = AllData.filter((item) => { return (item.month == month && item.year == year) })
                 setdailyTotal(calculateDailytot(dailyItems))
                 setModalData(dailyItems)
+                setBarModalData(PieCategories.SetbarchartData(dailyItems))
                 console.log(dailyItems, "Home")
                 groupData(dailyItems, 'Category', calculateDailytot(dailyItems))
                 break;
@@ -596,7 +598,7 @@ const Main: React.FC = (props) => {
                             </div>
                             <PieCatSelect page={PageSelect} PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal} setPieData={setPieChartData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
-                                <div> {PageSelect == 'BarCh' ? <BarCharts barData={ModalData}></BarCharts>
+                                <div> {PageSelect == 'BarCh' ? <BarCharts barData={BarModalData}></BarCharts>
                                     : <PieCharts pieData={PieChartData}></PieCharts>}</div>
                             </ResponsiveContainer>
                         </div>

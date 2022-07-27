@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import axios from 'axios';
-import ModalFile from './interface';
+import {ModalFile} from './interface';
 import './main.css'
 import exp from 'constants';
 import Box from '@mui/material/Box';
