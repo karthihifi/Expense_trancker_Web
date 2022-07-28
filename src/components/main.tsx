@@ -262,6 +262,7 @@ const Main: React.FC = (props) => {
                     ExpenseData = dummy.slice((dummy.length - maxcount), dummy.length)
                 }
                 setModalData(ExpenseData)
+                setBarModalData(PieCategories.SetbarchartData('Category',ExpenseData))
                 let dailyTotal = calculateDailytot(ExpenseData)
                 setdailyTotal(dailyTotal)
                 setDailyData(ExpenseData)
@@ -429,7 +430,7 @@ const Main: React.FC = (props) => {
                 const dailyItems = AllData.filter((item) => { return (item.month == month && item.year == year) })
                 setdailyTotal(calculateDailytot(dailyItems))
                 setModalData(dailyItems)
-                setBarModalData(PieCategories.SetbarchartData(dailyItems))
+                setBarModalData(PieCategories.SetbarchartData('Category',dailyItems))
                 console.log(dailyItems, "Home")
                 groupData(dailyItems, 'Category', calculateDailytot(dailyItems))
                 break;
@@ -479,6 +480,7 @@ const Main: React.FC = (props) => {
 
                 setdailyTotal(calculateDailytot(dailyitemsarr))
                 setModalData(dailyitemsarr)
+                setBarModalData(PieCategories.SetbarchartData('Category',dailyitemsarr))
                 console.log(dailyitemsarr, "Home")
                 groupData(dailyitemsarr, 'Date', calculateDailytot(dailyitemsarr))
                 break;
@@ -524,6 +526,7 @@ const Main: React.FC = (props) => {
                 setdailyTotal(montot)
                 setMontlyData(filteredArr)
                 setModalData(filteredArr)
+                setBarModalData(PieCategories.SetbarchartData('Category',filteredArr))
                 groupData(filteredArr, 'Month', calculateDailytot(filteredArr))
 
 
@@ -596,7 +599,8 @@ const Main: React.FC = (props) => {
                             <div className="header">
                                 <h3>Data Analysis</h3>
                             </div>
-                            <PieCatSelect page={PageSelect} PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal} setPieData={setPieChartData}></PieCatSelect>
+                            <PieCatSelect page={PageSelect} PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal} 
+                            setPieData={setPieChartData} setBarModalData={setBarModalData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {PageSelect == 'BarCh' ? <BarCharts barData={BarModalData}></BarCharts>
                                     : <PieCharts pieData={PieChartData}></PieCharts>}</div>

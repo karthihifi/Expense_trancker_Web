@@ -22,8 +22,13 @@ export const data = [
 ];
 
 export const options = {
-    title: "Population of Largest U.S. Cities",
-    chartArea: { width: "50%" },
+    chart: {
+        // title: "Amount Sepend",
+        // subtitle: "Sales, Expenses, and Profit: 2014-2017",
+    },
+    bars: "horizontal",
+    chartArea: { width: "100%" },
+    legend: { position: 'none' },
     // hAxis: {
     //     title: "Total Population",
     //     minValue: 0,
@@ -38,7 +43,7 @@ const BarCharts: React.FC<BarChartsProps> = (props) => {
     return (
         <div>
             <Chart
-            
+
                 chartType="Bar"
                 width="100%"
                 height="400px"

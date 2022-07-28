@@ -95,24 +95,17 @@ class PieCat {
         return total
     }
 
-    SetbarchartData(ModalData: ModalFile[]): [[]]{
-        let Bardata:any  =[["date","amount"]]
-        let baritem: any[] =[]//["City", "2010 Population"]
-  
-            // Bardata.push({title:'Date',value:'Amount'})
-            // baritem.push(['ada','adaas'])
-            // Bardata.push(baritem)
-        ModalData.forEach((item) => {
-            // baritem.push(item.date,item.amount)
-            // baritem.push(item.amount)
+
+    SetbarchartData(bymode: string,ModalData: ModalFile[]): [[]] {
+        let Bardata: any = [[bymode, "Amount"]]
+        let baritem: any[] = []
+        let filtereditems = this.GroupData_gc(bymode,ModalData)
+        filtereditems.forEach((item) => {
             baritem = []
-        baritem.push(String(item.date),item.amount)
-        Bardata.push(baritem)
+            baritem.push(String(item.name), item.value)
+            Bardata.push(baritem)
         })
-        // Bardata = [baritem]
-        // let newarr = Bardata.slice(1,13)
-        console.log(Bardata,'sads',typeof(Bardata))
-        // const data = google.visualization.arrayToDataTable(arrayData);
+        console.log(Bardata, 'sads', typeof (Bardata))
         return Bardata;
     }
     GetHighestspentData(bymode: string, ModalData: ModalFile[], total: number): string {
@@ -140,6 +133,49 @@ class PieCat {
         let percent = Math.round((finalitems[0].value / total) * 100)
         ret = `${finalitems[0].obj} (${percent}%)`
         return ret
+    }
+
+    GroupData_gc(bymode: string, ModalData: ModalFile[]): PieChartIntf[] {
+        let PieData: PieChartIntf[] = []
+        switch (bymode) {
+            case 'Necessity':
+                this.Necessity.forEach((nec) => {
+                    let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.necessity === nec) })
+                    if (filetreditems.length >= 1) {
+                        // let percent = Math.round((this.calculatetot(filetreditems) / total) * 100)
+                        PieData.push({ name: nec, value: this.calculatetot(filetreditems) })
+                    }
+                })
+                break;
+            case 'Category':
+                this.Usercat.forEach((cat) => {
+                    let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.category === cat) })
+                    if (filetreditems.length >= 1) {
+                        // let percent = Math.round((this.calculatetot(filetreditems) / total) * 100)
+                        PieData.push({ name: cat, value: this.calculatetot(filetreditems) })
+                    }
+                })
+                break;
+            case 'PurchMode':
+                this.PurchMode.forEach((mode) => {
+                    let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.availmode === mode) })
+                    if (filetreditems.length >= 1) {
+                        // let percent = Math.round((100 * this.calculatetot(filetreditems)) / total)
+                        PieData.push({ name: mode, value: this.calculatetot(filetreditems) })
+                    }
+                })
+                break;
+            case 'Date':
+                ModalData.forEach((item) => {
+                    // let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.availmode === mode) })
+                    // if (filetreditems.length >= 1) {
+                    // let percent = Math.round(100 * (item.amount) / total)
+                    PieData.push({ name: item.date, value: item.amount })
+                    // }
+                })
+                break;
+        }
+        return PieData
     }
 
     GroupData(bymode: string, ModalData: ModalFile[], total: number): PieChartIntf[] {

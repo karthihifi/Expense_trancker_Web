@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import PieCat from './PieCategories'
 import './main.css'
-import {ModalFile} from './interface';
+import { ModalFile } from './interface';
 
 // const PieCategories = new PieCat()
 // console.log(PieCategories.Categories)
@@ -17,6 +17,7 @@ interface PieProps {
     total: number
     PieCategories: PieCat
     page: string
+    setBarModalData: (ModalData: string[][]) => void;
 }
 const PieCatSelect: React.FC<PieProps> = (props) => {
 
@@ -37,6 +38,7 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                 break;
         }
         props.setPieData(props.PieCategories.GroupData(selected, props.ModalData, props.total))
+        props.setBarModalData(props.PieCategories.SetbarchartData(selected, props.ModalData))
     };
 
     return (
@@ -53,7 +55,7 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                         onChange={handleChange}
                     >
                         {props.PieCategories.Categories[props.page == 'Home' ? 0 :
-                            props.page == 'Daily' ? 1 : 0].Categories.map((option: string) => (
+                            props.page == 'Daily' || props.page == 'BarCh' ? 1 : 0].Categories.map((option: string) => (
                                 <MenuItem key={option} value={option}>
                                     {option}
                                 </MenuItem>
