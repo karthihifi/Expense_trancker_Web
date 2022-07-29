@@ -21,10 +21,13 @@ import ProfileMenu from './ProfileSettings'
 import SettingsIcon from '@mui/icons-material/Settings';
 import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import Divider from '@mui/material/Divider';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton } from '@mui/material';
 
 interface SideBarProps {
     // handleCliclPageChange(pageSelect: string): any
     handleCliclPageChange: (pageSelect: any) => void;
+    setSideMenuopen: (sideMenu: boolean) => void;
     profiledata: {
         currlabel: string, currsymbol: string, countryname: string,
         flag: string
@@ -38,101 +41,109 @@ const SideBar: React.FC<SideBarProps> = (props) => {
     };
 
     return (
-        <List
-            sx={{ width: '100%', maxWidth: 360, bgcolor: '#866ec7' }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-            subheader={
-                <ListSubheader component="div" sx={{ bgcolor: '#866ec7', margin: '15px 0' }} id="nested-list-subheader" className='Sidebar_header' >
-                    <ProfileMenu profiledata={props.profiledata}></ProfileMenu>
-                </ListSubheader>
-            }
-        >
-            <ListItemButton
-                onClick={() => props.handleCliclPageChange('Profile')}
+        <div>
+            <List
+                sx={{ width: '100%', maxWidth: 360, bgcolor: '#866ec7' }}
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                subheader={
+                    <div>
+                        <IconButton onClick={(eve)=>props.setSideMenuopen(false)}>
+                            <CloseIcon></CloseIcon>
+                        </IconButton>
+                        <ListSubheader component="div" sx={{ bgcolor: '#866ec7', margin: '15px 0' }} id="nested-list-subheader" className='Sidebar_header' >
+                            <ProfileMenu profiledata={props.profiledata}></ProfileMenu>
+                        </ListSubheader>
+                    </div>
+                }
             >
-                <ListItemIcon>
-                    <SettingsIcon style={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Profile Settings" />
-            </ListItemButton>
 
-            <ListItemButton
-                onClick={() => props.handleCliclPageChange('Currency')}
-            >
-                <ListItemIcon>
-                    <CurrencyPoundIcon style={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Set Currency" />
-            </ListItemButton>
+                <ListItemButton
+                    onClick={() => props.handleCliclPageChange('Profile')}
+                >
+                    <ListItemIcon>
+                        <SettingsIcon style={{ color: "#fff" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Profile Settings" />
+                </ListItemButton>
 
-            <ListItemButton
-                onClick={() => props.handleCliclPageChange('Category')}
-            >
-                <ListItemIcon>
-                    <CurrencyPoundIcon style={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Add Categories" />
-            </ListItemButton>
+                <ListItemButton
+                    onClick={() => props.handleCliclPageChange('Currency')}
+                >
+                    <ListItemIcon>
+                        <CurrencyPoundIcon style={{ color: "#fff" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Set Currency" />
+                </ListItemButton>
 
-            <Divider sx={{
-                bgcolor: '#fff'
-            }} />
+                <ListItemButton
+                    onClick={() => props.handleCliclPageChange('Category')}
+                >
+                    <ListItemIcon>
+                        <CurrencyPoundIcon style={{ color: "#fff" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Add Categories" />
+                </ListItemButton>
+
+                <Divider sx={{
+                    bgcolor: '#fff'
+                }} />
 
 
 
-            <ListItemButton
-                onClick={() => props.handleCliclPageChange('Home')}
-            >
-                <ListItemIcon>
-                    <AssessmentIcon style={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Daily Report" />
-            </ListItemButton>
-            <ListItemButton
-                onClick={() => props.handleCliclPageChange('Daily')}
-            >
-                <ListItemIcon>
-                    <AssessmentIcon style={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Daily Cumulative Report" />
-            </ListItemButton>
-            <ListItemButton onClick={() => props.handleCliclPageChange('Mon')}>
-                <ListItemIcon>
-                    <SummarizeIcon style={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Monthly Report" />
-            </ListItemButton >
-            <ListItemButton onClick={() => props.handleCliclPageChange('Year')}>
-                <ListItemIcon>
-                    <CurrencyYenIcon style={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Yearly Report" />
-            </ListItemButton>
-            <ListItemButton onClick={handleClick}>
-                <ListItemIcon>
-                    <InboxIcon style={{ color: "#fff" }} />
-                </ListItemIcon>
-                <ListItemText primary="Analysis" />
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} onClick={() => props.handleCliclPageChange('BarCh')}>
-                        <ListItemIcon>
-                            <BarChartIcon style={{ color: "#fff" }} />
-                        </ListItemIcon>
-                        <ListItemText primary="Bar Chart" />
-                    </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }} onClick={() => props.handleCliclPageChange('PieCh')}>
-                        <ListItemIcon>
-                            <PieChartIcon style={{ color: "#fff" }} />
-                        </ListItemIcon>
-                        <ListItemText primary="Pie Chart" />
-                    </ListItemButton>
-                </List>
-            </Collapse>
-        </List>
+                <ListItemButton
+                    onClick={() => props.handleCliclPageChange('Home')}
+                >
+                    <ListItemIcon>
+                        <AssessmentIcon style={{ color: "#fff" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Daily Report" />
+                </ListItemButton>
+                <ListItemButton
+                    onClick={() => props.handleCliclPageChange('Daily')}
+                >
+                    <ListItemIcon>
+                        <AssessmentIcon style={{ color: "#fff" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Daily Cumulative Report" />
+                </ListItemButton>
+                <ListItemButton onClick={() => props.handleCliclPageChange('Mon')}>
+                    <ListItemIcon>
+                        <SummarizeIcon style={{ color: "#fff" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Monthly Report" />
+                </ListItemButton >
+                <ListItemButton onClick={() => props.handleCliclPageChange('Year')}>
+                    <ListItemIcon>
+                        <CurrencyYenIcon style={{ color: "#fff" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Yearly Report" />
+                </ListItemButton>
+                <ListItemButton onClick={handleClick}>
+                    <ListItemIcon>
+                        <InboxIcon style={{ color: "#fff" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Analysis" />
+                    {open ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        <ListItemButton sx={{ pl: 4 }} onClick={() => props.handleCliclPageChange('BarCh')}>
+                            <ListItemIcon>
+                                <BarChartIcon style={{ color: "#fff" }} />
+                            </ListItemIcon>
+                            <ListItemText primary="Bar Chart" />
+                        </ListItemButton>
+                        <ListItemButton sx={{ pl: 4 }} onClick={() => props.handleCliclPageChange('PieCh')}>
+                            <ListItemIcon>
+                                <PieChartIcon style={{ color: "#fff" }} />
+                            </ListItemIcon>
+                            <ListItemText primary="Pie Chart" />
+                        </ListItemButton>
+                    </List>
+                </Collapse>
+            </List>
+        </div>
     );
 }
 

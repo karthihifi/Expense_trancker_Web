@@ -11,7 +11,7 @@ import TableSection from './TableSection'
 import SideBar from './SideBar'
 import NavBar from './NavBar'
 import TodaysExpenseSect from './TodaysExpenseSection'
-import {ModalFile,ChartSchema} from './interface';
+import { ModalFile, ChartSchema } from './interface';
 import PieCharts from './PieChart'
 import BarCharts from './BarChart'
 import firebase_Expeseapp from "./firebase";
@@ -24,6 +24,9 @@ import AddCurrency from './AddCurrency'
 import PieCat from './PieCategories'
 import PieCatSelect from './PieCatSect'
 import TextField from '@mui/material/TextField';
+import MenuIcon from '@mui/icons-material/Menu';
+import { IconButton } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 
 // Initialize Realtime Database and get a reference to the service
@@ -170,6 +173,8 @@ function writeGlobalUserData(expdata: Glabaldata) {
 const Main: React.FC = (props) => {
 
     const [PageSelect, setPageSelect] = React.useState('Home');
+    const [ChartSelect, setChartSelect] = React.useState('Pie');
+    const [SideMenuopen, setSideMenuopen] = React.useState(false);
 
     const [dailyTotal, setdailyTotal] = React.useState<number>(0);
     const [MonthTotal, setMonthTotal] = React.useState<Number>(0);
@@ -262,7 +267,7 @@ const Main: React.FC = (props) => {
                     ExpenseData = dummy.slice((dummy.length - maxcount), dummy.length)
                 }
                 setModalData(ExpenseData)
-                setBarModalData(PieCategories.SetbarchartData('Category',ExpenseData))
+                setBarModalData(PieCategories.SetbarchartData('Category', ExpenseData))
                 let dailyTotal = calculateDailytot(ExpenseData)
                 setdailyTotal(dailyTotal)
                 setDailyData(ExpenseData)
@@ -430,7 +435,7 @@ const Main: React.FC = (props) => {
                 const dailyItems = AllData.filter((item) => { return (item.month == month && item.year == year) })
                 setdailyTotal(calculateDailytot(dailyItems))
                 setModalData(dailyItems)
-                setBarModalData(PieCategories.SetbarchartData('Category',dailyItems))
+                setBarModalData(PieCategories.SetbarchartData('Category', dailyItems))
                 console.log(dailyItems, "Home")
                 groupData(dailyItems, 'Category', calculateDailytot(dailyItems))
                 break;
@@ -480,7 +485,7 @@ const Main: React.FC = (props) => {
 
                 setdailyTotal(calculateDailytot(dailyitemsarr))
                 setModalData(dailyitemsarr)
-                setBarModalData(PieCategories.SetbarchartData('Category',dailyitemsarr))
+                setBarModalData(PieCategories.SetbarchartData('Category', dailyitemsarr))
                 console.log(dailyitemsarr, "Home")
                 groupData(dailyitemsarr, 'Date', calculateDailytot(dailyitemsarr))
                 break;
@@ -526,7 +531,7 @@ const Main: React.FC = (props) => {
                 setdailyTotal(montot)
                 setMontlyData(filteredArr)
                 setModalData(filteredArr)
-                setBarModalData(PieCategories.SetbarchartData('Category',filteredArr))
+                setBarModalData(PieCategories.SetbarchartData('Category', filteredArr))
                 groupData(filteredArr, 'Month', calculateDailytot(filteredArr))
 
 
@@ -559,10 +564,12 @@ const Main: React.FC = (props) => {
                 groupData(filteredArr1, 'Year', calculateDailytot(filteredArr1))
                 break;
             case 'BarCh':
-                setPageSelect('BarCh');
+                // setPageSelect('BarCh');
+                setChartSelect('Bar')
                 break;
             case 'PieCh':
-                setPageSelect('PieCh');
+                // setPageSelect('PieCh');
+                setChartSelect('Pie')
                 break;
             case 'Profile':
                 // setPageSelect('PieCh');
@@ -584,9 +591,28 @@ const Main: React.FC = (props) => {
         <div>
             {/* <NavBar></NavBar> */}
             <div className="main">
-                <div className="Sidebar">
-                    <SideBar profiledata={GlobalUserData} handleCliclPageChange={handleCliclPageChange}></SideBar>
+                {/* <div className="Sidebar"> */}
+                <div className="Sidebar_menu">
+                    <IconButton onClick={(event) => setSideMenuopen(true)}>
+                        <MenuIcon></MenuIcon>
+                    </IconButton>
                 </div>
+                <Drawer
+                    sx={{
+                        width: '240px',
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: '240px',
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    // variant="persistent"
+                    anchor="left"
+                    open={SideMenuopen}
+                >
+                    <SideBar setSideMenuopen={setSideMenuopen} profiledata={GlobalUserData} handleCliclPageChange={handleCliclPageChange}></SideBar>
+                </Drawer>
+                {/* </div> */}
                 <div className="Detail">
                     {/* <ProfileMenu></ProfileMenu> */}
                     <DateSection GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
@@ -599,10 +625,10 @@ const Main: React.FC = (props) => {
                             <div className="header">
                                 <h3>Data Analysis</h3>
                             </div>
-                            <PieCatSelect page={PageSelect} PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal} 
-                            setPieData={setPieChartData} setBarModalData={setBarModalData}></PieCatSelect>
+                            <PieCatSelect page={PageSelect} PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal}
+                                setPieData={setPieChartData} setBarModalData={setBarModalData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
-                                <div> {PageSelect == 'BarCh' ? <BarCharts barData={BarModalData}></BarCharts>
+                                <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>
                                     : <PieCharts pieData={PieChartData}></PieCharts>}</div>
                             </ResponsiveContainer>
                         </div>
