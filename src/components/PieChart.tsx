@@ -8,7 +8,8 @@ import {
 } from 'recharts/src/component/DefaultTooltipContent';
 
 interface PieChartsProps {
-    pieData: { name: string, value: number }[]
+    // pieData: { name: string, value: number }[]
+    pieData: any[][],
 }
 
 let COLORS: string[] = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
@@ -49,7 +50,7 @@ const PieCharts: React.FC<PieChartsProps> = (props) => {
         <div>
             <Chart
       chartType="PieChart"
-      data={data}
+      data={props.pieData}
       options={options}
       width={"100%"}
       height={"400px"}

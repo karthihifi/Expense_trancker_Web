@@ -182,6 +182,7 @@ const Main: React.FC = (props) => {
 
     const [ModalData, setModalData] = React.useState<ModalFile[]>([]);
     const [BarModalData, setBarModalData] = React.useState<string[][]>([]);
+    const [PieModalData, setPieModalData] = React.useState<string[][]>([]);
     const [AllData, setAllData] = React.useState<ModalFile[]>([]);
 
     const [DailyData, setDailyData] = React.useState<ModalFile[]>([]);
@@ -268,6 +269,7 @@ const Main: React.FC = (props) => {
                 }
                 setModalData(ExpenseData)
                 setBarModalData(PieCategories.SetbarchartData('Category', ExpenseData))
+                setPieModalData(PieCategories.SetbarchartData('Category', ExpenseData))
                 let dailyTotal = calculateDailytot(ExpenseData)
                 setdailyTotal(dailyTotal)
                 setDailyData(ExpenseData)
@@ -359,6 +361,8 @@ const Main: React.FC = (props) => {
                 })
                 // console.log(PieData, "Piedata")
                 setPieChartData(PieData)
+                // setBarModalData(PieCategories.SetbarchartData('Category', ModalData))
+                setPieModalData(PieCategories.SetbarchartData('Category', ModalData))
                 break;
             case 'Date':
                 let PieData3: PieChartIntf[] = []
@@ -368,6 +372,7 @@ const Main: React.FC = (props) => {
                 })
                 console.log(PieData3, "Piedata")
                 setPieChartData(PieData3)
+                setPieModalData(PieCategories.SetbarchartData('Category', ModalData))
                 break;
             case 'Month':
                 let PieData1: PieChartIntf[] = []
@@ -436,6 +441,7 @@ const Main: React.FC = (props) => {
                 setdailyTotal(calculateDailytot(dailyItems))
                 setModalData(dailyItems)
                 setBarModalData(PieCategories.SetbarchartData('Category', dailyItems))
+                setPieModalData(PieCategories.SetbarchartData('Category', dailyItems))
                 console.log(dailyItems, "Home")
                 groupData(dailyItems, 'Category', calculateDailytot(dailyItems))
                 break;
@@ -485,7 +491,8 @@ const Main: React.FC = (props) => {
 
                 setdailyTotal(calculateDailytot(dailyitemsarr))
                 setModalData(dailyitemsarr)
-                setBarModalData(PieCategories.SetbarchartData('Category', dailyitemsarr))
+                setBarModalData(PieCategories.SetbarchartData('Date', dailyitemsarr))
+                setPieModalData(PieCategories.SetbarchartData('Date', dailyitemsarr))
                 console.log(dailyitemsarr, "Home")
                 groupData(dailyitemsarr, 'Date', calculateDailytot(dailyitemsarr))
                 break;
@@ -531,7 +538,8 @@ const Main: React.FC = (props) => {
                 setdailyTotal(montot)
                 setMontlyData(filteredArr)
                 setModalData(filteredArr)
-                setBarModalData(PieCategories.SetbarchartData('Category', filteredArr))
+                setBarModalData(PieCategories.SetbarchartData('Month', filteredArr))
+                setPieModalData(PieCategories.SetbarchartData('Month', filteredArr))
                 groupData(filteredArr, 'Month', calculateDailytot(filteredArr))
 
 
@@ -561,6 +569,8 @@ const Main: React.FC = (props) => {
                 setdailyTotal(calculateDailytot(filteredArr1))
                 setYearlyData(filteredArr1)
                 setModalData(filteredArr1)
+                setBarModalData(PieCategories.SetbarchartData('Year', filteredArr1))
+                setPieModalData(PieCategories.SetbarchartData('Year', filteredArr1))
                 groupData(filteredArr1, 'Year', calculateDailytot(filteredArr1))
                 break;
             case 'BarCh':
@@ -616,7 +626,7 @@ const Main: React.FC = (props) => {
                 <div className="Detail">
                     {/* <ProfileMenu></ProfileMenu> */}
                     <DateSection GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
-                    <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect>
+                    {/* <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect> */}
                     <div className="Detail_maincontent">
                         <div>
                             <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData} PieCategories={PieCategories} AllData={AllData} setModalData={setModalData} page={PageSelect} ModalData={ModalData}></TableSection>
@@ -626,10 +636,10 @@ const Main: React.FC = (props) => {
                                 <h3>Data Analysis</h3>
                             </div>
                             <PieCatSelect page={PageSelect} PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal}
-                                setPieData={setPieChartData} setBarModalData={setBarModalData}></PieCatSelect>
+                                setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>
-                                    : <PieCharts pieData={PieChartData}></PieCharts>}</div>
+                                    : <PieCharts pieData={PieModalData}></PieCharts>}</div>
                             </ResponsiveContainer>
                         </div>
                     </div>

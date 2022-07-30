@@ -342,7 +342,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                 autoComplete="on"
             >
                 <div>
-                    <form noValidate className='ExpenseSect-form'>
+                    <form  className='ExpenseSect-form'>
                         <TextField
                             disabled
                             id="outlined-select-currency"

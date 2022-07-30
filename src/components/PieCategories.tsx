@@ -96,10 +96,10 @@ class PieCat {
     }
 
 
-    SetbarchartData(bymode: string,ModalData: ModalFile[]): [[]] {
+    SetbarchartData(bymode: string, ModalData: ModalFile[],AllData?:ModalFile[],page?:string): [[]] {
         let Bardata: any = [[bymode, "Amount"]]
         let baritem: any[] = []
-        let filtereditems = this.GroupData_gc(bymode,ModalData)
+        let filtereditems = this.GroupData_gc(bymode, ModalData)
         filtereditems.forEach((item) => {
             baritem = []
             baritem.push(String(item.name), item.value)
@@ -167,13 +167,30 @@ class PieCat {
                 break;
             case 'Date':
                 ModalData.forEach((item) => {
-                    // let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.availmode === mode) })
-                    // if (filetreditems.length >= 1) {
-                    // let percent = Math.round(100 * (item.amount) / total)
                     PieData.push({ name: item.date, value: item.amount })
-                    // }
                 })
                 break;
+            case 'Month':
+                let year = parseInt(new Date().toISOString().split('T')[0].split('-')[0])
+                this.Calenderinfo.forEach((cat) => {
+                    let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.month === cat.key && item.year == year) })
+                    if (filetreditems.length >= 1) {
+                        PieData.push({ name: cat.value, value: this.calculatetot(filetreditems) })
+                    }
+                })
+                break;
+            case 'Year':
+                ModalData.forEach((item) => {
+                    PieData.push({ name: item.date, value: item.amount })
+                })
+                break;
+
+            case 'Date':
+                ModalData.forEach((item) => {
+                    PieData.push({ name: item.date, value: item.amount })
+                })
+                break;
+            default:
         }
         return PieData
     }

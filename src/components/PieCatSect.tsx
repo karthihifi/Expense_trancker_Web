@@ -18,6 +18,7 @@ interface PieProps {
     PieCategories: PieCat
     page: string
     setBarModalData: (ModalData: string[][]) => void;
+    setPieModalData: (ModalData: string[][]) => void;
 }
 const PieCatSelect: React.FC<PieProps> = (props) => {
 
@@ -37,8 +38,10 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                 selected = 'Category'
                 break;
         }
+        console.log(props.ModalData)
         props.setPieData(props.PieCategories.GroupData(selected, props.ModalData, props.total))
         props.setBarModalData(props.PieCategories.SetbarchartData(selected, props.ModalData))
+        props.setPieModalData(props.PieCategories.SetbarchartData(selected, props.ModalData))
     };
 
     return (
