@@ -68,7 +68,8 @@ class PieCat {
     ];
     constructor() {
         this.Categories = [{ page: 'Home', Categories: ['By Category', 'By Purchmode', 'By Necessity'] },
-        { page: 'DailyCum', Categories: ['By Date', 'By Category', 'By Purchmode', 'By Necessity'] }
+        { page: 'DailyCum', Categories: ['By Date', 'By Category', 'By Purchmode', 'By Necessity'] },
+        { page: 'Monthy', Categories: ['By Date', 'By Category', 'By Purchmode', 'By Necessity'] }
         ]
         this.Necessity = [
             'Needed',
@@ -95,8 +96,52 @@ class PieCat {
         return total
     }
 
+    ConsildatebyMonth(month: number,year:number, ModalData: ModalFile[]):ModalFile[] {
+        let dailyitemsarr: ModalFile[] = []
+        const dymmydata1: ModalFile[] = JSON.parse(JSON.stringify(ModalData));
+        const getDays = (year: number, month: number) => new Date(year, month, 0).getDate()
 
-    SetbarchartData(bymode: string, ModalData: ModalFile[],AllData?:ModalFile[],page?:string): [[]] {
+        const days = getDays(year, month)
+        console.log(days)
+        let noofdays = [...Array(days).keys()].slice(1);
+        noofdays.forEach((item: number) => {
+            let day: number = item
+            let dailyCumItems = dymmydata1.filter((item) => { return (item.dateno == day && item.month == month && item.year == year) })
+            let array1: ModalFile[] = dymmydata1.filter((item) => {
+                return item.dateno == day && item.month == month && item.year == year
+            })
+            if (array1.length >= 1) {
+                console.log(array1, "ada")
+                // console.log(calculateDailytot(array1))
+                let arritem: ModalFile = array1[0]
+                arritem.mostusedcat = this.GetHighestspentData('category', dailyCumItems, this.calculatetot(dailyCumItems))
+                arritem.amount = this.calculatetot(array1)
+                //arritem.mostusedcat = PieCategories.GetHighestspentData('category', dailyCumItems, calculateDailytot(dailyCumItems))
+                // let DailyItems = AllData.filter((item) => { return (item.month == month && item.year == year) })
+                dailyitemsarr.push(arritem)
+            }
+        })
+        console.log(dailyitemsarr)
+        let prev1: number = 0
+        dailyitemsarr.forEach((item, iter) => {
+            if (iter == 0) {
+                prev1 = item.amount
+            }
+            let percent = Math.round(((item.amount - prev1) / prev1) * 100)
+            prev1 = item.amount
+            item.trendrate = String(percent)
+            if (percent == 0) {
+                item.trendicon = 'neutral'
+            } else if (percent > 0) {
+                item.trendicon = 'up'
+            } else {
+                item.trendicon = 'down'
+            }
+        })
+        return dailyitemsarr
+    }
+
+    SetbarchartData(bymode: string, ModalData: ModalFile[], AllData?: ModalFile[], page?: string): [[]] {
         let Bardata: any = [[bymode, "Amount"]]
         let baritem: any[] = []
         let filtereditems = this.GroupData_gc(bymode, ModalData)

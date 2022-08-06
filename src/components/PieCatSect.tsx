@@ -13,6 +13,8 @@ import { ModalFile } from './interface';
 
 interface PieProps {
     setPieData: (ModalData: { name: string, value: number }[]) => void;
+    TablecatSelect: { page: string, cat: string }
+    AllData: ModalFile[]
     ModalData: ModalFile[]
     total: number
     PieCategories: PieCat
@@ -38,6 +40,19 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                 selected = 'Category'
                 break;
         }
+        if (props.TablecatSelect.page == 'Daily') {
+            let month = parseInt(props.TablecatSelect.cat)
+            let filtered = props.AllData.filter((item) => { return item.month == month })
+            if (selected == 'Date') {
+                let groupdata = props.PieCategories.ConsildatebyMonth(month, 2022, filtered)
+                props.setBarModalData(props.PieCategories.SetbarchartData(selected, groupdata))
+            } else {
+                props.setBarModalData(props.PieCategories.SetbarchartData(selected, filtered))
+            }
+
+            props.setPieModalData(props.PieCategories.SetbarchartData(selected, filtered))
+            return
+        }
         console.log(props.ModalData)
         props.setPieData(props.PieCategories.GroupData(selected, props.ModalData, props.total))
         props.setBarModalData(props.PieCategories.SetbarchartData(selected, props.ModalData))
@@ -58,7 +73,7 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                         onChange={handleChange}
                     >
                         {props.PieCategories.Categories[props.page == 'Home' ? 0 :
-                            props.page == 'Daily' || props.page == 'BarCh' ? 1 : 0].Categories.map((option: string) => (
+                            props.page == 'Daily' || props.page == 'BarCh' || props.page == 'Mon'  ? 1 : 0].Categories.map((option: string) => (
                                 <MenuItem key={option} value={option}>
                                     {option}
                                 </MenuItem>

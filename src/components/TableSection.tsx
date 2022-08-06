@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {ModalFile} from './interface';
+import { ModalFile } from './interface';
 import { pink } from '@mui/material/colors';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
@@ -23,8 +23,10 @@ interface ModalDataProps {
   ModalData: ModalFile[];
   page: string;
   setModalData: (ModalData: ModalFile[]) => void
+  setTablecatSelect: (cat: { page: string, cat: string }) => void
   PieCategories: PieCat
   setPieData: (ModalData: { name: string, value: number }[]) => void;
+  setPieModalData: (ModalData: string[][]) => void;
 }
 
 // import Main from './components/main'
@@ -157,9 +159,12 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
               return item.date == event.target.value
             })
             props.setModalData(filtered);
-            let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
-            props.setPieData(PieData)
+            // let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
+            let PieData = props.PieCategories.SetbarchartData('Date', filtered)
+            // props.setPieData(PieData)
+            props.setPieModalData(PieData)
             props.setdailyTotal(props.PieCategories.calculatetot(filtered))
+            props.setTablecatSelect({ page: 'Home', cat: event.target.value })
             console.log(filtered, "da")
           }}
         /> : props.page == 'Daily' ?
@@ -179,10 +184,18 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
                 let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
                 return item.month == calval[0].key
               })
-              props.setModalData(filtered);
-              let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
-              props.setPieData(PieData)
+              // props.setModalData(filtered);
+              // let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
+              let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
+              let consolidatedData = props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, filtered)
+              let PieData = props.PieCategories.SetbarchartData('Date', consolidatedData)
+
+              // console.log(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData), 'Month')
+              props.setModalData(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData));
+              // props.setPieData(PieData)
+              props.setPieModalData(PieData)
               props.setdailyTotal(props.PieCategories.calculatetot(filtered))
+              props.setTablecatSelect({ page: 'Daily', cat: String(calval[0].key) })
               console.log(filtered, "da")
             }}
           >

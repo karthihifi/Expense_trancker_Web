@@ -173,6 +173,7 @@ function writeGlobalUserData(expdata: Glabaldata) {
 const Main: React.FC = (props) => {
 
     const [PageSelect, setPageSelect] = React.useState('Home');
+    const [TablecatSelect, setTablecatSelect] = React.useState({ page: '', cat: '' });
     const [ChartSelect, setChartSelect] = React.useState('Pie');
     const [SideMenuopen, setSideMenuopen] = React.useState(false);
 
@@ -629,13 +630,17 @@ const Main: React.FC = (props) => {
                     {/* <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect> */}
                     <div className="Detail_maincontent">
                         <div>
-                            <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData} PieCategories={PieCategories} AllData={AllData} setModalData={setModalData} page={PageSelect} ModalData={ModalData}></TableSection>
+                            <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData} 
+                            setTablecatSelect = {setTablecatSelect} setPieModalData={setPieModalData}
+                            PieCategories={PieCategories} AllData={AllData} setModalData={setModalData} 
+                            page={PageSelect} ModalData={ModalData}></TableSection>
                         </div>
                         <div className="chart">
                             <div className="header">
                                 <h3>Data Analysis</h3>
                             </div>
-                            <PieCatSelect page={PageSelect} PieCategories={PieCategories} ModalData={ModalData} total={dailyTotal}
+                            <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
+                                AllData={AllData} ModalData={ModalData} total={dailyTotal}
                                 setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>
