@@ -19,6 +19,7 @@ interface PieProps {
     total: number
     PieCategories: PieCat
     page: string
+    charttype:string
     setBarModalData: (ModalData: string[][]) => void;
     setPieModalData: (ModalData: string[][]) => void;
 }
@@ -39,6 +40,9 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
             default:
                 selected = 'Category'
                 break;
+        }
+        if (props.page == 'Mon' || props.page == 'Daily') {
+            
         }
         if (props.TablecatSelect.page == 'Daily') {
             let month = parseInt(props.TablecatSelect.cat)
@@ -72,8 +76,14 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                         //   label="Sel. Category"
                         onChange={handleChange}
                     >
-                        {props.PieCategories.Categories[props.page == 'Home' ? 0 :
+                        {/* {props.PieCategories.Categories[props.page == 'Home' ? 0 :
                             props.page == 'Daily' || props.page == 'BarCh' || props.page == 'Mon'  ? 1 : 0].Categories.map((option: string) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))} */}
+
+                            {props.PieCategories.getChartCategories(props.page,props.charttype).map((option: string) => (
                                 <MenuItem key={option} value={option}>
                                     {option}
                                 </MenuItem>

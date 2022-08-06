@@ -96,7 +96,57 @@ class PieCat {
         return total
     }
 
-    ConsildatebyMonth(month: number,year:number, ModalData: ModalFile[]):ModalFile[] {
+    getChartCategories(page: string, chart: string): string[] {
+        let categories: string[] = []
+        switch (page) {
+            case 'Home':
+                switch (chart) {
+                    case 'Bar':
+                        categories = ['By Category', 'By Purchmode', 'By Necessity']
+                        break;
+                    case 'Pie':
+                        categories = ['By Category', 'By Purchmode', 'By Necessity']
+                        break;
+                    default:
+                        categories = ['By Category', 'By Purchmode', 'By Necessity']
+                        break;
+                }
+                break;
+
+            case 'Daily':
+                switch (chart) {
+                    case 'Bar':
+                        categories = ['By Date', 'By Category', 'By Purchmode', 'By Necessity']
+                        break;
+                    case 'Pie':
+                        categories = ['By Date', 'By Category', 'By Purchmode', 'By Necessity']
+                        break;
+                    default:
+                        categories = ['By Date', 'By Category', 'By Purchmode', 'By Necessity']
+                        break;
+                }
+                break;
+
+            case 'Mon':
+                switch (chart) {
+                    case 'Bar':
+                        categories = ['By Date']
+                        break;
+                    case 'Pie':
+                        categories = ['By Date']
+                        break;
+                    default:
+                        categories = ['By Date']
+                        break;
+                }
+                break;
+
+            default:
+                break;
+        }
+        return categories
+    }
+    ConsildatebyMonth(month: number, year: number, ModalData: ModalFile[]): ModalFile[] {
         let dailyitemsarr: ModalFile[] = []
         const dymmydata1: ModalFile[] = JSON.parse(JSON.stringify(ModalData));
         const getDays = (year: number, month: number) => new Date(year, month, 0).getDate()

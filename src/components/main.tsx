@@ -445,6 +445,7 @@ const Main: React.FC = (props) => {
                 setPieModalData(PieCategories.SetbarchartData('Category', dailyItems))
                 console.log(dailyItems, "Home")
                 groupData(dailyItems, 'Category', calculateDailytot(dailyItems))
+                setSideMenuopen(false)
                 break;
             case 'Daily':
                 setPageSelect('Daily');
@@ -496,6 +497,7 @@ const Main: React.FC = (props) => {
                 setPieModalData(PieCategories.SetbarchartData('Date', dailyitemsarr))
                 console.log(dailyitemsarr, "Home")
                 groupData(dailyitemsarr, 'Date', calculateDailytot(dailyitemsarr))
+                setSideMenuopen(false)
                 break;
             case 'Mon':
                 setPageSelect('Mon');
@@ -542,7 +544,7 @@ const Main: React.FC = (props) => {
                 setBarModalData(PieCategories.SetbarchartData('Month', filteredArr))
                 setPieModalData(PieCategories.SetbarchartData('Month', filteredArr))
                 groupData(filteredArr, 'Month', calculateDailytot(filteredArr))
-
+                setSideMenuopen(false)
 
                 break;
             case 'Year':
@@ -573,14 +575,17 @@ const Main: React.FC = (props) => {
                 setBarModalData(PieCategories.SetbarchartData('Year', filteredArr1))
                 setPieModalData(PieCategories.SetbarchartData('Year', filteredArr1))
                 groupData(filteredArr1, 'Year', calculateDailytot(filteredArr1))
+                setSideMenuopen(false)
                 break;
             case 'BarCh':
                 // setPageSelect('BarCh');
                 setChartSelect('Bar')
+                setSideMenuopen(false)
                 break;
             case 'PieCh':
                 // setPageSelect('PieCh');
                 setChartSelect('Pie')
+                setSideMenuopen(false)
                 break;
             case 'Profile':
                 // setPageSelect('PieCh');
@@ -589,10 +594,12 @@ const Main: React.FC = (props) => {
                 // setPageSelect('PieCh');
                 // setcatModalOpen(true)
                 setcurrModalOpen(true)
+                setSideMenuopen(false)
                 break;
 
             case 'Category':
                 setcatModalOpen(true)
+                setSideMenuopen(false)
                 break;
         }
     }
@@ -640,7 +647,7 @@ const Main: React.FC = (props) => {
                                 <h3>Data Analysis</h3>
                             </div>
                             <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
-                                AllData={AllData} ModalData={ModalData} total={dailyTotal}
+                                AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype = {ChartSelect}
                                 setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>
