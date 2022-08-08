@@ -149,3 +149,23 @@
   margin-top: 10px;
   align-items: flex-start;
 }
+
+.Login{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.Login_img{
+  background-image: url(https://wallpaper.dog/large/826954.jpg);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.Login_form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
