@@ -61,6 +61,8 @@ const timeofDay = [
 
 const Categories = [
     'Food',
+    'Beverages',
+    'Chocolates',
     'Clothes',
     'Electronics',
     'Entertainment',
@@ -502,7 +504,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                         size="small"
                         // value={expData.necessity}
                         helperText="Enter Comments"
-                    // onChange={handleChange('necessity')}
+                    onChange={handleChange('comments')}
                     >
 
                     </TextField>
