@@ -81,6 +81,8 @@ class PieCat {
         this.Usercat = [
             'Food',
             'Clothes',
+            'Chocolates',
+            'Beverages',
             'Electronics',
             'Entertainment',
             'Fitness'
@@ -200,7 +202,7 @@ class PieCat {
             baritem.push(String(item.name), item.value)
             Bardata.push(baritem)
         })
-        console.log(Bardata, 'sads', typeof (Bardata))
+        console.log(Bardata, 'sadss', typeof (Bardata))
         return Bardata;
     }
     GetHighestspentData(bymode: string, ModalData: ModalFile[], total: number): string {
@@ -245,6 +247,7 @@ class PieCat {
             case 'Category':
                 this.Usercat.forEach((cat) => {
                     let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.category === cat) })
+                    console.log(filetreditems,"filtered",cat,ModalData)
                     if (filetreditems.length >= 1) {
                         // let percent = Math.round((this.calculatetot(filetreditems) / total) * 100)
                         PieData.push({ name: cat, value: this.calculatetot(filetreditems) })

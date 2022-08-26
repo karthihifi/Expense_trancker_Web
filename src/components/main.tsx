@@ -156,12 +156,20 @@ const Necessity = [
 // }
 
 function writeGlobalUserData(expdata: Glabaldata) {
+    console.log(expdata,"ada")
     const Expref = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
     get(Expref).then((snapshot) => {
+        console.log(snapshot.val(),'ass')
+        if (snapshot.val() == undefined || snapshot.val() == null) {
+            const postListRef = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
+            const newPostRef = push(postListRef);
+            set(newPostRef, expdata);
+            return;
+        }
         let id = Object.keys(snapshot.val())[0]
         const Expref1 = ref(database, `ExpenseUser/${expdata.username}/ProfileData/${id}`);
         get(Expref1).then((snapshot) => {
-            console.log('Profiledata', snapshot.val())
+            console.log('Profiledata', snapshot.val(),id)
             set(Expref1, expdata)
         })
     })
@@ -196,7 +204,7 @@ const Main: React.FC = (props) => {
     const [PieChartData, setPieChartData] = React.useState<PieChartIntf[]>([]);
 
     const [GlobalUserData, setGlobalUserData] = React.useState<Glabaldata>({
-        username: 'testuser',
+        username: 'karthihifi',
         countryname: '', currlabel: '', currsymbol: '', flag: ''
     });
 
@@ -417,6 +425,7 @@ const Main: React.FC = (props) => {
     const handlecountryselect = (country: string) => {
         let dummydata = { ...GlobalUserData }
         dummydata.countryname = country
+        console.log('currencybef', dummydata,GlobalUserData)
         let currdata = CurrSymbols.find((item) => { return item.countryname == country })
         if (currdata != undefined) {
             // dummydata.
