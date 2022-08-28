@@ -145,6 +145,10 @@
   margin-right: 20px;
 }
 
+.table_comments{
+  font-weight: bold;
+}
+
 .Sidebar_menu{
   display: flex;
   margin-top: 10px;

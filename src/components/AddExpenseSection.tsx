@@ -7,10 +7,11 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import axios from 'axios';
-import {ModalFile} from './interface';
+import { ModalFile } from './interface';
 import './main.css'
 import exp from 'constants';
 import Box from '@mui/material/Box';
+import PieCat from './PieCategories'
 
 interface Glabaldata {
     username: string,
@@ -22,6 +23,7 @@ interface Glabaldata {
 interface MainProps {
     handleAddExpense: (ModalData: ModalFile) => void;
     GlobalData: Glabaldata
+    PieCategories: PieCat
 }
 
 interface ErrorFields {
@@ -61,12 +63,13 @@ const timeofDay = [
 
 const Categories = [
     'Food',
-    'Beverages',
-    'Chocolates',
+    'Travel',
+    'OneTimeExpense',
+    'BillPayments',
     'Clothes',
-    'Electronics',
     'Entertainment',
-    'Fitness'
+    'Fitness',
+    'Others'
 ]
 
 
@@ -144,9 +147,9 @@ const defaultExpData: ModalFile = {
     necessity: '',
     comments: '',
     trendrate: '',
-    trendicon:'',
-    mostusedcat:'',
-    mostusedpurchmode:'',
+    trendicon: '',
+    mostusedcat: '',
+    mostusedpurchmode: '',
     dateno: parseInt(new Date().toISOString().split('T')[0].split('-')[2]),
     month: parseInt(new Date().toISOString().split('T')[0].split('-')[1]),
     monthstr: findmonth(parseInt(new Date().toISOString().split('T')[0].split('-')[1])),
@@ -170,6 +173,7 @@ const DateSection: React.FC<MainProps> = (props) => {
     const [errorFileds, setErrorfields] = React.useState<ErrorFields>(defaultFieldState)
 
     const [CurrSymbols, setCurrSymbols] = React.useState<{ label: string, value: string }[]>([]);
+    const [SubCat, setSubCat] = React.useState<string[]>([]);
 
     const validationerror = (): boolean => {
 
@@ -246,7 +250,7 @@ const DateSection: React.FC<MainProps> = (props) => {
             }
 
             if (prop == 'amount') {
-                let amt = parseInt(event.target.value)
+                let amt = parseFloat(event.target.value)
                 if (amt != 0) {
                     fieldState.amount = false
                     setErrorfields(fieldState)
@@ -269,6 +273,11 @@ const DateSection: React.FC<MainProps> = (props) => {
                     fieldState.category = false
                     setErrorfields(fieldState)
                 }
+
+                let filteredCat: { key: string, value: string[] }[] = props.PieCategories.UserSubCat.filter((item) => {
+                    return category == item.key
+                })
+                setSubCat(filteredCat.length >= 1 ? filteredCat[0].value : [])
             }
 
             if (prop == 'necessity') {
@@ -281,7 +290,7 @@ const DateSection: React.FC<MainProps> = (props) => {
 
             if (prop == 'currency') {
                 let currency = event.target.value
-                console.log('value',currency)
+                console.log('value', currency)
                 if (currency != '') {
                     fieldState.currency = false
                     setErrorfields(fieldState)
@@ -344,7 +353,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                 autoComplete="on"
             >
                 <div>
-                    <form  className='ExpenseSect-form'>
+                    <form className='ExpenseSect-form'>
                         <TextField
                             disabled
                             id="outlined-select-currency"
@@ -371,6 +380,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                             helperText="Enter Expense"
                             type="number"
                             size="small"
+                            // step=
                             value={expData.amount}
                             onChange={handleChange('amount')}
                             InputLabelProps={{
@@ -471,7 +481,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                         helperText="Select SubCategory"
                         onChange={handleChange('subcategory')}
                     >
-                        {Necessity.map((option) => (
+                        {SubCat.map((option) => (
                             <MenuItem key={option} value={option}>
                                 {option}
                             </MenuItem>
@@ -500,11 +510,11 @@ const DateSection: React.FC<MainProps> = (props) => {
                         multiline
                         rows={1}
                         // select
-                        // label="Enter Comments"
+                        label="Comments"
                         size="small"
                         // value={expData.necessity}
                         helperText="Enter Comments"
-                    onChange={handleChange('comments')}
+                        onChange={handleChange('comments')}
                     >
 
                     </TextField>

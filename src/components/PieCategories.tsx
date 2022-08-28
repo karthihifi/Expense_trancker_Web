@@ -16,6 +16,7 @@ class PieCat {
     Necessity: string[]
     Usercat: string[]
     PurchMode: string[]
+    UserSubCat: { key: string, value: string[] }[]
     Calenderinfo = [
         {
             key: 1,
@@ -81,11 +82,29 @@ class PieCat {
         this.Usercat = [
             'Food',
             'Clothes',
-            'Chocolates',
-            'Beverages',
-            'Electronics',
+            'Travel',
+            'OneTimeExpense',
+            'BillPayments',
             'Entertainment',
-            'Fitness'
+            'Fitness',
+            'Others'
+        ]
+
+        this.UserSubCat = [{
+            key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse','Fruits','Vegetables','Water']
+        },
+        {
+            key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']
+        },
+        {
+            key: 'OneTimeExpense', value: ['HomeAppliance', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics']
+        },
+        {
+            key: 'Fitness', value: ['Gym', 'Football', 'Cricket', 'Others']
+        },
+        {
+            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Utilities', 'Room','Hotstar','Electicity','Water','Bank','Others']
+        },
         ]
         this.PurchMode = ['Online', 'Offline']
     }
@@ -247,7 +266,7 @@ class PieCat {
             case 'Category':
                 this.Usercat.forEach((cat) => {
                     let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.category === cat) })
-                    console.log(filetreditems,"filtered",cat,ModalData)
+                    console.log(filetreditems, "filtered", cat, ModalData)
                     if (filetreditems.length >= 1) {
                         // let percent = Math.round((this.calculatetot(filetreditems) / total) * 100)
                         PieData.push({ name: cat, value: this.calculatetot(filetreditems) })

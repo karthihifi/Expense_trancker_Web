@@ -642,7 +642,7 @@ const Main: React.FC = (props) => {
                 {/* </div> */}
                 <div className="Detail">
                     {/* <ProfileMenu></ProfileMenu> */}
-                    <DateSection GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
+                    <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
                     {/* <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect> */}
                     <div className="Detail_maincontent">
                         <div>
