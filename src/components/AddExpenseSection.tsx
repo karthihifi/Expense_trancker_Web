@@ -341,9 +341,9 @@ const DateSection: React.FC<MainProps> = (props) => {
     )
     return (
         <div className='Detail_header'>
-            <div className='header'>
+            {/* <div className='header'>
                 <h3>Todays Expense Details</h3>
-            </div>
+            </div> */}
             <Box
                 component="form"
                 sx={{

@@ -41,7 +41,8 @@ import './main.css'
 // );
 
 interface expensesect{
-    dailyTotal:Number
+    dailyTotal:string
+    Monthtot:string
 }
 
 const TodaysExpenseSect:React.FC<expensesect> = (props) => {
@@ -51,8 +52,8 @@ const TodaysExpenseSect:React.FC<expensesect> = (props) => {
         </div>
         <div>
             {/* <div>{String(props.dailyTotal)}</div> */}
-            <div>Total Amount spent Today : {String(props.dailyTotal)} INR  </div>
-            <div>Total Amount spent on August Month : 1500 INR</div>
+            <div>Total Amount spent Today : {props.dailyTotal}  </div>
+            <div>Total Amount spent on August Month : {props.Monthtot}</div>
         </div>
     </div>
         // <Box sx={{ minWidth: 1024 }}>

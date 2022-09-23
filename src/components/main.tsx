@@ -28,6 +28,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
+// import Accordion from '@mui/material/Accordion';
+// import AccordionSummary from '@mui/material/AccordionSummary';
+// import AccordionDetails from '@mui/material/AccordionDetails';
+// import Typography from '@mui/material/Typography';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import Accordion from 'react-bootstrap/Accordion';
 
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(firebase_Expeseapp);
@@ -156,10 +163,10 @@ const Necessity = [
 // }
 
 function writeGlobalUserData(expdata: Glabaldata) {
-    console.log(expdata,"ada")
+    console.log(expdata, "ada")
     const Expref = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
     get(Expref).then((snapshot) => {
-        console.log(snapshot.val(),'ass')
+        console.log(snapshot.val(), 'ass')
         if (snapshot.val() == undefined || snapshot.val() == null) {
             const postListRef = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
             const newPostRef = push(postListRef);
@@ -169,7 +176,7 @@ function writeGlobalUserData(expdata: Glabaldata) {
         let id = Object.keys(snapshot.val())[0]
         const Expref1 = ref(database, `ExpenseUser/${expdata.username}/ProfileData/${id}`);
         get(Expref1).then((snapshot) => {
-            console.log('Profiledata', snapshot.val(),id)
+            console.log('Profiledata', snapshot.val(), id)
             set(Expref1, expdata)
         })
     })
@@ -200,7 +207,7 @@ const Main: React.FC = (props) => {
 
     const [catModalOpen, setcatModalOpen] = React.useState<boolean>(false);
     const [currModalOpen, setcurrModalOpen] = React.useState<boolean>(false);
-    const [maxcount, setmaxcount] = React.useState<number>(15);
+    const [maxcount, setmaxcount] = React.useState<number>(1000);
     const [PieChartData, setPieChartData] = React.useState<PieChartIntf[]>([]);
 
     const [GlobalUserData, setGlobalUserData] = React.useState<Glabaldata>({
@@ -266,6 +273,9 @@ const Main: React.FC = (props) => {
 
     const readExpenseData = async () => {
         const Expref = ref(database, `ExpenseUser/${GlobalUserData.username}`);
+        let month = parseInt(new Date().toISOString().split('T')[0].split('-')[1])
+        let year = parseInt(new Date().toISOString().split('T')[0].split('-')[0])
+        let date = parseInt(new Date().toISOString().split('T')[0].split('-')[2])
         get(Expref).then((snapshot) => {
             if (snapshot.exists()) {
                 let profiledata: any = Object.values(snapshot.val().ProfileData)[0]
@@ -276,10 +286,13 @@ const Main: React.FC = (props) => {
                 if (ExpenseData.length > maxcount) {
                     ExpenseData = dummy.slice((dummy.length - maxcount), dummy.length)
                 }
+                let MonthData = ExpenseData.filter((item) => { return month == item.month && year == item.year })
+                let DailyData = ExpenseData.filter((item) => { return month == item.month && year == item.year && date == item.dateno })
+                setMonthTotal(PieCategories.calculatetot(MonthData))
                 setModalData(ExpenseData)
                 setBarModalData(PieCategories.SetbarchartData('Category', ExpenseData))
                 setPieModalData(PieCategories.SetbarchartData('Category', ExpenseData))
-                let dailyTotal = calculateDailytot(ExpenseData)
+                let dailyTotal = calculateDailytot(DailyData)
                 setdailyTotal(dailyTotal)
                 setDailyData(ExpenseData)
                 setAllData(ExpenseData)
@@ -425,7 +438,7 @@ const Main: React.FC = (props) => {
     const handlecountryselect = (country: string) => {
         let dummydata = { ...GlobalUserData }
         dummydata.countryname = country
-        console.log('currencybef', dummydata,GlobalUserData)
+        console.log('currencybef', dummydata, GlobalUserData)
         let currdata = CurrSymbols.find((item) => { return item.countryname == country })
         if (currdata != undefined) {
             // dummydata.
@@ -447,7 +460,7 @@ const Main: React.FC = (props) => {
             case 'Home':
                 setPageSelect('Home');
                 // const dailyItems = AllData.filter((item) => { return (item.dateno == date && item.month == month && item.year == year) })
-                const dailyItems = AllData.filter((item) => { return (item.month == month && item.year == year) })
+                const dailyItems = AllData.filter((item) => { return (item.month == month && item.year == year && item.dateno == date) })
                 setdailyTotal(calculateDailytot(dailyItems))
                 setModalData(dailyItems)
                 setBarModalData(PieCategories.SetbarchartData('Category', dailyItems))
@@ -463,11 +476,13 @@ const Main: React.FC = (props) => {
                 const getDays = (year: number, month: number) => new Date(year, month, 0).getDate()
 
                 const days = getDays(year, month)
-                console.log(days)
-                let noofdays = [...Array(days).keys()].slice(1);
+                // console.log(days,"asss",dymmydata1)
+                let noofdays = [...Array(days + 1).keys()].slice(1);
+                console.log([...Array(days)], "noof")
                 noofdays.forEach((item: number) => {
                     let day: number = item
                     let dailyCumItems = dymmydata1.filter((item) => { return (item.dateno == day && item.month == month && item.year == year) })
+                    // console.log(day,"asss",dailyCumItems,noofdays)
                     let array1: ModalFile[] = dymmydata1.filter((item) => {
                         return item.dateno == day && item.month == month && item.year == year
                     })
@@ -642,21 +657,29 @@ const Main: React.FC = (props) => {
                 {/* </div> */}
                 <div className="Detail">
                     {/* <ProfileMenu></ProfileMenu> */}
-                    <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
-                    {/* <TodaysExpenseSect dailyTotal={dailyTotal} ></TodaysExpenseSect> */}
+                    <Accordion className="Detail_Accor" flush>
+                        <Accordion.Item eventKey="0">
+                            <Accordion.Header>
+                                <h4>Add Expense Details</h4></Accordion.Header>
+                            <Accordion.Body>
+                                <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+                    <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect>
                     <div className="Detail_maincontent">
                         <div>
-                            <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData} 
-                            setTablecatSelect = {setTablecatSelect} setPieModalData={setPieModalData}
-                            PieCategories={PieCategories} AllData={AllData} setModalData={setModalData} 
-                            page={PageSelect} ModalData={ModalData}></TableSection>
+                            <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData}
+                                setTablecatSelect={setTablecatSelect} setPieModalData={setPieModalData}
+                                PieCategories={PieCategories} AllData={AllData} setModalData={setModalData}
+                                page={PageSelect} ModalData={ModalData}></TableSection>
                         </div>
                         <div className="chart">
                             <div className="header">
                                 <h3>Data Analysis</h3>
                             </div>
                             <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
-                                AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype = {ChartSelect}
+                                AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype={ChartSelect}
                                 setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>

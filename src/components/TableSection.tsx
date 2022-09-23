@@ -11,11 +11,14 @@ import { pink } from '@mui/material/colors';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import TableViewIcon from '@mui/icons-material/TableView';
+import TabIcon from '@mui/icons-material/Tab';
 import './main.css'
 import TextField from '@mui/material/TextField';
 import PieCat from './PieCategories'
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { TableView } from '@mui/icons-material';
 
 interface ModalDataProps {
   setdailyTotal: (tot: number) => void
@@ -92,7 +95,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         {/* <TableCell align="right">{row.subcategory}</TableCell>
         <TableCell align="right">{row.availmode}</TableCell> */}
         <TableCell align="right">{row.necessity}</TableCell>
-        <TableCell className='table_comments'align="right">{row.comments}</TableCell>
+        <TableCell className='table_comments' align="right">{row.comments}</TableCell>
         {/* <TableCell align="right">{row.trendrate}<TrendingUpIcon sx={{ color: pink[500] }}></TrendingUpIcon></TableCell> */}
         {/* <TableCell align="right">{row.dateno}</TableCell>
                   <TableCell align="right">{row.month}</TableCell>
@@ -139,7 +142,13 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
   return (
     <div className="table">
       <div className="header">
-        <h3>Expense Details</h3>
+        <div className="table_header">
+          <h3>Expense Details</h3>
+          <span>
+            <TableView></TableView>
+            <TabIcon></TabIcon>
+          </span>
+        </div>
       </div>
       <div className='table-date'>
         {props.page == 'Home' ? <TextField

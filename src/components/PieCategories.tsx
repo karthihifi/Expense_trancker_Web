@@ -91,19 +91,19 @@ class PieCat {
         ]
 
         this.UserSubCat = [{
-            key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse','Fruits','Vegetables','Water']
+            key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse','Fruits','Vegetables','Water','BreadItems','Pasteries','Chinese','NewTryOuts']
         },
         {
             key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']
         },
         {
-            key: 'OneTimeExpense', value: ['HomeAppliance', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics']
+            key: 'OneTimeExpense', value: ['HomeAppliance', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics','TravelUtilities']
         },
         {
             key: 'Fitness', value: ['Gym', 'Football', 'Cricket', 'Others']
         },
         {
-            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Utilities', 'Room','Hotstar','Electicity','Water','Bank','Others']
+            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Utilities', 'Room','Hotstar','Sooka','AstroGo','Electicity','Water','Bank','Others']
         },
         ]
         this.PurchMode = ['Online', 'Offline']

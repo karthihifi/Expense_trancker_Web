@@ -39,11 +39,15 @@
   width:100%
 }
 
+.Detail_Accor{
+  width: 100%;
+}
+
 .Detail_header {
   display: flex;
   /* flex-grow: 1; */
   flex-direction: column;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
   transition: 0.3s;
   border-radius: 5px;
   width: 100%;
@@ -123,8 +127,8 @@
 }
 
 .header {
-  background-color: #4c70b9;
-  color: #fff;
+  /* background-color: #4c70b9; */
+  /* color: #fff; */
   margin-bottom: 15px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
