@@ -163,6 +163,7 @@ const Necessity = [
 // }
 
 function writeGlobalUserData(expdata: Glabaldata) {
+
     console.log(expdata, "ada")
     const Expref = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
     get(Expref).then((snapshot) => {
@@ -178,6 +179,7 @@ function writeGlobalUserData(expdata: Glabaldata) {
         get(Expref1).then((snapshot) => {
             console.log('Profiledata', snapshot.val(), id)
             set(Expref1, expdata)
+            PieCategories.setGlobalData(expdata)
         })
     })
     // const postListRef = ref(database, `ExpenseUser/${expdata.username}/ProfileData`);
@@ -279,7 +281,9 @@ const Main: React.FC = (props) => {
         get(Expref).then((snapshot) => {
             if (snapshot.exists()) {
                 let profiledata: any = Object.values(snapshot.val().ProfileData)[0]
+                console.log('profiledata',profiledata)
                 setGlobalUserData(profiledata)
+                PieCategories.setGlobalData(profiledata)
                 // console.log(profiledata,'profile')
                 let dummy: ModalFile[] = Object.values(snapshot.val().ExpenseData)
                 let ExpenseData: ModalFile[] = Object.values(snapshot.val().ExpenseData)

@@ -1,7 +1,7 @@
 
 import { type } from 'os';
 import { stringify } from 'querystring';
-import { ModalFile, ChartSchema } from './interface';
+import { ModalFile, ChartSchema, Globaldata } from './interface';
 
 interface Cattype {
     page: string,
@@ -10,8 +10,11 @@ interface Cattype {
 
 interface PieChartIntf { name: string, value: number }
 
+interface Generic { name: string, value: number }
+
 type charttype = string | number
 class PieCat {
+    GlobalData: Globaldata
     Categories: Cattype[];
     Necessity: string[]
     Usercat: string[]
@@ -68,6 +71,10 @@ class PieCat {
         },
     ];
     constructor() {
+        this.GlobalData = {
+            username: 'karthihifi',
+            countryname: '', currlabel: '', currsymbol: '', flag: ''
+        }
         this.Categories = [{ page: 'Home', Categories: ['By Category', 'By Purchmode', 'By Necessity'] },
         { page: 'DailyCum', Categories: ['By Date', 'By Category', 'By Purchmode', 'By Necessity'] },
         { page: 'Monthy', Categories: ['By Date', 'By Category', 'By Purchmode', 'By Necessity'] }
@@ -91,19 +98,19 @@ class PieCat {
         ]
 
         this.UserSubCat = [{
-            key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse','Fruits','Vegetables','Water','BreadItems','Pasteries','Chinese','NewTryOuts']
+            key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse', 'Fruits', 'Vegetables', 'Water', 'BreadItems', 'Pasteries', 'Chinese', 'NewTryOuts']
         },
         {
             key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']
         },
         {
-            key: 'OneTimeExpense', value: ['HomeAppliance', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics','TravelUtilities']
+            key: 'OneTimeExpense', value: ['HomeAppliance', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics', 'TravelUtilities']
         },
         {
             key: 'Fitness', value: ['Gym', 'Football', 'Cricket', 'Others']
         },
         {
-            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Utilities', 'Room','Hotstar','Sooka','AstroGo','Electicity','Water','Bank','Others']
+            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
         },
         ]
         this.PurchMode = ['Online', 'Offline']
@@ -117,6 +124,10 @@ class PieCat {
         return total
     }
 
+    setGlobalData(inp: Globaldata) {
+        console.log(inp, 'inp')
+        this.GlobalData = inp
+    }
     getChartCategories(page: string, chart: string): string[] {
         let categories: string[] = []
         switch (page) {
@@ -251,6 +262,24 @@ class PieCat {
         return ret
     }
 
+    getSubCatArr(cat: string): string[] {
+        let filtered = this.UserSubCat.filter((item) => { return item.key == cat })
+        console.log(filtered,"adas")
+        return filtered[0].value
+    }
+    GroupData_SubCat(inp: ModalFile[],cat:string): PieChartIntf[] {
+        let ModalData: PieChartIntf[] = []
+
+        this.getSubCatArr(cat).forEach((item) => {
+            let suncat = item
+            let filetreditems: ModalFile[] = inp.filter((item) => { return (item.subcategory === suncat) })
+            console.log("SubData",filetreditems)
+            if (filetreditems.length >= 1) {
+                ModalData.push({ name: suncat, value: this.calculatetot(filetreditems) })
+            }
+        })
+        return ModalData
+    }
     GroupData_gc(bymode: string, ModalData: ModalFile[]): PieChartIntf[] {
         let PieData: PieChartIntf[] = []
         switch (bymode) {
@@ -266,7 +295,7 @@ class PieCat {
             case 'Category':
                 this.Usercat.forEach((cat) => {
                     let filetreditems: ModalFile[] = ModalData.filter((item) => { return (item.category === cat) })
-                    console.log(filetreditems, "filtered", cat, ModalData)
+                    // console.log(filetreditems, "filtered", cat, ModalData)
                     if (filetreditems.length >= 1) {
                         // let percent = Math.round((this.calculatetot(filetreditems) / total) * 100)
                         PieData.push({ name: cat, value: this.calculatetot(filetreditems) })

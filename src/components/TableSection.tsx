@@ -19,6 +19,10 @@ import PieCat from './PieCategories'
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { TableView } from '@mui/icons-material';
+import TableGroupTabs from './TableGroupView'
+import IconButton from '@mui/material/IconButton';
+import { Props } from 'recharts/types/container/Surface';
+import { Generic } from './interface'
 
 interface ModalDataProps {
   setdailyTotal: (tot: number) => void
@@ -32,6 +36,7 @@ interface ModalDataProps {
   setPieModalData: (ModalData: string[][]) => void;
 }
 
+// const ModalClass = new PieCat()
 // import Main from './components/main'
 
 function createData(
@@ -78,6 +83,8 @@ const Monthly_Yearlyheader = (): any => {
 const TableSection: React.FC<ModalDataProps> = (props) => {
 
   const [PageSelect, setPageSelect] = React.useState(true);
+  const [View, setView] = React.useState('Default');
+  const [InitialData_frGroup, setInitialData_frGroup] = React.useState<Generic[]>([]);
 
   const Homeheaderdata = (row: ModalFile): any => {
     return (
@@ -145,95 +152,112 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         <div className="table_header">
           <h3>Expense Details</h3>
           <span>
-            <TableView></TableView>
-            <TabIcon></TabIcon>
+            <IconButton>
+              <TableView onClick={() => setView('Default')}></TableView>
+            </IconButton>
+            <IconButton onClick={() => {
+              let month = parseInt(new Date().toISOString().split('T')[0].split('-')[1])
+              let year = parseInt(new Date().toISOString().split('T')[0].split('-')[0])
+              let ModelData = props.AllData.filter((item) => { return item.month == month && item.year == year })
+              let filteredData = props.PieCategories.GroupData_gc('Category', ModelData)
+              console.log('filtered', filteredData)
+              setInitialData_frGroup(filteredData)
+              setView('Tab')
+            }
+            }>
+              <TabIcon></TabIcon>
+            </IconButton>
           </span>
         </div>
       </div>
-      <div className='table-date'>
-        {props.page == 'Home' ? <TextField
-          // required
-          // error={errorFileds.date}
-          id="date"
-          label="Enter Date"
-          type="date"
-          // defaultValue= {defDate}
-          // value={expData.date}
-          size="small"
-          //   className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(event) => {
-            console.log(event.target.value)
-            let filtered = props.AllData.filter((item) => {
-              return item.date == event.target.value
-            })
-            props.setModalData(filtered);
-            // let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
-            let PieData = props.PieCategories.SetbarchartData('Date', filtered)
-            // props.setPieData(PieData)
-            props.setPieModalData(PieData)
-            props.setdailyTotal(props.PieCategories.calculatetot(filtered))
-            props.setTablecatSelect({ page: 'Home', cat: event.target.value })
-            console.log(filtered, "da")
-          }}
-        /> : props.page == 'Daily' ?
-          <TextField
-            sx={{ m: 1, minWidth: 120 }}
-            select
-            // multiple
-            id="month"
-            label="Enter Month"
-            size="small"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            onChange={(event) => {
-              console.log(event.target.value)
-              let filtered = props.AllData.filter((item) => {
-                let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
-                return item.month == calval[0].key
-              })
-              // props.setModalData(filtered);
-              // let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
-              let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
-              let consolidatedData = props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, filtered)
-              let PieData = props.PieCategories.SetbarchartData('Date', consolidatedData)
+      {View == 'Tab' ? <TableGroupTabs InitialData={InitialData_frGroup} AllData={props.AllData} PieCategories={props.PieCategories}></TableGroupTabs> :
+        <div>
+          <div className='table-date'>
+            {props.page == 'Home' ? <TextField
+              // required
+              // error={errorFileds.date}
+              id="date"
+              label="Enter Date"
+              type="date"
+              // defaultValue= {defDate}
+              // value={expData.date}
+              size="small"
+              //   className={classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(event) => {
+                console.log(event.target.value)
+                let filtered = props.AllData.filter((item) => {
+                  return item.date == event.target.value
+                })
+                props.setModalData(filtered);
+                // let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
+                let PieData = props.PieCategories.SetbarchartData('Date', filtered)
+                // props.setPieData(PieData)
+                props.setPieModalData(PieData)
+                props.setdailyTotal(props.PieCategories.calculatetot(filtered))
+                props.setTablecatSelect({ page: 'Home', cat: event.target.value })
+                console.log(filtered, "da")
+              }}
+            /> : props.page == 'Daily' ?
+              <TextField
+                sx={{ m: 1, minWidth: 120 }}
+                select
+                // multiple
+                id="month"
+                label="Enter Month"
+                size="small"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={(event) => {
+                  console.log(event.target.value)
+                  let filtered = props.AllData.filter((item) => {
+                    let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
+                    return item.month == calval[0].key
+                  })
+                  // props.setModalData(filtered);
+                  // let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
+                  let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
+                  let consolidatedData = props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, filtered)
+                  let PieData = props.PieCategories.SetbarchartData('Date', consolidatedData)
 
-              // console.log(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData), 'Month')
-              props.setModalData(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData));
-              // props.setPieData(PieData)
-              props.setPieModalData(PieData)
-              props.setdailyTotal(props.PieCategories.calculatetot(filtered))
-              props.setTablecatSelect({ page: 'Daily', cat: String(calval[0].key) })
-              console.log(filtered, "da")
-            }}
-          >
-            {props.PieCategories.Calenderinfo.map((option) => (
-              <MenuItem key={option.key} value={option.value}>
-                {option.value}
-              </MenuItem>
-            ))}
-          </TextField>
-          : ''}
+                  // console.log(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData), 'Month')
+                  props.setModalData(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData));
+                  // props.setPieData(PieData)
+                  props.setPieModalData(PieData)
+                  props.setdailyTotal(props.PieCategories.calculatetot(filtered))
+                  props.setTablecatSelect({ page: 'Daily', cat: String(calval[0].key) })
+                  console.log(filtered, "da")
+                }}
+              >
+                {props.PieCategories.Calenderinfo.map((option) => (
+                  <MenuItem key={option.key} value={option.value}>
+                    {option.value}
+                  </MenuItem>
+                ))}
+              </TextField>
+              : ''}
 
-      </div>
-      <div className='table-cont'>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
-            <TableHead>
-              {props.page == 'Home' ? <Homeheader></Homeheader> : <Monthly_Yearlyheader></Monthly_Yearlyheader>}
-            </TableHead>
-            <TableBody>
-              {props.ModalData.map((row: ModalFile) => (
-                props.page == 'Home' ? <Homeheaderdata {...row}></Homeheaderdata> : <Monthly_Yearlyheaderdata {...row}></Monthly_Yearlyheaderdata>
-              ))
-              }
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
+          </div>
+          <div className='table-cont'>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
+                <TableHead>
+                  {props.page == 'Home' ? <Homeheader></Homeheader> : <Monthly_Yearlyheader></Monthly_Yearlyheader>}
+                </TableHead>
+                <TableBody>
+                  {props.ModalData.map((row: ModalFile) => (
+                    props.page == 'Home' ? <Homeheaderdata {...row}></Homeheaderdata> : <Monthly_Yearlyheaderdata {...row}></Monthly_Yearlyheaderdata>
+                  ))
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
+      }
     </div >
   );
 }
