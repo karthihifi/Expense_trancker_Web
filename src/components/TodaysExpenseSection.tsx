@@ -52,8 +52,8 @@ const TodaysExpenseSect:React.FC<expensesect> = (props) => {
         </div>
         <div>
             {/* <div>{String(props.dailyTotal)}</div> */}
-            <div>Total Amount spent Today : {props.dailyTotal}  </div>
-            <div>Total Amount spent on August Month : {props.Monthtot}</div>
+            <div>Total Amount spent Today : {parseFloat(props.dailyTotal).toLocaleString()}  </div>
+            <div>Total Amount spent on August Month : {(parseFloat(props.Monthtot)).toLocaleString()}</div>
         </div>
     </div>
         // <Box sx={{ minWidth: 1024 }}>

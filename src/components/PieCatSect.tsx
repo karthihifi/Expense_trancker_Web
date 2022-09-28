@@ -4,6 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
 import PieCat from './PieCategories'
 import './main.css'
 import { ModalFile } from './interface';
@@ -19,12 +20,18 @@ interface PieProps {
     total: number
     PieCategories: PieCat
     page: string
-    charttype:string
+    charttype: string
     setBarModalData: (ModalData: string[][]) => void;
     setPieModalData: (ModalData: string[][]) => void;
+    setChartSelect: (chart: string) => void
 }
 const PieCatSelect: React.FC<PieProps> = (props) => {
 
+    const handleChangeChart = (event: SelectChangeEvent) => {
+        let selected = event.target.value
+        console.log(selected)
+        props.setChartSelect(selected)
+    }
     const handleChange = (event: SelectChangeEvent) => {
         let selected = event.target.value
         switch (selected) {
@@ -42,7 +49,7 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                 break;
         }
         if (props.page == 'Mon' || props.page == 'Daily') {
-            
+
         }
         if (props.TablecatSelect.page == 'Daily') {
             let month = parseInt(props.TablecatSelect.cat)
@@ -65,10 +72,34 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
 
     return (
         <div className='pieCat-sel'>
-            <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth size="small" variant="standard">
+            {/* <Box sx={{ minWidth: 120 }}> */}
+            {/* <FormControl fullWidth size="small" variant="standard"> */}
+            <Stack direction="row" spacing={2}>
+                <Box>
+                    <InputLabel id="demo-simple-select-label">Sel. View</InputLabel>
+                    <Select
+                        sx={{ width: 100 }}
+                        variant='standard'
+                        autoWidth
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        //   value={age}
+                        //   label="Sel. Category"
+                        onChange={handleChangeChart}
+                    >
+                        <MenuItem key='1' value='Bar'>
+                            Bar Chart
+                        </MenuItem>
+                        <MenuItem key='2' value='Pie'>
+                            Pie Chart
+                        </MenuItem>
+                    </Select>
+                </Box>
+                <Box>
                     <InputLabel id="demo-simple-select-label">Sel. Category</InputLabel>
                     <Select
+                        variant='standard'
+                        sx={{ width: 100 }}
                         autoWidth
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -76,23 +107,19 @@ const PieCatSelect: React.FC<PieProps> = (props) => {
                         //   label="Sel. Category"
                         onChange={handleChange}
                     >
-                        {/* {props.PieCategories.Categories[props.page == 'Home' ? 0 :
-                            props.page == 'Daily' || props.page == 'BarCh' || props.page == 'Mon'  ? 1 : 0].Categories.map((option: string) => (
-                                <MenuItem key={option} value={option}>
-                                    {option}
-                                </MenuItem>
-                            ))} */}
 
-                            {props.PieCategories.getChartCategories(props.page,props.charttype).map((option: string) => (
-                                <MenuItem key={option} value={option}>
-                                    {option}
-                                </MenuItem>
-                            ))}
+                        {props.PieCategories.getChartCategories(props.page, props.charttype).map((option: string) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
 
                     </Select>
-                </FormControl>
-            </Box>
-        </div>
+                </Box>
+            </Stack>
+            {/* </FormControl> */}
+            {/* </Box> */}
+        </div >
     );
 }
 

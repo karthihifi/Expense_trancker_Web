@@ -676,14 +676,15 @@ const Main: React.FC = (props) => {
                             <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData}
                                 setTablecatSelect={setTablecatSelect} setPieModalData={setPieModalData}
                                 PieCategories={PieCategories} AllData={AllData} setModalData={setModalData}
-                                page={PageSelect} ModalData={ModalData}></TableSection>
+                                page={PageSelect} ModalData={ModalData} setBarModalData={setBarModalData}></TableSection>
                         </div>
                         <div className="chart">
                             <div className="header">
                                 <h3>Data Analysis</h3>
                             </div>
                             <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
-                                AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype={ChartSelect}
+                                AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype={ChartSelect} 
+                                setChartSelect = {setChartSelect}
                                 setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
                             <ResponsiveContainer width="100%" height="100%">
                                 <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>

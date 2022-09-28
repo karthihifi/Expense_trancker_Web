@@ -223,16 +223,31 @@ class PieCat {
         return dailyitemsarr
     }
 
-    SetbarchartData(bymode: string, ModalData: ModalFile[], AllData?: ModalFile[], page?: string): [[]] {
+    SetbarchartData(bymode: string, ModalData: ModalFile[], AllData?: ModalFile[],
+        page?: string): [[]] {
         let Bardata: any = [[bymode, "Amount"]]
         let baritem: any[] = []
+
         let filtereditems = this.GroupData_gc(bymode, ModalData)
+
         filtereditems.forEach((item) => {
             baritem = []
             baritem.push(String(item.name), item.value)
             Bardata.push(baritem)
         })
-        console.log(Bardata, 'sadss', typeof (Bardata))
+        // console.log(Bardata, 'sadss', typeof (Bardata))
+        return Bardata;
+    }
+
+    SetpiebarforSubcat(bymode: string, ModalData: ModalFile[], cat?: string): [[]] {
+        let Bardata: any = [['Category', "Amount"]]
+        let baritem: any[] = []
+        let filtereditems = this.GroupData_SubCat(bymode, ModalData, cat!)
+        filtereditems.forEach((item) => {
+            baritem = []
+            baritem.push(String(item.name), item.value)
+            Bardata.push(baritem)
+        })
         return Bardata;
     }
     GetHighestspentData(bymode: string, ModalData: ModalFile[], total: number): string {
@@ -264,20 +279,32 @@ class PieCat {
 
     getSubCatArr(cat: string): string[] {
         let filtered = this.UserSubCat.filter((item) => { return item.key == cat })
-        console.log(filtered,"adas")
+        console.log(filtered, "adas")
         return filtered[0].value
     }
-    GroupData_SubCat(inp: ModalFile[],cat:string): PieChartIntf[] {
+    GroupData_SubCat(bymode: string, inp: ModalFile[], cat: string): PieChartIntf[] {
         let ModalData: PieChartIntf[] = []
 
-        this.getSubCatArr(cat).forEach((item) => {
-            let suncat = item
-            let filetreditems: ModalFile[] = inp.filter((item) => { return (item.subcategory === suncat) })
-            console.log("SubData",filetreditems)
-            if (filetreditems.length >= 1) {
-                ModalData.push({ name: suncat, value: this.calculatetot(filetreditems) })
-            }
-        })
+        switch (bymode) {
+            case 'Date':
+                inp.forEach((item) => {
+                    ModalData.push({ name: item.date, value: item.amount })
+                })
+                break;
+            case 'Category':
+                this.getSubCatArr(cat).forEach((item) => {
+                    let suncat = item
+                    let filetreditems: ModalFile[] = inp.filter((item) => { return (item.subcategory === suncat) })
+                    console.log("SubData", filetreditems)
+                    if (filetreditems.length >= 1) {
+                        ModalData.push({ name: suncat, value: this.calculatetot(filetreditems) })
+                    }
+                })
+                break;
+            default:
+                break;
+        }
+
         return ModalData
     }
     GroupData_gc(bymode: string, ModalData: ModalFile[]): PieChartIntf[] {

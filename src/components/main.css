@@ -11,6 +11,12 @@
   border-radius: 5px;
   /* padding: 20px; */
 }
+
+.table_header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .main {
   text-align: center;
   width: 100%;
@@ -129,7 +135,7 @@
 .header {
   /* background-color: #4c70b9; */
   /* color: #fff; */
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   width: 100%;

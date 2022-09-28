@@ -34,6 +34,7 @@ interface ModalDataProps {
   PieCategories: PieCat
   setPieData: (ModalData: { name: string, value: number }[]) => void;
   setPieModalData: (ModalData: string[][]) => void;
+  setBarModalData: (ModalData: string[][]) => void;
 }
 
 // const ModalClass = new PieCat()
@@ -120,7 +121,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         <TableCell component="th" scope="row">
           {row.date}
         </TableCell>
-        <TableCell align="right">{row.amount} {row.currency}</TableCell>
+        <TableCell align="right">{row.amount.toLocaleString()} {row.currency}</TableCell>
         <TableCell align="right">{row.trendrate}%</TableCell>
         <TableCell align="right">{row.mostusedcat}</TableCell>
         <TableCell align="right">
@@ -170,7 +171,8 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
           </span>
         </div>
       </div>
-      {View == 'Tab' ? <TableGroupTabs InitialData={InitialData_frGroup} AllData={props.AllData} PieCategories={props.PieCategories}></TableGroupTabs> :
+      {View == 'Tab' ? <TableGroupTabs setPieModalData={props.setPieModalData} InitialData={InitialData_frGroup} 
+      AllData={props.AllData} PieCategories={props.PieCategories} setBarModalData={props.setBarModalData}></TableGroupTabs> :
         <div>
           <div className='table-date'>
             {props.page == 'Home' ? <TextField

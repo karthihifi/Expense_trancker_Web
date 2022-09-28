@@ -12,6 +12,8 @@ interface GlobalProps {
     PieCategories: PieCat
     AllData: ModalFile[]
     InitialData: Generic[]
+    setPieModalData: (ModalData: string[][]) => void;
+    setBarModalData: (ModalData: string[][]) => void;
 }
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -63,6 +65,10 @@ const TableGroupTabs: React.FC<GlobalProps> = (props) => {
         let ModelData = props.AllData.filter((item) => { return item.month == mon && item.year == year })
         let filteredData = props.PieCategories.GroupData_gc('Category', ModelData)
         setModelData(filteredData)
+        // let consolidatedData = props.PieCategories.ConsildatebyMonth(mon, year, ModelData)
+        // console.log(ModelData, "dasas")
+        let PieData = props.PieCategories.SetbarchartData('Category', ModelData)
+        props.setPieModalData(PieData)
     };
 
     return (
@@ -74,7 +80,8 @@ const TableGroupTabs: React.FC<GlobalProps> = (props) => {
                 )}
             </Tabs>
             <TabPanel value={value} index={value}>
-                <TableGroupList month={month} listData={ModelData} AllData={props.AllData} PieCategories={props.PieCategories}></TableGroupList>
+                <TableGroupList setPieModalData={props.setPieModalData} month={month} setBarModalData={props.setBarModalData}
+                    listData={ModelData} AllData={props.AllData} PieCategories={props.PieCategories}></TableGroupList>
             </TabPanel>
         </Box>
 
