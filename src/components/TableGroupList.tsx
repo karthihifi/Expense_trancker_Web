@@ -80,7 +80,7 @@ const TableGroupList: React.FC<GlobalProps> = (props) => {
 
     return (
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            <Grid item xs={12} md={6}>
+            <Grid item >
                 <List dense={true}>
                     {props.listData.map((item, index) =>
                         <Box>

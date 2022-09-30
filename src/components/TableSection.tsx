@@ -61,7 +61,7 @@ const Homeheader = (): any => {
     <TableCell align="right">Category</TableCell>
     {/* <TableCell align="right">SubCat</TableCell>
     <TableCell align="right">Purch. Mode</TableCell> */}
-    <TableCell align="right">Necessity</TableCell>
+    {/* <TableCell align="right">Necessity</TableCell> */}
     <TableCell align="right">Comments</TableCell>
   </TableRow>)
 }
@@ -102,7 +102,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         <TableCell align="right">{row.category}</TableCell>
         {/* <TableCell align="right">{row.subcategory}</TableCell>
         <TableCell align="right">{row.availmode}</TableCell> */}
-        <TableCell align="right">{row.necessity}</TableCell>
+        {/* <TableCell align="right">{row.necessity}</TableCell> */}
         <TableCell className='table_comments' align="right">{row.comments}</TableCell>
         {/* <TableCell align="right">{row.trendrate}<TrendingUpIcon sx={{ color: pink[500] }}></TrendingUpIcon></TableCell> */}
         {/* <TableCell align="right">{row.dateno}</TableCell>

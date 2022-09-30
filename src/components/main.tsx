@@ -27,6 +27,8 @@ import TextField from '@mui/material/TextField';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 // import Accordion from '@mui/material/Accordion';
 // import AccordionSummary from '@mui/material/AccordionSummary';
@@ -281,7 +283,7 @@ const Main: React.FC = (props) => {
         get(Expref).then((snapshot) => {
             if (snapshot.exists()) {
                 let profiledata: any = Object.values(snapshot.val().ProfileData)[0]
-                console.log('profiledata',profiledata)
+                console.log('profiledata', profiledata)
                 setGlobalUserData(profiledata)
                 PieCategories.setGlobalData(profiledata)
                 // console.log(profiledata,'profile')
@@ -659,46 +661,55 @@ const Main: React.FC = (props) => {
                     <SideBar setSideMenuopen={setSideMenuopen} profiledata={GlobalUserData} handleCliclPageChange={handleCliclPageChange}></SideBar>
                 </Drawer>
                 {/* </div> */}
-                <div className="Detail">
-                    {/* <ProfileMenu></ProfileMenu> */}
-                    <Accordion className="Detail_Accor" flush>
-                        <Accordion.Item eventKey="0">
-                            <Accordion.Header>
-                                <h4>Add Expense Details</h4></Accordion.Header>
-                            <Accordion.Body>
-                                <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
-                    <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect>
-                    <div className="Detail_maincontent">
-                        <div>
-                            <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData}
-                                setTablecatSelect={setTablecatSelect} setPieModalData={setPieModalData}
-                                PieCategories={PieCategories} AllData={AllData} setModalData={setModalData}
-                                page={PageSelect} ModalData={ModalData} setBarModalData={setBarModalData}></TableSection>
-                        </div>
-                        <div className="chart">
-                            <div className="header">
-                                <h3>Data Analysis</h3>
-                            </div>
-                            <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
-                                AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype={ChartSelect} 
-                                setChartSelect = {setChartSelect}
-                                setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>
-                                    : <PieCharts pieData={PieModalData}></PieCharts>}</div>
-                            </ResponsiveContainer>
-                        </div>
+                <Container maxWidth='xl'>
+                    <div className="Detail">
+                        {/* <ProfileMenu></ProfileMenu> */}
+                        <Accordion className="Detail_Accor" flush>
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header>
+                                    <h4>Add Expense Details</h4></Accordion.Header>
+                                <Accordion.Body>
+                                    <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                        <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect>
+                        <Grid container spacing={2} sx={{ maxHeight:"600px"}}>
+                            {/* <div className="Detail_maincontent"> */}
+                            {/* <div> */}
+                            <Grid item xs={7} sx={{ maxHeight:"600px"}}>
+                                <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData}
+                                    setTablecatSelect={setTablecatSelect} setPieModalData={setPieModalData}
+                                    PieCategories={PieCategories} AllData={AllData} setModalData={setModalData}
+                                    page={PageSelect} ModalData={ModalData} setBarModalData={setBarModalData}></TableSection>
+                            </Grid>
+                            {/* </div> */}
+                            <Grid item xs={5} sx={{ maxHeight:"600px"}}>
+                                <div className="chart">
+                                    <div className="header">
+                                        <h3>Data Analysis</h3>
+                                    </div>
+                                    <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
+                                        AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype={ChartSelect}
+                                        setChartSelect={setChartSelect}
+                                        setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>
+                                            : <PieCharts pieData={PieModalData}></PieCharts>}</div>
+                                    </ResponsiveContainer>
+                                </div>
+                            </Grid>
+                            {/* </div> */}
+                        </Grid>
                     </div>
-                </div>
+                </Container>
                 <AddCategory openCatmodal={catModalOpen} handleCatModalclose={handleCatModalclose}></AddCategory>
                 <AddCurrency openCurrmodal={currModalOpen} handleCurrModalclose={handleCurrModalclose}
                     CountryDetails={CurrSymbols} globalCurrencydata={GlobalUserData}
                     handlecountryselect={handlecountryselect} handlecurrencysave={handlecurrencysave}></AddCurrency>
             </div>
         </div>
+
     );
 }
 
