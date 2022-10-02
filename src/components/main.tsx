@@ -637,7 +637,8 @@ const Main: React.FC = (props) => {
 
     return (
         <div>
-            {/* <NavBar></NavBar> */}
+            <NavBar handleCliclPageChange={handleCliclPageChange} profiledata={GlobalUserData}
+                setChartSelect={setChartSelect} ></NavBar>
             <div className="main">
                 {/* <div className="Sidebar"> */}
                 <div className="Sidebar_menu">
@@ -658,7 +659,8 @@ const Main: React.FC = (props) => {
                     anchor="left"
                     open={SideMenuopen}
                 >
-                    <SideBar setSideMenuopen={setSideMenuopen} profiledata={GlobalUserData} handleCliclPageChange={handleCliclPageChange}></SideBar>
+                    <SideBar setSideMenuopen={setSideMenuopen} profiledata={GlobalUserData}
+                        handleCliclPageChange={handleCliclPageChange}></SideBar>
                 </Drawer>
                 {/* </div> */}
                 <Container maxWidth='xl'>
@@ -674,17 +676,17 @@ const Main: React.FC = (props) => {
                             </Accordion.Item>
                         </Accordion>
                         <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect>
-                        <Grid container spacing={2} sx={{ maxHeight:"600px"}}>
+                        <Grid container spacing={2} sx={{ maxHeight: "600px" }}>
                             {/* <div className="Detail_maincontent"> */}
                             {/* <div> */}
-                            <Grid item xs={7} sx={{ maxHeight:"600px"}}>
+                            <Grid item xs={7} sx={{ maxHeight: "600px" }}>
                                 <TableSection setdailyTotal={setdailyTotal} setPieData={setPieChartData}
                                     setTablecatSelect={setTablecatSelect} setPieModalData={setPieModalData}
                                     PieCategories={PieCategories} AllData={AllData} setModalData={setModalData}
                                     page={PageSelect} ModalData={ModalData} setBarModalData={setBarModalData}></TableSection>
                             </Grid>
                             {/* </div> */}
-                            <Grid item xs={5} sx={{ maxHeight:"600px"}}>
+                            <Grid item xs={5} sx={{ maxHeight: "600px" }}>
                                 <div className="chart">
                                     <div className="header">
                                         <h3>Data Analysis</h3>

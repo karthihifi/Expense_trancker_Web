@@ -14,6 +14,11 @@
   /* padding: 20px; */
 }
 
+.Nav_bar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .Detail_table{
   height: 100%;
   display: flex;
