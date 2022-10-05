@@ -410,6 +410,84 @@ class PieCat {
         }
         return PieData
     }
+
+    getFirstDayOfWeek(d: Date): Date {
+        // 👇️ clone date object, so we don't mutate it
+        const date = new Date(d);
+        const day = date.getDay(); // 👉️ get day of week
+
+        // 👇️ day of month - day of week (-6 if Sunday), otherwise +1
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+
+        return new Date(date.setDate(diff));
+    }
+
+    GetWeeklySpent(ModalData: ModalFile[]): [[]] {
+        const date = new Date(new Date());
+        let CurrentWeek = this.getFirstDayOfWeek(new Date());
+        let WeekDataheader: any = ['Weekno', "Amount"]
+        let WeekData: any = []
+        let WeekItem: any[] = []
+
+        for (let index = 1; index < 6; index++) {
+            let filteredData: ModalFile[] = []
+            let Enddate = CurrentWeek.getDate();
+            let EndMonth = CurrentWeek.getMonth() + 1;
+            let EndYear = CurrentWeek.getFullYear();
+
+            let date1 = new Date(CurrentWeek);
+            date1.setDate(date1.getDate() - 7)
+
+            let Startdate = date1.getDate();
+            let StartMonth = date1.getMonth() + 1;
+            let StartYear = date1.getFullYear();
+            console.log(date1, CurrentWeek, "WeekData")
+
+
+            switch (StartMonth == EndMonth) {
+                case false:
+                    let month1 = ModalData.filter((item) => {
+                        return item.dateno >= Startdate && item.month == StartMonth && item.year == StartYear
+                    })
+                    let month2 = ModalData.filter((item) => {
+                        return item.dateno <= Enddate && item.month == EndMonth && item.year == StartYear
+                    })
+                    filteredData = month1.concat(month2)
+                    break;
+                default:
+                    filteredData = ModalData.filter((item) => {
+                        return (item.dateno >= Startdate && item.dateno <= Enddate) &&
+                            (item.month >= StartMonth && item.month <= EndMonth) &&
+                            (item.year >= StartYear && item.year <= EndYear)
+                    })
+                    break;
+            }
+            WeekItem = []
+            if (filteredData.length > 1) {
+                let Weekno: string = String(this.getMonth(StartMonth) + '-' + this.getWeekOfMonth(date1))
+                WeekItem.push(Weekno, parseFloat(this.calculatetot(filteredData).toFixed(2)))
+                WeekData.push(WeekItem)
+            }
+            CurrentWeek = date1
+        }
+
+        WeekData.reverse()
+        console.log(WeekData, "WeekData1")
+        // WeekData[0] = WeekDataheader
+        WeekData.unshift(WeekDataheader);
+        console.log(WeekData, "WeekData")
+        return WeekData;
+    }
+
+    getWeekOfMonth(date: Date): number {
+        let adjustedDate = date.getDate() + date.getDay();
+        let prefixes = ['0', '1', '2', '3', '4', '5'];
+        return (parseInt(prefixes[0 | adjustedDate / 7]) + 1);
+    }
+
+    getMonth(no: number): string {
+        return this.Calenderinfo.filter((item) => { return item.key == no })[0].value.substring(0, 3)
+    }
 }
 
 export default PieCat;

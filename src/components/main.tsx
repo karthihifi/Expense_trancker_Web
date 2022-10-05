@@ -29,6 +29,7 @@ import { IconButton } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import SpendingTrend from '../components/Widgets/SpendingTrend'
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 // import Accordion from '@mui/material/Accordion';
 // import AccordionSummary from '@mui/material/AccordionSummary';
@@ -202,6 +203,7 @@ const Main: React.FC = (props) => {
 
     const [ModalData, setModalData] = React.useState<ModalFile[]>([]);
     const [BarModalData, setBarModalData] = React.useState<string[][]>([]);
+    const [WeeklyTrendLineChData, setWeeklyTrendLineChData] = React.useState<string[][]>([]);
     const [PieModalData, setPieModalData] = React.useState<string[][]>([]);
     const [AllData, setAllData] = React.useState<ModalFile[]>([]);
 
@@ -303,6 +305,7 @@ const Main: React.FC = (props) => {
                 setDailyData(ExpenseData)
                 setAllData(ExpenseData)
                 groupData(ExpenseData, 'Category', dailyTotal)
+                setWeeklyTrendLineChData(PieCategories.GetWeeklySpent(ExpenseData))
             } else {
                 console.log("No data available");
             }
@@ -641,11 +644,11 @@ const Main: React.FC = (props) => {
                 setChartSelect={setChartSelect} ></NavBar>
             <div className="main">
                 {/* <div className="Sidebar"> */}
-                <div className="Sidebar_menu">
+                {/* <div className="Sidebar_menu">
                     <IconButton onClick={(event) => setSideMenuopen(true)}>
                         <MenuIcon></MenuIcon>
                     </IconButton>
-                </div>
+                </div> */}
                 <Drawer
                     sx={{
                         width: '240px',
@@ -675,7 +678,8 @@ const Main: React.FC = (props) => {
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
-                        <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect>
+                        <SpendingTrend ChartData={WeeklyTrendLineChData}></SpendingTrend>
+                        {/* <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect> */}
                         <Grid container spacing={2} sx={{ maxHeight: "600px" }}>
                             {/* <div className="Detail_maincontent"> */}
                             {/* <div> */}

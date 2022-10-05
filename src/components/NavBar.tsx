@@ -35,7 +35,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
             <Navbar.Brand href="#home" onClick={(eve) => {
               handlePageChange('Home')
             }}>Home</Navbar.Brand>
-            <Nav.Link href="#link"
+            <Nav.Link href="#link" className='Nav_text'
               onClick={(eve) => {
                 handlePageChange('Mon')
               }}>Monthly Report</Nav.Link>
