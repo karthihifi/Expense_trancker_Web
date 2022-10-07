@@ -1,6 +1,7 @@
 
 import { type } from 'os';
 import { stringify } from 'querystring';
+import { Modal } from 'react-bootstrap';
 import { ModalFile, ChartSchema, Globaldata } from './interface';
 
 interface Cattype {
@@ -441,7 +442,7 @@ class PieCat {
             let Startdate = date1.getDate();
             let StartMonth = date1.getMonth() + 1;
             let StartYear = date1.getFullYear();
-            console.log(date1, CurrentWeek, "WeekData")
+            // console.log(date1, CurrentWeek, "WeekData")
 
 
             switch (StartMonth == EndMonth) {
@@ -472,10 +473,10 @@ class PieCat {
         }
 
         WeekData.reverse()
-        console.log(WeekData, "WeekData1")
+        // console.log(WeekData, "WeekData1")
         // WeekData[0] = WeekDataheader
         WeekData.unshift(WeekDataheader);
-        console.log(WeekData, "WeekData")
+        // console.log(WeekData, "WeekData")
         return WeekData;
     }
 
@@ -487,6 +488,86 @@ class PieCat {
 
     getMonth(no: number): string {
         return this.Calenderinfo.filter((item) => { return item.key == no })[0].value.substring(0, 3)
+    }
+
+    getMostUsedCategory(ModalData: ModalFile[]): { cat: string, items: ModalFile[] } {
+        let CatItem: { cat: string, items: ModalFile[] } = { cat: "", items: [] }
+        let catArray: { cat: string, count: number, items: ModalFile[] }[] = []
+        this.Usercat.map((cat) => {
+            let Catitems = ModalData.filter((item) => { return item.category == cat })
+            catArray.push({ cat: cat, count: Catitems.length, items: Catitems })
+        })
+        catArray.sort((a, b) => b.count - a.count)
+        CatItem = { cat: catArray[0].cat, items: catArray[0].items }
+        return CatItem
+    }
+
+    GetWeeklySpentonCategory(ModalData: ModalFile[]): [[]] {
+        let CatItems = this.getMostUsedCategory(ModalData)
+        console.log(CatItems, "CatItems")
+        return this.GetWeeklySpent(CatItems.items)
+    }
+
+    GetCategoryCount(category: string, ModalData: ModalFile[]): { cat: string, count: number } {
+        let cat = { cat: category, count: ModalData.filter((item) => { return item.category == category }).length }
+        return cat
+    }
+
+    getCatgorySpentCount_byWeek(ModalData: ModalFile[]): [[]] {
+        const date = new Date(new Date());
+        let CurrentWeek = this.getFirstDayOfWeek(new Date());
+        let WeekDataheader: any = ['Weekno']
+        let WeekData: any = []
+        let WeekItem: any[] = []
+
+        this.Usercat.map((item) => {
+            WeekDataheader.push(item)
+        })
+
+        for (let index = 1; index < 6; index++) {
+            let filteredData: ModalFile[] = []
+            let Enddate = CurrentWeek.getDate();
+            let EndMonth = CurrentWeek.getMonth() + 1;
+            let EndYear = CurrentWeek.getFullYear();
+
+            let date1 = new Date(CurrentWeek);
+            date1.setDate(date1.getDate() - 7)
+
+            let Startdate = date1.getDate();
+            let StartMonth = date1.getMonth() + 1;
+            let StartYear = date1.getFullYear();
+
+            switch (StartMonth == EndMonth) {
+                case false:
+                    let month1 = ModalData.filter((item) => {
+                        return item.dateno >= Startdate && item.month == StartMonth && item.year == StartYear
+                    })
+                    let month2 = ModalData.filter((item) => {
+                        return item.dateno <= Enddate && item.month == EndMonth && item.year == StartYear
+                    })
+                    filteredData = month1.concat(month2)
+                    break;
+                default:
+                    filteredData = ModalData.filter((item) => {
+                        return (item.dateno >= Startdate && item.dateno <= Enddate) &&
+                            (item.month >= StartMonth && item.month <= EndMonth) &&
+                            (item.year >= StartYear && item.year <= EndYear)
+                    })
+                    break;
+            }
+            CurrentWeek = date1
+
+            WeekItem = []
+            let Weekno: string = String(this.getMonth(StartMonth) + '-' + this.getWeekOfMonth(date1))
+            WeekItem.push(Weekno)
+            this.Usercat.map((item) => {
+                WeekItem.push(this.GetCategoryCount(item, filteredData).count)
+            })
+            WeekData.push(WeekItem)
+        }
+        WeekData.reverse()
+        WeekData.unshift(WeekDataheader);
+        return WeekData
     }
 }
 

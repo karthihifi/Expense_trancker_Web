@@ -30,6 +30,8 @@ import Drawer from '@mui/material/Drawer';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import SpendingTrend from '../components/Widgets/SpendingTrend'
+import SpenTrend_forMostUsedCat from '../components/Widgets/SpenTrend_forMostUsedCat'
+import SpendTrend_byCatCount from '../components/Widgets/SpendTrend_byCatCount'
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 // import Accordion from '@mui/material/Accordion';
 // import AccordionSummary from '@mui/material/AccordionSummary';
@@ -204,6 +206,8 @@ const Main: React.FC = (props) => {
     const [ModalData, setModalData] = React.useState<ModalFile[]>([]);
     const [BarModalData, setBarModalData] = React.useState<string[][]>([]);
     const [WeeklyTrendLineChData, setWeeklyTrendLineChData] = React.useState<string[][]>([]);
+    const [WeeklyTrendLineCateg_ChData, setWeeklyTrendLineCateg_ChData] = React.useState<string[][]>([]);
+    const [WeeklyTrendby_CategoryCount_ChData, setWeeklyTrendby_CategoryCount_ChData] = React.useState<string[][]>([]);
     const [PieModalData, setPieModalData] = React.useState<string[][]>([]);
     const [AllData, setAllData] = React.useState<ModalFile[]>([]);
 
@@ -306,6 +310,8 @@ const Main: React.FC = (props) => {
                 setAllData(ExpenseData)
                 groupData(ExpenseData, 'Category', dailyTotal)
                 setWeeklyTrendLineChData(PieCategories.GetWeeklySpent(ExpenseData))
+                setWeeklyTrendLineCateg_ChData(PieCategories.GetWeeklySpentonCategory(ExpenseData))
+                setWeeklyTrendby_CategoryCount_ChData(PieCategories.getCatgorySpentCount_byWeek(ExpenseData))
             } else {
                 console.log("No data available");
             }
@@ -678,7 +684,18 @@ const Main: React.FC = (props) => {
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
-                        <SpendingTrend ChartData={WeeklyTrendLineChData}></SpendingTrend>
+                        <Grid container spacing={2}>
+                            <Grid item xs={4}>
+                                <SpendingTrend ChartData={WeeklyTrendLineChData}></SpendingTrend>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <SpenTrend_forMostUsedCat ChartData={WeeklyTrendLineCateg_ChData}></SpenTrend_forMostUsedCat>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <SpendTrend_byCatCount ChartData={WeeklyTrendby_CategoryCount_ChData}></SpendTrend_byCatCount>
+                            </Grid>
+                        </Grid>
+
                         {/* <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect> */}
                         <Grid container spacing={2} sx={{ maxHeight: "600px" }}>
                             {/* <div className="Detail_maincontent"> */}

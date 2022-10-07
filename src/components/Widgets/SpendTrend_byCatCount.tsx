@@ -1,3 +1,5 @@
+
+
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -7,9 +9,8 @@ import Typography from '@mui/material/Typography';
 import { ModalFile } from '../interface';
 import { Generic } from '../interface'
 import { Chart } from "react-google-charts";
-import Card from 'react-bootstrap/Card';
 import Modal from '@mui/material/Modal';
-import { padding } from '@mui/system';
+import Card from 'react-bootstrap/Card';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -22,7 +23,6 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-
 interface SpendingTrendProps {
     ChartData: any[][],
 }
@@ -31,13 +31,15 @@ export const options = {
     // title: "Company Performance",
     curveType: "none",
     legend: { position: "bottom", textStyle: { color: "#fff" } },
-    backgroundColor: '#00cc00',
-    colors: ["#fff"],
+    backgroundColor: '#D6323C',
+    bars: 'horizontal',
+    // colors: ["#fff"],
+    bar: { groupWidth: "140%" },
     hAxis: {
         gridlines: {
-            color: "#fff"
+            color: "transparent"
         },
-        baselineColor: "Red",
+        baselineColor: "#fff",
         textStyle: {
             color: "#fff",
         },
@@ -54,22 +56,22 @@ export const options = {
     }
 };
 
-const SpendingTrend: React.FC<SpendingTrendProps> = (props) => {
+const SpendTrend_byCatCount: React.FC<SpendingTrendProps> = (props) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose1 = () => { console.log('clickedas', open); setOpen(!open); };
     return (
         <div>
-            <Card onClick={handleOpen}>     
+            <Card onClick={handleOpen}>
                 <Chart
-                    chartType="LineChart"
+                    chartType="BarChart"
                     width="100%"
                     height="250px"
                     data={props.ChartData}
                     options={options}
                 />
                 <Card.Body>
-                    <Card.Title>Spending Trend</Card.Title>
+                    <Card.Title>Spending Count by Category</Card.Title>
                     <Card.Text>
                         Some quick example text to build on the card title and make up the
                         bulk of the card's content.
@@ -79,22 +81,22 @@ const SpendingTrend: React.FC<SpendingTrendProps> = (props) => {
             </Card>
             <Modal
                 open={open}
-                onClose={handleClose}
+                onClose={handleClose1}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                <Chart
-                    chartType="LineChart"
-                    width="100%"
-                    height="500px"
-                    data={props.ChartData}
-                    options={options}
-                />
+                    <Chart
+                        chartType="BarChart"
+                        width="100%"
+                        height="500px"
+                        data={props.ChartData}
+                        options={options}
+                    />
                 </Box>
             </Modal>
         </div>
     );
 }
 
-export default SpendingTrend
+export default SpendTrend_byCatCount
