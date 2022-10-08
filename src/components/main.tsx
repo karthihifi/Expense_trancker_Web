@@ -512,7 +512,7 @@ const Main: React.FC = (props) => {
                         dailyitemsarr.push(arritem)
                     }
                 })
-                console.log(dailyitemsarr)
+                // console.log(dailyitemsarr)
                 let prev1: number = 0
                 dailyitemsarr.forEach((item, iter) => {
                     if (iter == 0) {
@@ -645,7 +645,7 @@ const Main: React.FC = (props) => {
 
 
     return (
-        <div>
+        <div className="App">
             <NavBar handleCliclPageChange={handleCliclPageChange} profiledata={GlobalUserData}
                 setChartSelect={setChartSelect} ></NavBar>
             <div className="main">
@@ -689,11 +689,12 @@ const Main: React.FC = (props) => {
                                 <SpendingTrend ChartData={WeeklyTrendLineChData}></SpendingTrend>
                             </Grid>
                             <Grid item xs={4}>
-                                <SpenTrend_forMostUsedCat ChartData={WeeklyTrendLineCateg_ChData}></SpenTrend_forMostUsedCat>
-                            </Grid>
-                            <Grid item xs={4}>
                                 <SpendTrend_byCatCount ChartData={WeeklyTrendby_CategoryCount_ChData}></SpendTrend_byCatCount>
                             </Grid>
+                            <Grid item xs={4}>
+                                <SpenTrend_forMostUsedCat ChartData={WeeklyTrendLineCateg_ChData}></SpenTrend_forMostUsedCat>
+                            </Grid>
+                          
                         </Grid>
 
                         {/* <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect> */}

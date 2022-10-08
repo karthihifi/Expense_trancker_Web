@@ -21,6 +21,7 @@ class PieCat {
     Usercat: string[]
     PurchMode: string[]
     UserSubCat: { key: string, value: string[] }[]
+    Exception_categorylist: { key: string, value: string[] }[]
     Calenderinfo = [
         {
             key: 1,
@@ -97,6 +98,7 @@ class PieCat {
             'Fitness',
             'Others'
         ]
+        this.Exception_categorylist = [{ key: 'OneTimeExpense', value: ['AppartmentRent'] }]
 
         this.UserSubCat = [{
             key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse', 'Fruits', 'Vegetables', 'Water', 'BreadItems', 'Pasteries', 'Chinese', 'NewTryOuts']
@@ -464,9 +466,10 @@ class PieCat {
                     break;
             }
             WeekItem = []
-            if (filteredData.length > 1) {
+            let FinalData = this.filterExceptionCategorylist(filteredData)
+            if (FinalData.length > 1) {
                 let Weekno: string = String(this.getMonth(StartMonth) + '-' + this.getWeekOfMonth(date1))
-                WeekItem.push(Weekno, parseFloat(this.calculatetot(filteredData).toFixed(2)))
+                WeekItem.push(Weekno, parseFloat(this.calculatetot(FinalData).toFixed(2)))
                 WeekData.push(WeekItem)
             }
             CurrentWeek = date1
@@ -480,6 +483,21 @@ class PieCat {
         return WeekData;
     }
 
+    filterExceptionCategorylist(ModalData: ModalFile[]): ModalFile[] {
+        let FinalData: ModalFile[] = []
+        ModalData.map((list) => {
+            let Exceptioncat = this.Exception_categorylist.find((item) => { return item.key == list.category })
+            if (Exceptioncat != undefined) {
+                let subcat = Exceptioncat.value.find((item) => { return item == list.subcategory })
+                if (subcat == undefined) {
+                    FinalData.push(list)
+                }
+            } else {
+                FinalData.push(list)
+            }
+        })
+        return FinalData
+    }
     getWeekOfMonth(date: Date): number {
         let adjustedDate = date.getDate() + date.getDay();
         let prefixes = ['0', '1', '2', '3', '4', '5'];
