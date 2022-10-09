@@ -295,11 +295,13 @@ const Main: React.FC = (props) => {
                 // console.log(profiledata,'profile')
                 let dummy: ModalFile[] = Object.values(snapshot.val().ExpenseData)
                 let ExpenseData: ModalFile[] = Object.values(snapshot.val().ExpenseData)
+                ExpenseData = ExpenseData.reverse()
                 if (ExpenseData.length > maxcount) {
                     ExpenseData = dummy.slice((dummy.length - maxcount), dummy.length)
                 }
                 let MonthData = ExpenseData.filter((item) => { return month == item.month && year == item.year })
                 let DailyData = ExpenseData.filter((item) => { return month == item.month && year == item.year && date == item.dateno })
+
                 setMonthTotal(PieCategories.calculatetot(MonthData))
                 setModalData(ExpenseData)
                 setBarModalData(PieCategories.SetbarchartData('Category', ExpenseData))
@@ -675,15 +677,15 @@ const Main: React.FC = (props) => {
                 <Container maxWidth='xl'>
                     <div className="Detail">
                         {/* <ProfileMenu></ProfileMenu> */}
-                        <Accordion className="Detail_Accor" flush>
+                        {/* <Accordion className="Detail_Accor" flush>
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>
                                     <h4>Add Expense Details</h4></Accordion.Header>
-                                <Accordion.Body>
+                                <Accordion.Body> */}
                                     <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
-                                </Accordion.Body>
+                                {/* </Accordion.Body>
                             </Accordion.Item>
-                        </Accordion>
+                        </Accordion> */}
                         <Grid container spacing={2}>
                             <Grid item xs={4}>
                                 <SpendingTrend ChartData={WeeklyTrendLineChData}></SpendingTrend>
@@ -694,7 +696,7 @@ const Main: React.FC = (props) => {
                             <Grid item xs={4}>
                                 <SpenTrend_forMostUsedCat ChartData={WeeklyTrendLineCateg_ChData}></SpenTrend_forMostUsedCat>
                             </Grid>
-                          
+
                         </Grid>
 
                         {/* <TodaysExpenseSect dailyTotal={dailyTotal + ' ' + GlobalUserData.currlabel} Monthtot={MonthTotal + ' ' + GlobalUserData.currlabel}></TodaysExpenseSect> */}

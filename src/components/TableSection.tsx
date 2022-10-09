@@ -55,14 +55,14 @@ function createData(
 
 const Homeheader = (): any => {
   return (<TableRow>
-    <TableCell>Date</TableCell>
-    <TableCell align="right">Amount</TableCell>
-    <TableCell align="right">Time</TableCell>
-    <TableCell align="right">Category</TableCell>
+    <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
+    <TableCell sx={{ fontWeight: 'bold' }} align="right">Amount</TableCell>
+    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Time</TableCell>
+    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Category</TableCell>
     {/* <TableCell align="right">SubCat</TableCell>
     <TableCell align="right">Purch. Mode</TableCell> */}
     {/* <TableCell align="right">Necessity</TableCell> */}
-    <TableCell align="right">Comments</TableCell>
+    <TableCell align="right" sx={{ fontWeight: 'bold' }}>Comments</TableCell>
   </TableRow>)
 }
 
@@ -148,7 +148,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
   let pageselected: string = props.page
 
   return (
-    <div className="table">
+    <div className="Detailtable">
       <div className="header">
         <div className="table_header">
           <h3>Expense Details</h3>
@@ -171,8 +171,8 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
           </span>
         </div>
       </div>
-      {View == 'Tab' ? <TableGroupTabs setPieModalData={props.setPieModalData} InitialData={InitialData_frGroup} 
-      AllData={props.AllData} PieCategories={props.PieCategories} setBarModalData={props.setBarModalData}></TableGroupTabs> :
+      {View == 'Tab' ? <TableGroupTabs setPieModalData={props.setPieModalData} InitialData={InitialData_frGroup}
+        AllData={props.AllData} PieCategories={props.PieCategories} setBarModalData={props.setBarModalData}></TableGroupTabs> :
         <div>
           <div className='table-date'>
             {props.page == 'Home' ? <TextField

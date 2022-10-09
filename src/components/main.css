@@ -4,6 +4,9 @@
   background: #EDEDED;
 }
 
+.card{
+  border-radius: 5px;
+}
 .chart {
   /* width: 100%; */
   /* min-width: 530px; */
@@ -58,7 +61,7 @@
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   /* justify-content: center; */
   border: 10px black;
   padding: 20px;
@@ -96,7 +99,7 @@
   justify-content: space-between;
 }
 
-.table {
+.Detailtable {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -158,9 +161,9 @@
 }
 
 .header {
-  /* background-color: #4c70b9; */
-  /* color: #fff; */
-  /* margin-bottom: 15px; */
+  background-color: #4c70b9;
+  color: #fff;
+  margin-bottom: 15px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   width: 100%;

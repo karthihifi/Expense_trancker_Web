@@ -9,6 +9,7 @@ import { Generic } from '../interface'
 import { Chart } from "react-google-charts";
 import Modal from '@mui/material/Modal';
 import Card from 'react-bootstrap/Card';
+import Paper from '@mui/material/Paper';
 
 
 const style = {
@@ -60,7 +61,7 @@ const SpenTrend_forMostUsedCat: React.FC<SpendingTrendProps> = (props) => {
     const handleOpen = () => setOpen(true);
     const handleClose1 = () => { console.log('clickedas', open); setOpen(!open); };
     return (
-        <div>
+        <Paper elevation={3}>
             <Card onClick={handleOpen}>
                 <Chart
                     chartType="LineChart"
@@ -70,11 +71,12 @@ const SpenTrend_forMostUsedCat: React.FC<SpendingTrendProps> = (props) => {
                     options={options}
                 />
                 <Card.Body>
-                    <Card.Title>Spending Count by Category</Card.Title>
-                    <Card.Text>
-                        Some quick example text to build on the card title and make up the
-                        bulk of the card's content.
-                    </Card.Text>
+                    {/* <Card.Title>Spending Count by Category</Card.Title> */}
+                    {/* <Card.Text> */}
+                        <Typography variant='h6'>Weekly Spending</Typography>
+                        <Typography variant='body2'>Average Weekly Spending : 128 RM</Typography>
+                        <Typography variant='body2'>Trend : 12%</Typography>
+                    {/* </Card.Text> */}
                     {/* <Button variant="primary">Go somewhere</Button> */}
                 </Card.Body>
             </Card>
@@ -86,7 +88,7 @@ const SpenTrend_forMostUsedCat: React.FC<SpendingTrendProps> = (props) => {
             >
                 <Box sx={style}>
                     <Chart
-                        chartType="BarChart"
+                        chartType="LineChart"
                         width="100%"
                         height="500px"
                         data={props.ChartData}
@@ -94,7 +96,7 @@ const SpenTrend_forMostUsedCat: React.FC<SpendingTrendProps> = (props) => {
                     />
                 </Box>
             </Modal>
-        </div>
+        </Paper>
     );
 }
 

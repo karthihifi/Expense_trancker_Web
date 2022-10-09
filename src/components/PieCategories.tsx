@@ -444,7 +444,7 @@ class PieCat {
             let Startdate = date1.getDate();
             let StartMonth = date1.getMonth() + 1;
             let StartYear = date1.getFullYear();
-            // console.log(date1, CurrentWeek, "WeekData")
+            console.log(date1, CurrentWeek, "WeekData")
 
 
             switch (StartMonth == EndMonth) {

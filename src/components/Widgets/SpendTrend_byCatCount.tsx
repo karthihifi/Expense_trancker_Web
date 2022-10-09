@@ -11,6 +11,7 @@ import { Generic } from '../interface'
 import { Chart } from "react-google-charts";
 import Modal from '@mui/material/Modal';
 import Card from 'react-bootstrap/Card';
+import Paper from '@mui/material/Paper';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -61,7 +62,7 @@ const SpendTrend_byCatCount: React.FC<SpendingTrendProps> = (props) => {
     const handleOpen = () => setOpen(true);
     const handleClose1 = () => { console.log('clickedas', open); setOpen(!open); };
     return (
-        <div>
+        <Paper elevation={3}>
             <Card onClick={handleOpen}>
                 <Chart
                     chartType="BarChart"
@@ -71,11 +72,9 @@ const SpendTrend_byCatCount: React.FC<SpendingTrendProps> = (props) => {
                     options={options}
                 />
                 <Card.Body>
-                    <Card.Title>Spending Count by Category</Card.Title>
-                    <Card.Text>
-                        Some quick example text to build on the card title and make up the
-                        bulk of the card's content.
-                    </Card.Text>
+                <Typography variant='h6'>Weekly Spending</Typography>
+                        <Typography variant='body2'>Average Weekly Spending : 128 RM</Typography>
+                        <Typography variant='body2'>Trend : 12%</Typography>
                     {/* <Button variant="primary">Go somewhere</Button> */}
                 </Card.Body>
             </Card>
@@ -95,7 +94,7 @@ const SpendTrend_byCatCount: React.FC<SpendingTrendProps> = (props) => {
                     />
                 </Box>
             </Modal>
-        </div>
+        </Paper>
     );
 }
 

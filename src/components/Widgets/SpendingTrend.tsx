@@ -9,7 +9,9 @@ import { Generic } from '../interface'
 import { Chart } from "react-google-charts";
 import Card from 'react-bootstrap/Card';
 import Modal from '@mui/material/Modal';
+import Paper from '@mui/material/Paper';
 import { padding } from '@mui/system';
+import "../main.css"
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -59,8 +61,8 @@ const SpendingTrend: React.FC<SpendingTrendProps> = (props) => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     return (
-        <div>
-            <Card onClick={handleOpen}>
+        <Paper elevation={3}>
+            <Card onClick={handleOpen} className="card">
                 <Chart
                     chartType="LineChart"
                     width="100%"
@@ -69,7 +71,7 @@ const SpendingTrend: React.FC<SpendingTrendProps> = (props) => {
                     options={options}
                 />
                 <Card.Body>
-                    <Typography variant='subtitle1'>Weekly Spending</Typography>
+                    <Typography variant='h6'>Weekly Spending</Typography>
                     <Typography variant='body2'>Average Weekly Spending : 128 RM</Typography>
                     <Typography variant='body2'>Trend : 12%</Typography>
                 </Card.Body>
@@ -90,7 +92,7 @@ const SpendingTrend: React.FC<SpendingTrendProps> = (props) => {
                     />
                 </Box>
             </Modal>
-        </div>
+        </Paper>
     );
 }
 
