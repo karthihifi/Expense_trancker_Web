@@ -34,4 +34,6 @@ export interface Globaldata {
 
 }
 
+export interface TredWidgets { chartData: any, AvgWeekspent: number, AvgDailySpent: number }
+
 // export default { ModalFile , ChartSchema };

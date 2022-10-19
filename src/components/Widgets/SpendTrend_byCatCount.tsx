@@ -72,7 +72,7 @@ const SpendTrend_byCatCount: React.FC<SpendingTrendProps> = (props) => {
                     options={options}
                 />
                 <Card.Body>
-                <Typography variant='h6'>Weekly Spending</Typography>
+                <Typography variant='h6'>Weekly Category Usage</Typography>
                         <Typography variant='body2'>Average Weekly Spending : 128 RM</Typography>
                         <Typography variant='body2'>Trend : 12%</Typography>
                     {/* <Button variant="primary">Go somewhere</Button> */}

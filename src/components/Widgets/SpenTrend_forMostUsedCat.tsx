@@ -4,12 +4,16 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import PieCat from '../PieCategories'
 import Typography from '@mui/material/Typography';
-import { ModalFile } from '../interface';
+import { ModalFile, TredWidgets } from '../interface';
 import { Generic } from '../interface'
 import { Chart } from "react-google-charts";
 import Modal from '@mui/material/Modal';
 import Card from 'react-bootstrap/Card';
 import Paper from '@mui/material/Paper';
+import BrunchDiningIcon from '@mui/icons-material/BrunchDining';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Grid from '@mui/material/Grid';
 
 
 const style = {
@@ -25,7 +29,7 @@ const style = {
 };
 
 interface SpendingTrendProps {
-    ChartData: any[][],
+    ChartData: TredWidgets,
 }
 
 export const options = {
@@ -67,17 +71,27 @@ const SpenTrend_forMostUsedCat: React.FC<SpendingTrendProps> = (props) => {
                     chartType="LineChart"
                     width="100%"
                     height="250px"
-                    data={props.ChartData}
+                    data={props.ChartData.chartData}
                     options={options}
                 />
                 <Card.Body>
-                    {/* <Card.Title>Spending Count by Category</Card.Title> */}
-                    {/* <Card.Text> */}
-                        <Typography variant='h6'>Weekly Spending</Typography>
-                        <Typography variant='body2'>Average Weekly Spending : 128 RM</Typography>
-                        <Typography variant='body2'>Trend : 12%</Typography>
-                    {/* </Card.Text> */}
-                    {/* <Button variant="primary">Go somewhere</Button> */}
+                    <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+                        <Grid item xs={3}>
+                            <BrunchDiningIcon fontSize='large' sx={{ color: '#2C3333' }}></BrunchDiningIcon>
+                        </Grid>
+                        <Grid item xs={9} sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                            <Typography variant='h6'>Spending for Food</Typography>
+                            <Box sx={{ display: 'flex',alignItems:'center' }}>
+                                <Typography variant='body2'>Weekly Avg : {props.ChartData.AvgWeekspent} RM
+                                </Typography>
+                                <Typography variant='caption' sx={{ display: 'flex',alignItems:'center' }}>(
+                                    <KeyboardArrowUpIcon sx={{ color: 'red' }}></KeyboardArrowUpIcon>
+                                    <Typography variant='subtitle2' sx={{ color: 'red' }}>12% </Typography>
+                                   Since last wk)</Typography>
+                            </Box>
+                            <Typography variant='body2'>Daily Avg : {props.ChartData.AvgDailySpent} RM</Typography>
+                        </Grid>
+                    </Grid>
                 </Card.Body>
             </Card>
             <Modal
@@ -91,7 +105,7 @@ const SpenTrend_forMostUsedCat: React.FC<SpendingTrendProps> = (props) => {
                         chartType="LineChart"
                         width="100%"
                         height="500px"
-                        data={props.ChartData}
+                        data={props.ChartData.chartData}
                         options={options}
                     />
                 </Box>

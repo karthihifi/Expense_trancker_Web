@@ -4,13 +4,15 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import PieCat from '../PieCategories'
 import Typography from '@mui/material/Typography';
-import { ModalFile } from '../interface';
+import { ModalFile, TredWidgets } from '../interface';
 import { Generic } from '../interface'
 import { Chart } from "react-google-charts";
 import Card from 'react-bootstrap/Card';
 import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
 import { padding } from '@mui/system';
+import EuroIcon from '@mui/icons-material/Euro';
+import Grid from '@mui/material/Grid';
 import "../main.css"
 
 const style = {
@@ -26,7 +28,7 @@ const style = {
 };
 
 interface SpendingTrendProps {
-    ChartData: any[][],
+    ChartData: TredWidgets,
 }
 
 export const options = {
@@ -67,13 +69,20 @@ const SpendingTrend: React.FC<SpendingTrendProps> = (props) => {
                     chartType="LineChart"
                     width="100%"
                     height="250px"
-                    data={props.ChartData}
+                    data={props.ChartData.chartData}
                     options={options}
                 />
                 <Card.Body>
-                    <Typography variant='h6'>Weekly Spending</Typography>
-                    <Typography variant='body2'>Average Weekly Spending : 128 RM</Typography>
-                    <Typography variant='body2'>Trend : 12%</Typography>
+                    <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+                        <Grid item xs={4}>
+                            <EuroIcon fontSize='large' sx={{color:'#2C3333'}}></EuroIcon>
+                        </Grid>
+                        <Grid item xs={8} sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                            <Typography variant='h6'>Weekly Spending</Typography>
+                            <Typography variant='body2'>Average Weekly Spending : {props.ChartData.AvgWeekspent} RM</Typography>
+                            <Typography variant='body2'>Average Daily Spending : {props.ChartData.AvgDailySpent} RM</Typography>
+                        </Grid>
+                    </Grid>
                 </Card.Body>
             </Card>
             <Modal
@@ -87,7 +96,7 @@ const SpendingTrend: React.FC<SpendingTrendProps> = (props) => {
                         chartType="LineChart"
                         width="100%"
                         height="500px"
-                        data={props.ChartData}
+                        data={props.ChartData.chartData}
                         options={options}
                     />
                 </Box>

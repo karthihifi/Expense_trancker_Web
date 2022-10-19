@@ -11,7 +11,7 @@ import TableSection from './TableSection'
 import SideBar from './SideBar'
 import NavBar from './NavBar'
 import TodaysExpenseSect from './TodaysExpenseSection'
-import { ModalFile, ChartSchema } from './interface';
+import { ModalFile, ChartSchema, TredWidgets } from './interface';
 import PieCharts from './PieChart'
 import BarCharts from './BarChart'
 import firebase_Expeseapp from "./firebase";
@@ -205,8 +205,8 @@ const Main: React.FC = (props) => {
 
     const [ModalData, setModalData] = React.useState<ModalFile[]>([]);
     const [BarModalData, setBarModalData] = React.useState<string[][]>([]);
-    const [WeeklyTrendLineChData, setWeeklyTrendLineChData] = React.useState<string[][]>([]);
-    const [WeeklyTrendLineCateg_ChData, setWeeklyTrendLineCateg_ChData] = React.useState<string[][]>([]);
+    const [WeeklyTrendLineChData, setWeeklyTrendLineChData] = React.useState<TredWidgets>({ chartData: [[]], AvgDailySpent: 0, AvgWeekspent: 0 });
+    const [WeeklyTrendLineCateg_ChData, setWeeklyTrendLineCateg_ChData] = React.useState<TredWidgets>({ chartData: [[]], AvgDailySpent: 0, AvgWeekspent: 0 });
     const [WeeklyTrendby_CategoryCount_ChData, setWeeklyTrendby_CategoryCount_ChData] = React.useState<string[][]>([]);
     const [PieModalData, setPieModalData] = React.useState<string[][]>([]);
     const [AllData, setAllData] = React.useState<ModalFile[]>([]);
@@ -682,8 +682,8 @@ const Main: React.FC = (props) => {
                                 <Accordion.Header>
                                     <h4>Add Expense Details</h4></Accordion.Header>
                                 <Accordion.Body> */}
-                                    <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
-                                {/* </Accordion.Body>
+                        <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
+                        {/* </Accordion.Body>
                             </Accordion.Item>
                         </Accordion> */}
                         <Grid container spacing={2}>

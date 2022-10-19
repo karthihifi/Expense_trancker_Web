@@ -21,6 +21,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { TableView } from '@mui/icons-material';
 import TableGroupTabs from './TableGroupView'
 import IconButton from '@mui/material/IconButton';
+import TuneIcon from '@mui/icons-material/Tune';
 import { Props } from 'recharts/types/container/Surface';
 import { Generic } from './interface'
 
@@ -153,10 +154,13 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         <div className="table_header">
           <h3>Expense Details</h3>
           <span>
-            <IconButton>
+            <IconButton sx={{ color: '#fff' }}>
+              <TuneIcon></TuneIcon>
+            </IconButton>
+            <IconButton sx={{ color: '#fff' }}>
               <TableView onClick={() => setView('Default')}></TableView>
             </IconButton>
-            <IconButton onClick={() => {
+            <IconButton sx={{ color: '#fff' }} onClick={() => {
               let month = parseInt(new Date().toISOString().split('T')[0].split('-')[1])
               let year = parseInt(new Date().toISOString().split('T')[0].split('-')[0])
               let ModelData = props.AllData.filter((item) => { return item.month == month && item.year == year })

@@ -2,7 +2,7 @@
 import { type } from 'os';
 import { stringify } from 'querystring';
 import { Modal } from 'react-bootstrap';
-import { ModalFile, ChartSchema, Globaldata } from './interface';
+import { ModalFile, ChartSchema, Globaldata, TredWidgets } from './interface';
 
 interface Cattype {
     page: string,
@@ -98,7 +98,9 @@ class PieCat {
             'Fitness',
             'Others'
         ]
-        this.Exception_categorylist = [{ key: 'OneTimeExpense', value: ['AppartmentRent'] }]
+        this.Exception_categorylist = [{ key: 'OneTimeExpense', value: ['AppartmentRent'] }, {
+            key: 'BillPayments', value: ['Room']
+        }]
 
         this.UserSubCat = [{
             key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse', 'Fruits', 'Vegetables', 'Water', 'BreadItems', 'Pasteries', 'Chinese', 'NewTryOuts']
@@ -425,14 +427,15 @@ class PieCat {
         return new Date(date.setDate(diff));
     }
 
-    GetWeeklySpent(ModalData: ModalFile[]): [[]] {
+    GetWeeklySpent(ModalData: ModalFile[]): TredWidgets {
         const date = new Date(new Date());
         let CurrentWeek = this.getFirstDayOfWeek(new Date());
         let WeekDataheader: any = ['Weekno', "Amount"]
-        let WeekData: any = []
+        let WeekData: TredWidgets = { chartData: [], AvgDailySpent: 0, AvgWeekspent: 0 }
         let WeekItem: any[] = []
+        let WeekAmtArr = []
 
-        for (let index = 1; index < 6; index++) {
+        for (let index = 1; index < 7; index++) {
             let filteredData: ModalFile[] = []
             let Enddate = CurrentWeek.getDate();
             let EndMonth = CurrentWeek.getMonth() + 1;
@@ -444,7 +447,7 @@ class PieCat {
             let Startdate = date1.getDate();
             let StartMonth = date1.getMonth() + 1;
             let StartYear = date1.getFullYear();
-            console.log(date1, CurrentWeek, "WeekData")
+            // console.log(date1, CurrentWeek, "WeekData")
 
 
             switch (StartMonth == EndMonth) {
@@ -470,17 +473,22 @@ class PieCat {
             if (FinalData.length > 1) {
                 let Weekno: string = String(this.getMonth(StartMonth) + '-' + this.getWeekOfMonth(date1))
                 WeekItem.push(Weekno, parseFloat(this.calculatetot(FinalData).toFixed(2)))
-                WeekData.push(WeekItem)
+                WeekData.chartData.push(WeekItem)
             }
             CurrentWeek = date1
+            WeekAmtArr.push(parseFloat(this.calculatetot(FinalData).toFixed(2)))
         }
 
-        WeekData.reverse()
-        // console.log(WeekData, "WeekData1")
-        // WeekData[0] = WeekDataheader
-        WeekData.unshift(WeekDataheader);
-        // console.log(WeekData, "WeekData")
+        WeekData.chartData.reverse()
+        WeekData.chartData.unshift(WeekDataheader);
+        WeekData.AvgWeekspent = parseFloat(this.getAvgSpentby_noofWeeks(WeekAmtArr, 7).toFixed(2))
+        WeekData.AvgDailySpent = parseFloat((WeekData.AvgWeekspent / 7).toFixed(2))
         return WeekData;
+    }
+
+    getAvgSpentby_noofWeeks(ModalData: number[], Weekcount: number): number {
+        let total_amt = ModalData.reduce((total, num) => { return total + num }, 0)
+        return total_amt / Weekcount
     }
 
     filterExceptionCategorylist(ModalData: ModalFile[]): ModalFile[] {
@@ -520,7 +528,7 @@ class PieCat {
         return CatItem
     }
 
-    GetWeeklySpentonCategory(ModalData: ModalFile[]): [[]] {
+    GetWeeklySpentonCategory(ModalData: ModalFile[]): TredWidgets {
         let CatItems = this.getMostUsedCategory(ModalData)
         console.log(CatItems, "CatItems")
         return this.GetWeeklySpent(CatItems.items)
@@ -542,7 +550,7 @@ class PieCat {
             WeekDataheader.push(item)
         })
 
-        for (let index = 1; index < 6; index++) {
+        for (let index = 1; index < 7; index++) {
             let filteredData: ModalFile[] = []
             let Enddate = CurrentWeek.getDate();
             let EndMonth = CurrentWeek.getMonth() + 1;
