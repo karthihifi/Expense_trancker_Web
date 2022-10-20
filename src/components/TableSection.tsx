@@ -21,9 +21,22 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { TableView } from '@mui/icons-material';
 import TableGroupTabs from './TableGroupView'
 import IconButton from '@mui/material/IconButton';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import TuneIcon from '@mui/icons-material/Tune';
 import { Props } from 'recharts/types/container/Surface';
+import Popover from '@mui/material/Popover';
 import { Generic } from './interface'
+import Typography from '@mui/material/Typography';
+import { Dayjs } from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { StaticDateRangePicker } from '@mui/x-date-pickers-pro/StaticDateRangePicker';
+import { DateRangePicker, DateRange } from '@mui/x-date-pickers-pro/DateRangePicker';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Stack from '@mui/material/Stack';
 
 interface ModalDataProps {
   setdailyTotal: (tot: number) => void
@@ -87,6 +100,26 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
   const [PageSelect, setPageSelect] = React.useState(true);
   const [View, setView] = React.useState('Default');
   const [InitialData_frGroup, setInitialData_frGroup] = React.useState<Generic[]>([]);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const filteropen = Boolean(anchorEl);
+  const id = filteropen ? 'simple-popover' : undefined;
+  const [value, setValue] = React.useState<DateRange<Dayjs>>([null, null]);
+
+  const [Cat, setCat] = React.useState('');
+
+  const handleCatChange = (event: SelectChangeEvent) => {
+    setCat(event.target.value as string);
+  };
+
+  const handlefilterClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlefilterClose = () => {
+    setAnchorEl(null);
+  };
+
+
 
   const Homeheaderdata = (row: ModalFile): any => {
     return (
@@ -171,6 +204,9 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
             }
             }>
               <TabIcon></TabIcon>
+            </IconButton>
+            <IconButton sx={{ color: '#fff' }} onClick={handlefilterClick}>
+              <FilterAltIcon></FilterAltIcon>
             </IconButton>
           </span>
         </div>
@@ -264,6 +300,60 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
           </div>
         </div>
       }
+      <Popover
+      sx={{textAlign:'center'}}
+        id={id}
+        open={filteropen}
+        anchorEl={anchorEl}
+        onClose={handlefilterClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Typography variant='h6' sx={{ p: 2 }} >Filter Expenses</Typography>
+        <Stack spacing={2} direction="row" sx={{ margin: '5px' }}>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Category</InputLabel>
+              <Select
+                size='small'
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={Cat}
+                label="Category"
+                onChange={handleCatChange}
+              >
+                {props.PieCategories.Usercat.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            localeText={{ start: 'Start-Date', end: 'End-Date' }}
+          >
+            <DateRangePicker
+              value={value}
+              onChange={(newValue) => {
+                // console.log(newValue)
+                setValue(newValue);
+              }}
+              renderInput={(startProps, endProps) => (
+                <React.Fragment>
+                  <TextField {...startProps} size='small'/>
+                  <Box sx={{ mx: 2 }}> to </Box>
+                  <TextField {...endProps} size='small'/>
+                </React.Fragment>
+              )}
+            />
+          </LocalizationProvider>
+        </Stack>
+        <Button variant="contained" size='small' sx={{margin:'10px'}}>Apply</Button>
+      </Popover>
     </div >
   );
 }
