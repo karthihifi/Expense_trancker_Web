@@ -539,6 +539,45 @@ class PieCat {
         return cat
     }
 
+    getfilteredItemsbydates(ModalData: ModalFile[], inp1: Date, inp2?: Date): ModalFile[] {
+
+        let filtered: ModalFile[] = []
+
+        let Enddate: number;
+        let EndMonth: number = 99;
+        let EndYear: number;
+
+        if (inp2 != undefined) {
+            Enddate = inp2.getDate();
+            EndMonth = inp2.getMonth() + 1;
+            EndYear = inp2.getFullYear();
+        }
+
+        let Startdate = inp1.getDate();
+        let StartMonth = inp1.getMonth() + 1;
+        let StartYear = inp1.getFullYear();
+
+        switch (StartMonth == EndMonth) {
+            case false:
+                let month1 = ModalData.filter((item) => {
+                    return item.dateno == Startdate && item.month == StartMonth && item.year == StartYear
+                })
+                let month2 = ModalData.filter((item) => {
+                    return item.dateno == Enddate && item.month == EndMonth && item.year == StartYear
+                })
+                filtered = month1.concat(month2)
+                break;
+            default:
+                filtered = ModalData.filter((item) => {
+                    return (item.dateno >= Startdate && item.dateno <= Enddate) &&
+                        (item.month >= StartMonth && item.month <= EndMonth) &&
+                        (item.year >= StartYear && item.year <= EndYear)
+                })
+                break;
+        }
+
+        return filtered
+    }
     getCatgorySpentCount_byWeek(ModalData: ModalFile[]): [[]] {
         const date = new Date(new Date());
         let CurrentWeek = this.getFirstDayOfWeek(new Date());

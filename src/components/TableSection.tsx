@@ -107,7 +107,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
 
   const [Cat, setCat] = React.useState('');
 
-  const handleCatChange = (event: SelectChangeEvent) => {
+  const handleCatChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCat(event.target.value as string);
   };
 
@@ -119,8 +119,40 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
     setAnchorEl(null);
   };
 
+  const clearFilters = () => {
+    setValue([null, null])
+    setCat('')
+    props.setModalData(props.AllData);
+    let PieData = props.PieCategories.SetbarchartData('Category', props.AllData)
+    props.setPieModalData(PieData)
+  }
 
+  const handleDateChange = (inp1: Date, inp2?: Date) => {
+    let filtered = props.PieCategories.getfilteredItemsbydates(props.AllData, inp1, inp2)
+    console.log(filtered, 'filtered')
+    props.setModalData(filtered);
+    let PieData = props.PieCategories.SetbarchartData('Category', filtered)
+    props.setPieModalData(PieData)
+  }
 
+  const handleMonthChange = (month: string) => {
+    let filtered = props.AllData.filter((item) => {
+      let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == month })
+      return item.month == calval[0].key
+    })
+    // props.setModalData(filtered);
+    // let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
+    let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == month })
+    let consolidatedData = props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, filtered)
+    let PieData = props.PieCategories.SetbarchartData('Category', consolidatedData)
+
+    // console.log(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData), 'Month')
+    props.setModalData(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData));
+    // props.setPieData(PieData)
+    props.setPieModalData(PieData)
+    props.setdailyTotal(props.PieCategories.calculatetot(filtered))
+    props.setTablecatSelect({ page: 'Daily', cat: String(calval[0].key) })
+  }
   const Homeheaderdata = (row: ModalFile): any => {
     return (
       <TableRow
@@ -166,6 +198,59 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         </TableCell>
       </TableRow>
     )
+  }
+
+  const LocalDateMultiInp = () => {
+    return (
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        localeText={{ start: 'Start-Date', end: 'End-Date' }}
+      >
+        <DateRangePicker
+          value={value}
+          onChange={(newValue) => {
+
+            let Date1: Date = new Date()
+            if (newValue[0] != null) {
+              Date1 = newValue[0].toDate()
+            }
+            handleDateChange(Date1, newValue[1]?.toDate())
+            setValue(newValue);
+          }}
+          renderInput={(startProps, endProps) => (
+            <React.Fragment>
+              <TextField {...startProps} id="date" type="date" helperText="Enter Start Date" size='small' sx={{ width: '150px' }} />
+              <Box sx={{ mx: 2 }}> to </Box>
+              <TextField {...endProps} id="date" type="date" helperText="Enter End Date" size='small' />
+            </React.Fragment>
+          )}
+        />
+      </LocalizationProvider>
+    )
+  }
+
+  const MonthInp = () => {
+    return (
+      <TextField
+        sx={{ m: 1, minWidth: 120 }}
+        select
+        // multiple
+        id="month"
+        label="Enter Month"
+        size="small"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        onChange={(event) => {
+          handleMonthChange(event.target.value)
+        }}
+      >
+        {props.PieCategories.Calenderinfo.map((option) => (
+          <MenuItem key={option.key} value={option.value}>
+            {option.value}
+          </MenuItem>
+        ))}
+      </TextField>)
   }
 
   // const pagesel = (): boolean => {
@@ -214,17 +299,12 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
       {View == 'Tab' ? <TableGroupTabs setPieModalData={props.setPieModalData} InitialData={InitialData_frGroup}
         AllData={props.AllData} PieCategories={props.PieCategories} setBarModalData={props.setBarModalData}></TableGroupTabs> :
         <div>
-          <div className='table-date'>
+          {/* <div className='table-date'>
             {props.page == 'Home' ? <TextField
-              // required
-              // error={errorFileds.date}
               id="date"
               label="Enter Date"
               type="date"
-              // defaultValue= {defDate}
-              // value={expData.date}
               size="small"
-              //   className={classes.textField}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -243,46 +323,10 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
                 console.log(filtered, "da")
               }}
             /> : props.page == 'Daily' ?
-              <TextField
-                sx={{ m: 1, minWidth: 120 }}
-                select
-                // multiple
-                id="month"
-                label="Enter Month"
-                size="small"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(event) => {
-                  console.log(event.target.value)
-                  let filtered = props.AllData.filter((item) => {
-                    let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
-                    return item.month == calval[0].key
-                  })
-                  // props.setModalData(filtered);
-                  // let PieData = props.PieCategories.GroupData('Category', filtered, props.PieCategories.calculatetot(filtered))
-                  let calval = props.PieCategories.Calenderinfo.filter((item) => { return item.value == event.target.value })
-                  let consolidatedData = props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, filtered)
-                  let PieData = props.PieCategories.SetbarchartData('Date', consolidatedData)
-
-                  // console.log(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData), 'Month')
-                  props.setModalData(props.PieCategories.ConsildatebyMonth(calval[0].key, 2022, props.AllData));
-                  // props.setPieData(PieData)
-                  props.setPieModalData(PieData)
-                  props.setdailyTotal(props.PieCategories.calculatetot(filtered))
-                  props.setTablecatSelect({ page: 'Daily', cat: String(calval[0].key) })
-                  console.log(filtered, "da")
-                }}
-              >
-                {props.PieCategories.Calenderinfo.map((option) => (
-                  <MenuItem key={option.key} value={option.value}>
-                    {option.value}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <MonthInp></MonthInp>
               : ''}
 
-          </div>
+          </div> */}
           <div className='table-cont'>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
@@ -301,7 +345,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         </div>
       }
       <Popover
-      sx={{textAlign:'center'}}
+        sx={{ textAlign: 'center' }}
         id={id}
         open={filteropen}
         anchorEl={anchorEl}
@@ -315,13 +359,14 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         <Stack spacing={2} direction="row" sx={{ margin: '5px' }}>
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Category</InputLabel>
-              <Select
-                size='small'
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+              <TextField
+                required
+                id="outlined-basic"
+                select
+                label="Select"
+                size="small"
+                helperText="Select Category"
                 value={Cat}
-                label="Category"
                 onChange={handleCatChange}
               >
                 {props.PieCategories.Usercat.map((option) => (
@@ -329,31 +374,15 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
                     {option}
                   </MenuItem>
                 ))}
-              </Select>
+              </TextField>
             </FormControl>
           </Box>
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            localeText={{ start: 'Start-Date', end: 'End-Date' }}
-          >
-            <DateRangePicker
-              value={value}
-              onChange={(newValue) => {
-                // console.log(newValue)
-                setValue(newValue);
-              }}
-              renderInput={(startProps, endProps) => (
-                <React.Fragment>
-                  <TextField {...startProps} size='small'/>
-                  <Box sx={{ mx: 2 }}> to </Box>
-                  <TextField {...endProps} size='small'/>
-                </React.Fragment>
-              )}
-            />
-          </LocalizationProvider>
+          {props.page == 'Home' ? <LocalDateMultiInp></LocalDateMultiInp> : props.page == 'Daily' ? <MonthInp></MonthInp> : ''}
         </Stack>
-        <Button variant="contained" size='small' sx={{margin:'10px'}}>Apply</Button>
-      </Popover>
+        <Button variant="contained" size='small' sx={{ margin: '10px' }}>Apply</Button>
+        <Button variant="contained" size='small' sx={{ margin: '10px' }}
+          onClick={clearFilters}>Clear Filters</Button>
+      </Popover >
     </div >
   );
 }
