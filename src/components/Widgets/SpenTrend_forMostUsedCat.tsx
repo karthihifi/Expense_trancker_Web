@@ -43,7 +43,7 @@ export const options = {
         gridlines: {
             color: "#fff"
         },
-        baselineColor: "Red",
+        baselineColor: "#fff",
         textStyle: {
             color: "#fff",
         },

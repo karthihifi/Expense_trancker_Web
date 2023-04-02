@@ -91,6 +91,7 @@ class PieCat {
         this.Usercat = [
             'Food',
             'Clothes',
+            'Groceries',
             'Travel',
             'OneTimeExpense',
             'BillPayments',
@@ -103,7 +104,10 @@ class PieCat {
         }]
 
         this.UserSubCat = [{
-            key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse', 'Fruits', 'Vegetables', 'Water', 'BreadItems', 'Pasteries', 'Chinese', 'NewTryOuts']
+            key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse', 'Fruits', 'Nuts', 'Water', 'BreadItems', 'Pasteries', 'Chinese', 'NewTryOuts']
+        },
+        {
+            key: 'Groceries', value: ['Fish', 'Chicken', 'Lamb', 'Prawn', 'OtherMeat', 'Vegetables', 'Friuits', 'Spices', 'Masala', 'Rice', 'Wheat']
         },
         {
             key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']

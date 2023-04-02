@@ -26,6 +26,8 @@ import PieCatSelect from './PieCatSect'
 import TextField from '@mui/material/TextField';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
+import PageviewRoundedIcon from '@mui/icons-material/PageviewRounded';
+import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded';
 import Drawer from '@mui/material/Drawer';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -130,12 +132,6 @@ function createData(
 ) {
     return { date, currency, amount, time, category, subcategory, availmode, necessity, dateno, month, monthstr, year };
 }
-
-const rows = [
-    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'EUR', 6.0, 'Afternoon', 'Food', 'Junk', 'Online', 'Needed', 3, 7, 'July', 2022),
-    createData('2022-07-03', 'USD', 9.0, 'Morning', 'Clothes', 'Formals', 'Online', 'Maybe', 3, 7, 'July', 2022),
-];
 
 
 const timeofDay = [
@@ -712,9 +708,18 @@ const Main: React.FC = (props) => {
                             {/* </div> */}
                             <Grid item xs={5} sx={{ maxHeight: "600px" }}>
                                 <div className="chart">
-                                    <div className="header">
-                                        <h3>Data Analysis</h3>
+                                    <div className="chart-header">
+                                        <h4>Data Analysis</h4>
+                                        <span>
+                                            <IconButton sx={{ color: 'orange' }}>
+                                                <PageviewRoundedIcon></PageviewRoundedIcon>
+                                            </IconButton>
+                                            <IconButton sx={{ color: 'orange' }}>
+                                                <InsightsRoundedIcon></InsightsRoundedIcon>
+                                            </IconButton>
+                                        </span>
                                     </div>
+
                                     <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
                                         AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype={ChartSelect}
                                         setChartSelect={setChartSelect}

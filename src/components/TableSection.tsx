@@ -270,7 +270,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
     <div className="Detailtable">
       <div className="header">
         <div className="table_header">
-          <h3>Expense Details</h3>
+          <h4>Expense Details</h4>
           <span>
             <IconButton sx={{ color: '#fff' }}>
               <TuneIcon></TuneIcon>

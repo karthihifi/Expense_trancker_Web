@@ -89,6 +89,7 @@ const timeofDay = [
 
 const Categories = [
     'Food',
+    'Groceries',
     'Travel',
     'OneTimeExpense',
     'BillPayments',
@@ -387,7 +388,7 @@ const DateSection: React.FC<MainProps> = (props) => {
                     }}
                 >
                     <Fade in={open}>
-                        <Box sx={style}>
+                        <Box sx={style} className="AddExp_modal">
                             <div className='Detail_header'>
 
                                 <div>
