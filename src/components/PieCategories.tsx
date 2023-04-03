@@ -107,7 +107,7 @@ class PieCat {
             key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse', 'Fruits', 'Nuts', 'Water', 'BreadItems', 'Pasteries', 'Chinese', 'NewTryOuts']
         },
         {
-            key: 'Groceries', value: ['Fish', 'Chicken', 'Lamb', 'Prawn', 'OtherMeat', 'Vegetables', 'Friuits', 'Spices', 'Masala', 'Rice', 'Wheat']
+            key: 'Groceries', value: ['Fish', 'Chicken', 'Lamb', 'Prawn', 'OtherMeat', 'Vegetables', 'Friuits', 'DosaBatter', 'Spices', 'Masala', 'Rice', 'Wheat']
         },
         {
             key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']
