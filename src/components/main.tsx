@@ -34,6 +34,8 @@ import Grid from '@mui/material/Grid';
 import SpendingTrend from '../components/Widgets/SpendingTrend'
 import SpenTrend_forMostUsedCat from '../components/Widgets/SpenTrend_forMostUsedCat'
 import SpendTrend_byCatCount from '../components/Widgets/SpendTrend_byCatCount'
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 // import {collection, addDoc, Timestamp} from 'firebase/firestore'
 // import Accordion from '@mui/material/Accordion';
 // import AccordionSummary from '@mui/material/AccordionSummary';
@@ -216,6 +218,12 @@ const Main: React.FC = (props) => {
     const [maxcount, setmaxcount] = React.useState<number>(1000);
     const [PieChartData, setPieChartData] = React.useState<PieChartIntf[]>([]);
 
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const GrapViewopen = Boolean(anchorEl);
+    const ModeViewopen = Boolean(anchorEl);
+    const GrapViewid = GrapViewopen ? 'simple-popover' : undefined;
+    const ModeViewid = ModeViewopen ? 'simple-popover' : undefined;
+
     const [GlobalUserData, setGlobalUserData] = React.useState<Glabaldata>({
         username: 'karthihifi',
         countryname: '', currlabel: '', currsymbol: '', flag: ''
@@ -226,6 +234,13 @@ const Main: React.FC = (props) => {
         flag: string
     }[]>([]);
 
+    const handleGrapViewClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleGrapViewClose = () => {
+        setAnchorEl(null);
+    };
 
     const getCountryDetails = () => {
         axios.get('https://restcountries.com/v3.1/all')
@@ -711,7 +726,7 @@ const Main: React.FC = (props) => {
                                     <div className="chart-header">
                                         <h4>Data Analysis</h4>
                                         <span>
-                                            <IconButton sx={{ color: 'orange' }}>
+                                            <IconButton sx={{ color: 'orange' }} onClick={handleGrapViewClick}>
                                                 <PageviewRoundedIcon></PageviewRoundedIcon>
                                             </IconButton>
                                             <IconButton sx={{ color: 'orange' }}>
@@ -739,6 +754,27 @@ const Main: React.FC = (props) => {
                     CountryDetails={CurrSymbols} globalCurrencydata={GlobalUserData}
                     handlecountryselect={handlecountryselect} handlecurrencysave={handlecurrencysave}></AddCurrency>
             </div>
+
+            <Popover
+                sx={{ textAlign: 'center' }}
+                id={GrapViewid}
+                open={GrapViewopen}
+                anchorEl={anchorEl}
+                onClose={handleGrapViewClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+            >
+                <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
+                    AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype={ChartSelect}
+                    setChartSelect={setChartSelect}
+                    setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
+            </Popover >
         </div>
 
     );

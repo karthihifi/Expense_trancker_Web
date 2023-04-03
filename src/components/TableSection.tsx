@@ -272,13 +272,13 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
         <div className="table_header">
           <h4>Expense Details</h4>
           <span>
-            <IconButton sx={{ color: '#fff' }}>
+            <IconButton sx={{ color: 'orange' }}>
               <TuneIcon></TuneIcon>
             </IconButton>
-            <IconButton sx={{ color: '#fff' }}>
+            <IconButton sx={{ color: 'orange' }}>
               <TableView onClick={() => setView('Default')}></TableView>
             </IconButton>
-            <IconButton sx={{ color: '#fff' }} onClick={() => {
+            <IconButton sx={{ color: 'orange' }} onClick={() => {
               let month = parseInt(new Date().toISOString().split('T')[0].split('-')[1])
               let year = parseInt(new Date().toISOString().split('T')[0].split('-')[0])
               let ModelData = props.AllData.filter((item) => { return item.month == month && item.year == year })
@@ -290,7 +290,7 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
             }>
               <TabIcon></TabIcon>
             </IconButton>
-            <IconButton sx={{ color: '#fff' }} onClick={handlefilterClick}>
+            <IconButton sx={{ color: 'orange' }} onClick={handlefilterClick}>
               <FilterAltIcon></FilterAltIcon>
             </IconButton>
           </span>
