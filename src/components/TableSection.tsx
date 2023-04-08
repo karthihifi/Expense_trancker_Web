@@ -11,8 +11,8 @@ import { pink } from '@mui/material/colors';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
-import TableViewIcon from '@mui/icons-material/TableView';
-import TabIcon from '@mui/icons-material/Tab';
+import TableViewRoundedIcon from '@mui/icons-material/TableViewRounded';
+import TabRoundedIcon from '@mui/icons-material/TabRounded';
 import './main.css'
 import TextField from '@mui/material/TextField';
 import PieCat from './PieCategories'
@@ -21,8 +21,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { TableView } from '@mui/icons-material';
 import TableGroupTabs from './TableGroupView'
 import IconButton from '@mui/material/IconButton';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import TuneIcon from '@mui/icons-material/Tune';
+import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
+import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import { Props } from 'recharts/types/container/Surface';
 import Popover from '@mui/material/Popover';
 import { Generic } from './interface'
@@ -273,10 +273,10 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
           <h4>Expense Details</h4>
           <span>
             <IconButton sx={{ color: 'orange' }}>
-              <TuneIcon></TuneIcon>
+              <TuneRoundedIcon></TuneRoundedIcon>
             </IconButton>
             <IconButton sx={{ color: 'orange' }}>
-              <TableView onClick={() => setView('Default')}></TableView>
+              <TableViewRoundedIcon onClick={() => setView('Default')}></TableViewRoundedIcon>
             </IconButton>
             <IconButton sx={{ color: 'orange' }} onClick={() => {
               let month = parseInt(new Date().toISOString().split('T')[0].split('-')[1])
@@ -288,10 +288,10 @@ const TableSection: React.FC<ModalDataProps> = (props) => {
               setView('Tab')
             }
             }>
-              <TabIcon></TabIcon>
+              <TabRoundedIcon></TabRoundedIcon>
             </IconButton>
             <IconButton sx={{ color: 'orange' }} onClick={handlefilterClick}>
-              <FilterAltIcon></FilterAltIcon>
+              <FilterAltRoundedIcon></FilterAltRoundedIcon>
             </IconButton>
           </span>
         </div>

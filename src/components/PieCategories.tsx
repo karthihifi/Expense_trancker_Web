@@ -107,7 +107,7 @@ class PieCat {
             key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse', 'Fruits', 'Nuts', 'Water', 'BreadItems', 'Pasteries', 'Chinese', 'NewTryOuts']
         },
         {
-            key: 'Groceries', value: ['Fish', 'Chicken', 'Lamb', 'Prawn', 'OtherMeat', 'Vegetables', 'Friuits', 'DosaBatter', 'Spices', 'Masala', 'Rice', 'Wheat']
+            key: 'Groceries', value: ['Fish', 'Chicken', 'Lamb', 'Prawn', 'Flour', 'Rava', 'OtherMeat', 'Vegetables', 'Friuits', 'DosaBatter', 'Milk', 'Yogurt', 'Spices', 'Masala', 'Rice', 'Wheat']
         },
         {
             key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']
@@ -119,7 +119,7 @@ class PieCat {
             key: 'Fitness', value: ['Gym', 'Football', 'Cricket', 'Others']
         },
         {
-            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
+            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Apple', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
         },
         ]
         this.PurchMode = ['Online', 'Offline']

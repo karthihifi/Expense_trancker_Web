@@ -735,10 +735,10 @@ const Main: React.FC = (props) => {
                                         </span>
                                     </div>
 
-                                    <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
+                                    {/* <PieCatSelect page={PageSelect} PieCategories={PieCategories} TablecatSelect={TablecatSelect}
                                         AllData={AllData} ModalData={ModalData} total={dailyTotal} charttype={ChartSelect}
                                         setChartSelect={setChartSelect}
-                                        setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect>
+                                        setPieData={setPieChartData} setBarModalData={setBarModalData} setPieModalData={setPieModalData}></PieCatSelect> */}
                                     <ResponsiveContainer width="100%" height="100%">
                                         <div> {ChartSelect == 'Bar' ? <BarCharts barData={BarModalData}></BarCharts>
                                             : <PieCharts pieData={PieModalData}></PieCharts>}</div>
