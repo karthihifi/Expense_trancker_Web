@@ -113,7 +113,7 @@ class PieCat {
             key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']
         },
         {
-            key: 'OneTimeExpense', value: ['HomeAppliance', 'StudyMaterials', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics', 'TravelUtilities']
+            key: 'OneTimeExpense', value: ['HomeAppliance', 'StudyMaterials', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics', 'TravelUtilities','Grooming']
         },
         {
             key: 'Fitness', value: ['Gym', 'Football', 'Cricket', 'Others']
