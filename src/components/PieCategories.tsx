@@ -113,13 +113,13 @@ class PieCat {
             key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']
         },
         {
-            key: 'OneTimeExpense', value: ['HomeAppliance', 'StudyMaterials', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics', 'TravelUtilities','Grooming']
+            key: 'OneTimeExpense', value: ['HomeAppliance', 'StudyMaterials', 'TravelCards', 'VehiclePurchase', 'AppartmentRent', 'Electronics', 'TravelUtilities', 'Grooming']
         },
         {
             key: 'Fitness', value: ['Gym', 'Football', 'Cricket', 'Others']
         },
         {
-            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Apple', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
+            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Apple', 'MobileRecharge', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
         },
         ]
         this.PurchMode = ['Online', 'Offline']
