@@ -599,6 +599,33 @@ const Main: React.FC = (props) => {
                 setSideMenuopen(false)
 
                 break;
+            case 'Week':
+                setPageSelect('Week');
+                let initialModalData: ModalFile = {
+                    date: "",
+                    currency: "",
+                    amount: 0,
+                    time: "",
+                    category: "",
+                    subcategory: "",
+                    availmode: "",
+                    necessity: "",
+                    comments: "",
+                    trendrate: "",
+                    trendicon: "",
+                    mostusedcat: "",
+                    mostusedpurchmode: "",
+                    dateno: 0,
+                    month: 0,
+                    monthstr: "",
+                    year: 0
+                }
+                let WeekData = PieCategories.GetWeekDataforTable(AllData, initialModalData);
+                setModalData(WeekData)
+                setBarModalData(PieCategories.SetbarchartData('Week', WeekData))
+                setPieModalData(PieCategories.SetbarchartData('Week', WeekData))
+                console.log('Week Page Clicked')
+                break;
             case 'Year':
                 setPageSelect('Year');
                 setdailyTotal(calculateYeartot(year))

@@ -42,6 +42,7 @@ export const data = [
 
 export const options = {
     // title: "My Daily Activities",
+    is3D: true,
 };
 
 const PieCharts: React.FC<PieChartsProps> = (props) => {

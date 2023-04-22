@@ -366,13 +366,21 @@ class PieCat {
                     PieData.push({ name: item.date, value: item.amount })
                 })
                 break;
-
+            case 'Week':
+                ModalData.forEach((item) => {
+                    PieData.push({ name: item.date, value: item.amount })
+                })
+                break;
             case 'Date':
                 ModalData.forEach((item) => {
                     PieData.push({ name: item.date, value: item.amount })
                 })
                 break;
             default:
+                ModalData.forEach((item) => {
+                    PieData.push({ name: item.date, value: item.amount })
+                })
+                // break;
         }
         return PieData
     }
@@ -431,6 +439,99 @@ class PieCat {
         return new Date(date.setDate(diff));
     }
 
+    GetWeekDataforTable<T, U>(InData: ModalFile[], RetType: U): Array<U> {
+
+        let ModalData: ModalFile[] = InData as unknown as ModalFile[];
+        let RetData: ModalFile[] = []
+        const date = new Date(new Date());
+        let CurrentWeek = this.getFirstDayOfWeek(new Date());
+
+        let WeekItem: any[] = []
+        let WeekAmtArr = []
+
+        for (let index = 1; index < 7; index++) {
+            let filteredData: ModalFile[] = []
+            let Enddate = CurrentWeek.getDate() - 1;
+            let EndMonth = CurrentWeek.getMonth() + 1;
+            let EndYear = CurrentWeek.getFullYear();
+
+            let date1 = new Date(CurrentWeek);
+            date1.setDate(date1.getDate() - 7)
+
+            let Startdate = date1.getDate();
+            let StartMonth = date1.getMonth() + 1;
+            let StartYear = date1.getFullYear();
+            console.log("WeekData", Startdate, Enddate, date1)
+
+            switch (StartMonth == EndMonth) {
+                case false:
+                    let month1 = ModalData.filter((item) => {
+                        return item.dateno >= Startdate && item.month == StartMonth && item.year == StartYear
+                    })
+                    let month2 = ModalData.filter((item) => {
+                        return item.dateno <= Enddate && item.month == EndMonth && item.year == StartYear
+                    })
+                    filteredData = month1.concat(month2)
+                    break;
+                default:
+                    filteredData = ModalData.filter((item) => {
+                        return (item.dateno >= Startdate && item.dateno <= Enddate) &&
+                            (item.month >= StartMonth && item.month <= EndMonth) &&
+                            (item.year >= StartYear && item.year <= EndYear)
+                    })
+                    break;
+            }
+            WeekItem = []
+            let FinalData = this.filterExceptionCategorylist(filteredData)
+            if (FinalData.length > 1) {
+                let Weekno: string = String(this.getMonth(StartMonth) + '-' + this.getWeekOfMonth(date1))
+                WeekItem.push(Weekno, parseFloat(this.calculatetot(FinalData).toFixed(2)))
+                // WeekData.chartData.push(WeekItem)
+                let Item: ModalFile = {
+                    date: Weekno,
+                    amount: parseFloat(this.calculatetot(FinalData).toFixed(2)),
+                    currency: this.GlobalData.currlabel,
+                    time: '',
+                    category: '',
+                    subcategory: '',
+                    availmode: '',
+                    necessity: '',
+                    comments: '',
+                    trendrate: '',
+                    trendicon: '',
+                    mostusedcat: this.GetHighestspentData('category', FinalData, this.calculatetot(FinalData)),
+                    mostusedpurchmode: '',
+                    dateno: 0,
+                    month: 0,
+                    monthstr: '',
+                    year: 0
+                }
+                RetData.push(Item);
+            }
+            CurrentWeek = date1
+            WeekAmtArr.push(parseFloat(this.calculatetot(FinalData).toFixed(2)))
+        }
+        console.log('Week Data', RetData)
+
+        let prev: number = 0
+        RetData.reverse()
+        RetData.forEach((item, iter) => {
+            let percent: number = 0; //Math.round(((item.amount - prev) / prev) * 100)
+            iter === 0 ? percent = 0 : percent = Math.round(((item.amount - prev) / prev) * 100);
+
+            prev = item.amount
+            item.trendrate = String(percent)
+            if (percent == 0) {
+                item.trendicon = 'neutral'
+            } else if (percent > 0) {
+                item.trendicon = 'up'
+            } else {
+                item.trendicon = 'down'
+            }
+        })
+        return RetData as unknown as Array<U>;
+    };
+
     GetWeeklySpent(ModalData: ModalFile[]): TredWidgets {
         const date = new Date(new Date());
         let CurrentWeek = this.getFirstDayOfWeek(new Date());
@@ -451,7 +552,7 @@ class PieCat {
             let Startdate = date1.getDate();
             let StartMonth = date1.getMonth() + 1;
             let StartYear = date1.getFullYear();
-            console.log("WeekData", Startdate, Enddate,date1)
+            console.log("WeekData", Startdate, Enddate, date1)
 
 
             switch (StartMonth == EndMonth) {

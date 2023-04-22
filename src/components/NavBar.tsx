@@ -43,7 +43,9 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               onClick={(eve) => {
                 handlePageChange('Daily')
               }}>Cumulative Report</Nav.Link>
-            <Nav.Link href="#link">Weekly Report</Nav.Link>
+            <Nav.Link href="#link" onClick={(eve) => {
+              handlePageChange('Week');
+            }}>Weekly Report</Nav.Link>
             <Nav.Link href="#link"
               onClick={(eve) => {
                 handlePageChange('Year')
@@ -63,7 +65,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-            Signed in as: <a href="#login">Mark Otto</a>
+            Signed in as: <a href="#login">Karthik</a>
           </Navbar.Text>
         </Navbar.Collapse>
       </Container>
