@@ -441,7 +441,7 @@ class PieCat {
 
         for (let index = 1; index < 7; index++) {
             let filteredData: ModalFile[] = []
-            let Enddate = CurrentWeek.getDate();
+            let Enddate = CurrentWeek.getDate() - 1;
             let EndMonth = CurrentWeek.getMonth() + 1;
             let EndYear = CurrentWeek.getFullYear();
 
@@ -451,7 +451,7 @@ class PieCat {
             let Startdate = date1.getDate();
             let StartMonth = date1.getMonth() + 1;
             let StartYear = date1.getFullYear();
-            // console.log(date1, CurrentWeek, "WeekData")
+            console.log("WeekData", Startdate, Enddate,date1)
 
 
             switch (StartMonth == EndMonth) {
