@@ -22,6 +22,12 @@ class PieCat {
     PurchMode: string[]
     UserSubCat: { key: string, value: string[] }[]
     Exception_categorylist: { key: string, value: string[] }[]
+    BarChartLabel_Anno = {
+        sourceColumn: 0,
+        role: "annotation",
+        type: "string",
+        calc: "stringify"
+    };
     Calenderinfo = [
         {
             key: 1,
@@ -380,7 +386,7 @@ class PieCat {
                 ModalData.forEach((item) => {
                     PieData.push({ name: item.date, value: item.amount })
                 })
-                // break;
+            // break;
         }
         return PieData
     }
@@ -734,6 +740,73 @@ class PieCat {
                 WeekItem.push(this.GetCategoryCount(item, filteredData).count)
             })
             WeekData.push(WeekItem)
+        }
+        WeekData.reverse()
+        WeekData.unshift(WeekDataheader);
+        return WeekData
+    }
+
+    ConcatValues_fr_BarchartLabelling<T, U>(Inp: T[], NextVal: U): T[] {
+        let retValue = Inp.concat(NextVal as any)
+        return retValue;
+    };
+
+    getCatgorySpentAmount_byWeek(ModalData: ModalFile[]): [[]] {
+        const date = new Date(new Date());
+        let CurrentWeek = this.getFirstDayOfWeek(new Date());
+        let WeekDataheader: any = ['Weekno']
+        let WeekData: any = []
+        let WeekItem: any[] = []
+
+        this.Usercat.map((item) => {
+            WeekDataheader.push(item)
+        })
+
+        for (let index = 1; index < 7; index++) {
+            let filteredData: ModalFile[] = []
+            let Enddate = CurrentWeek.getDate() - 1;
+            let EndMonth = CurrentWeek.getMonth() + 1;
+            let EndYear = CurrentWeek.getFullYear();
+
+            let date1 = new Date(CurrentWeek);
+            date1.setDate(date1.getDate() - 7)
+
+            let Startdate = date1.getDate();
+            let StartMonth = date1.getMonth() + 1;
+            let StartYear = date1.getFullYear();
+
+            switch (StartMonth == EndMonth) {
+                case false:
+                    let month1 = ModalData.filter((item) => {
+                        return item.dateno >= Startdate && item.month == StartMonth && item.year == StartYear
+                    })
+                    let month2 = ModalData.filter((item) => {
+                        return item.dateno <= Enddate && item.month == EndMonth && item.year == StartYear
+                    })
+                    filteredData = month1.concat(month2)
+                    break;
+                default:
+                    filteredData = ModalData.filter((item) => {
+                        return (item.dateno >= Startdate && item.dateno <= Enddate) &&
+                            (item.month >= StartMonth && item.month <= EndMonth) &&
+                            (item.year >= StartYear && item.year <= EndYear)
+                    })
+                    break;
+            }
+            CurrentWeek = date1
+
+            WeekItem = []
+            if (filteredData.length > 0) {
+                let Weekno: string = String(this.getMonth(StartMonth) + '-' + this.getWeekOfMonth(date1))
+                WeekItem.push(Weekno)
+                // eslint-disable-next-line no-loop-func, array-callback-return
+                this.Usercat.map((item) => {
+                    let filterbyCat = filteredData.filter((weekdata) => { return weekdata.category === item })
+                    let total = this.calculatetot(filterbyCat)
+                    WeekItem.push(total)
+                })
+                WeekData.push(WeekItem)
+            }
         }
         WeekData.reverse()
         WeekData.unshift(WeekDataheader);

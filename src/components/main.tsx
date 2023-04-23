@@ -324,7 +324,8 @@ const Main: React.FC = (props) => {
                 groupData(ExpenseData, 'Category', dailyTotal)
                 setWeeklyTrendLineChData(PieCategories.GetWeeklySpent(ExpenseData))
                 setWeeklyTrendLineCateg_ChData(PieCategories.GetWeeklySpentonCategory(ExpenseData))
-                setWeeklyTrendby_CategoryCount_ChData(PieCategories.getCatgorySpentCount_byWeek(ExpenseData))
+                setWeeklyTrendby_CategoryCount_ChData(PieCategories.getCatgorySpentAmount_byWeek(ExpenseData))
+                // setWeeklyTrendby_CategoryCount_ChData(PieCategories.getCatgorySpentCount_byWeek(ExpenseData))
             } else {
                 console.log("No data available");
             }

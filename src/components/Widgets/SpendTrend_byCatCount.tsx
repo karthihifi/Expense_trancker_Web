@@ -12,6 +12,7 @@ import { Chart } from "react-google-charts";
 import Modal from '@mui/material/Modal';
 import Card from 'react-bootstrap/Card';
 import Paper from '@mui/material/Paper';
+import { Percent } from '@mui/icons-material';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -35,8 +36,11 @@ export const options = {
     backgroundColor: '#D6323C',
     bars: 'horizontal',
     // colors: ["#fff"],
-    bar: { groupWidth: "140%" },
+    // bar: { groupWidth: "140%" },
+    isStacked: true,
     hAxis: {
+        // minValue: 0,
+        // ticks: [0, .3, .6, .9, 1],
         gridlines: {
             color: "transparent"
         },
