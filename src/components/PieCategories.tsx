@@ -113,7 +113,7 @@ class PieCat {
             key: 'Food', value: ['Snacks', 'Beverages', 'MainCourse', 'Fruits', 'Nuts', 'Water', 'BreadItems', 'Pasteries', 'Chinese', 'NewTryOuts']
         },
         {
-            key: 'Groceries', value: ['Fish', 'Chicken', 'Lamb', 'Prawn', 'Flour', 'Nuts', 'Salt', 'Sugar', 'Dhal', 'Rava', 'OtherMeat', 'Vegetables', 'CookingOil', 'OtherOil', 'Friuits', 'DosaBatter', 'Milk', 'Yogurt', 'Spices', 'Masala', 'Rice', 'Wheat']
+            key: 'Groceries', value: ['Fish', 'Chicken', 'Lamb', 'Prawn', 'Egg', 'Flour', 'Nuts', 'Salt', 'Sugar', 'Dhal', 'Rava', 'OtherMeat', 'Vegetables', 'CookingOil', 'OtherOil', 'Friuits', 'DosaBatter', 'Milk', 'Yogurt', 'Spices', 'Masala', 'Rice', 'Wheat']
         },
         {
             key: 'Travel', value: ['Train', 'Bus', 'Car', 'Bike', 'Taxi']
@@ -748,6 +748,8 @@ class PieCat {
 
     ConcatValues_fr_BarchartLabelling<T, U>(Inp: T[], NextVal: U): T[] {
         let retValue = Inp.concat(NextVal as any)
+        retValue.push(this.BarChartLabel_Anno as any)
+        // console.log('Ret Value',retValue)
         return retValue;
     };
 
@@ -761,6 +763,12 @@ class PieCat {
         this.Usercat.map((item) => {
             WeekDataheader.push(item)
         })
+
+        // let WeekDataheader: any = ['Weekno']
+        // this.Usercat.map((item) => {
+        //     WeekDataheader = this.ConcatValues_fr_BarchartLabelling(WeekDataheader, item)
+        // })
+        // console.log('Label Added', WeekDataheader)
 
         for (let index = 1; index < 7; index++) {
             let filteredData: ModalFile[] = []
@@ -804,6 +812,7 @@ class PieCat {
                     let filterbyCat = filteredData.filter((weekdata) => { return weekdata.category === item })
                     let total = this.calculatetot(filterbyCat)
                     WeekItem.push(total)
+                    // WeekItem.push(total.toFixed(2))
                 })
                 WeekData.push(WeekItem)
             }
