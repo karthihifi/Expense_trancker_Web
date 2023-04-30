@@ -25,7 +25,7 @@ import PieCat from './PieCategories'
 import PieCatSelect from './PieCatSect'
 import TextField from '@mui/material/TextField';
 import MenuIcon from '@mui/icons-material/Menu';
-import { IconButton } from '@mui/material';
+import { Box, IconButton, Stack } from '@mui/material';
 import PageviewRoundedIcon from '@mui/icons-material/PageviewRounded';
 import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded';
 import Drawer from '@mui/material/Drawer';
@@ -44,6 +44,8 @@ import Typography from '@mui/material/Typography';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import Accordion from 'react-bootstrap/Accordion';
+import TrendWeekSlider from '../components/TrendWeekNoSettings'
+import ManageCategories from '../components/ManageCategories'
 
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(firebase_Expeseapp);
@@ -721,7 +723,13 @@ const Main: React.FC = (props) => {
                                 <Accordion.Header>
                                     <h4>Add Expense Details</h4></Accordion.Header>
                                 <Accordion.Body> */}
-                        <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <DateSection PieCategories={PieCategories} GlobalData={GlobalUserData} handleAddExpense={handleAddExpense}></DateSection>
+                            <Stack spacing={2} direction="row">
+                                <ManageCategories></ManageCategories>
+                                <TrendWeekSlider></TrendWeekSlider>
+                            </Stack>
+                        </Box>
                         {/* </Accordion.Body>
                             </Accordion.Item>
                         </Accordion> */}
