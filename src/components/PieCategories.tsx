@@ -125,7 +125,7 @@ class PieCat {
             key: 'Fitness', value: ['Gym', 'Football', 'Cricket', 'Others']
         },
         {
-            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Apple', 'MobileRecharge', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
+            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Apple','Internet', 'MobileRecharge', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
         },
         ]
         this.PurchMode = ['Online', 'Offline']
