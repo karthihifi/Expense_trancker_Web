@@ -125,7 +125,7 @@ class PieCat {
             key: 'Fitness', value: ['Gym', 'Football', 'Cricket', 'Others']
         },
         {
-            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Apple','Internet', 'MobileRecharge', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
+            key: 'BillPayments', value: ['Netflix', 'Amazon', 'Apple', 'Internet', 'MobileRecharge', 'Utilities', 'Room', 'Hotstar', 'Sooka', 'AstroGo', 'Electicity', 'Water', 'Bank', 'Others']
         },
         ]
         this.PurchMode = ['Online', 'Offline']
@@ -538,6 +538,31 @@ class PieCat {
         return RetData as unknown as Array<U>;
     };
 
+    GetTotalAmountByDate(Startdate: number, Enddate: number, StartMonth: number, EndMonth: number, StartYear: number, EndYear: number, ModalData: ModalFile[]): number {
+        let filteredData: ModalFile[] = []
+        switch (StartMonth == EndMonth) {
+            case false:
+                let month1 = ModalData.filter((item) => {
+                    return item.dateno >= Startdate && item.month == StartMonth && item.year == StartYear
+                })
+                let month2 = ModalData.filter((item) => {
+                    return item.dateno <= Enddate && item.month == EndMonth && item.year == StartYear
+                })
+                filteredData = month1.concat(month2)
+                break;
+            default:
+                filteredData = ModalData.filter((item) => {
+                    return (item.dateno >= Startdate && item.dateno <= Enddate) &&
+                        (item.month >= StartMonth && item.month <= EndMonth) &&
+                        (item.year >= StartYear && item.year <= EndYear)
+                })
+                break;
+        }
+
+        let FinalData = this.filterExceptionCategorylist(filteredData)
+        return parseFloat(this.calculatetot(FinalData).toFixed(2))
+    };
+
     GetWeeklySpent(ModalData: ModalFile[]): TredWidgets {
         const date = new Date(new Date());
         let CurrentWeek = this.getFirstDayOfWeek(new Date());
@@ -546,6 +571,10 @@ class PieCat {
         let WeekItem: any[] = []
         let WeekAmtArr = []
 
+        WeekItem.push('Ongoing Week', this.GetTotalAmountByDate(CurrentWeek.getDate(),
+            new Date().getDate(), CurrentWeek.getMonth() + 1, new Date().getMonth() + 1,
+            CurrentWeek.getFullYear(), new Date().getFullYear(), ModalData))
+            
         for (let index = 1; index < 7; index++) {
             let filteredData: ModalFile[] = []
             let Enddate = CurrentWeek.getDate() - 1;
